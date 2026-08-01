@@ -1,0 +1,10 @@
+{
+  "id": "tufte-inline",
+  "name": "Tufte Inline",
+  "version": "1.2.0",
+  "minAppVersion": "1.4.0",
+  "description": "Inline typography shorthands rendered in Reading view and Live Preview: ^^text^^ for a small-caps new-thought opener, &&text&& for an italic run-in lead-in, and @@字@@ for a two-line CJK drop cap (首字下沉). Styling is provided by the Tufte theme.",
+  "author": "Daocheng Lin",
+  "authorUrl": "https://github.com/PleiadesM/TufteObsidian",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,265 @@
+/* ============================================================================
+   Tufte Sidenotes plugin styles
+
+   These rules intentionally live in the plugin, not the Tufte theme, so
+   sidenotes and marginnotes become ordinary Obsidian callouts when the plugin
+   is disabled. They are scoped to Reading view; the CodeMirror editor stays
+   single-column and shows sidenotes/marginnotes as normal callouts.
+   ============================================================================ */
+
+body.tufte-sidenotes-enabled .markdown-preview-view .footnote-link,
+body.tufte-sidenotes-enabled .markdown-preview-view sup.footnote-ref,
+body.tufte-sidenotes-enabled .markdown-preview-view sup.tufte-sidenote-ref,
+body.tufte-sidenotes-enabled .markdown-preview-view .tufte-sidenote-ref {
+  color: var(--tufte-accent) !important;
+  font-size: 0.75em !important;
+  vertical-align: super !important;
+  line-height: 0 !important;
+  text-decoration: none !important;
+  margin-left: 1px;
+  font-family: var(--font-text-theme);
+  font-style: normal;
+  font-weight: normal;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .footnotes,
+body.tufte-sidenotes-enabled .markdown-preview-view section.footnotes,
+body.tufte-sidenotes-enabled .markdown-preview-view ol:has(> li[data-footnote-id^="fn-"]),
+body.tufte-sidenotes-enabled .markdown-preview-view ol:has(> li[id^="fn-"]) {
+  display: none !important;
+}
+
+body.tufte-sidenotes-enabled .popover.hover-popover:has([id^="fn-"]),
+body.tufte-sidenotes-enabled .popover.hover-popover:has(.footnote-backref),
+body.tufte-sidenotes-enabled .popover.hover-popover:has(> .footnotes),
+body.tufte-sidenotes-enabled .popover.hover-popover > .markdown-embed[data-type="footnote"],
+body.tufte-sidenotes-enabled .tooltip.mod-footnote {
+  display: none !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-title {
+  display: block;
+  float: left;
+  padding: 0;
+  margin: 0.05em 0.25em 0 0;
+  background: transparent;
+  color: var(--tufte-accent);
+  font-family: var(--font-text-theme);
+  font-size: 0.7em;
+  line-height: 1;
+  font-style: normal;
+  font-weight: normal;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-icon {
+  display: none;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-title-inner {
+  color: inherit;
+  font-style: normal;
+  font-weight: normal;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"].tufte-sidenote-untitled .callout-title {
+  display: none;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-title {
+  display: none;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-content > .footnotes:first-child {
+  display: contents !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .footnotes hr,
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .footnote-backref {
+  display: none !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .footnotes ol {
+  display: block !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .footnotes li {
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .footnotes p {
+  display: inline !important;
+  margin: 0 !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"],
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] {
+  float: right !important;
+  clear: right !important;
+  width: 22cqi !important;                       /* pane-proportional (Tufte-style %), scales so it never overflows */
+  margin: 0.3rem -24cqi 1rem 1rem !important;    /* pulled into the gutter proportionally (pull 24 > width 22) */
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  font-size: 0.85em !important;
+  line-height: 1.4 !important;
+  color: var(--tufte-muted) !important;
+  font-style: normal !important;
+  mix-blend-mode: normal !important;
+  box-shadow: none !important;
+  /* Long inline code (URLs, file paths) is one unbreakable token and
+     would overflow the marginnote box, getting clipped at the
+     viewport. Allow character-level wrapping inside marginnotes so
+     content stays within the box. */
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] code,
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] code {
+  /* Inline code in a marginnote must break at any character — file
+     paths and URLs are otherwise a single unbreakable word that
+     would push past the box's right edge. */
+  word-break: break-all !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-title {
+  display: none !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-content,
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-content {
+  padding: 0 !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-content > *:first-child,
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-content > *:first-child {
+  margin-top: 0 !important;
+}
+
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] .callout-content > *:last-child,
+body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-content > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Collapsible marginalia — the Tufte CSS small-screen behaviour, pane-relative.
+
+   The original tufte-css hides sidenotes/marginnotes at its `@media (max-width:
+   760px)` breakpoint and turns the in-text marker into a click-to-reveal toggle.
+   We do the same, but keyed to the PANE via `@container tufte-pane` (never the
+   window) so it also fires when the sidebars narrow the pane inside a wide
+   window — the project's responsive rule. The plugin's tap handler mirrors this
+   same 760px threshold against the pane and toggles `tufte-sidenote-revealed` /
+   `tufte-marginnote-revealed` on click/Enter.
+
+     · Sidenote   — the floated callout is hidden; its NUMERIC superscript stays
+                    in the prose as the clickable toggle (numbers are kept, just
+                    as in tufte-css where only number-less marginnotes get a ⊕).
+                    Revealing drops the note inline, set off by the accent rule.
+     · Marginnote — has no number, so the callout stays in the flow but collapses
+                    to a ⊕ glyph (its title); the body shows only once revealed.
+
+   This single breakpoint also covers real phones: at a ≤600px window the pane is
+   likewise ≤760px, so the container query fires (the theme handles phone page
+   geometry separately in its own `@media (max-width: 600px)` block).
+   ────────────────────────────────────────────────────────────────────────── */
+@container tufte-pane (max-width: 760px) {
+  /* Hide the floated sidenote until its number is tapped. */
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"] {
+    display: none !important;
+  }
+
+  /* Keep the numeric superscript in the text and make it the toggle. */
+  body.tufte-sidenotes-enabled .markdown-preview-view sup.tufte-sidenote-ref,
+  body.tufte-sidenotes-enabled .markdown-preview-view sup.footnote-ref,
+  body.tufte-sidenotes-enabled .markdown-preview-view sup.footnote-ref > .footnote-link {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Revealed sidenote: inline block, full width, set off by the accent rule. */
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"].tufte-sidenote-revealed {
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0.6rem 0 1rem 1.25rem !important;
+    border-left: 2px solid var(--tufte-accent) !important;
+    padding-left: 0.75rem !important;
+    font-size: 0.95em !important;
+    line-height: 1.45 !important;
+    color: var(--tufte-ink) !important;
+  }
+
+  /* Show the note's own number inline (as a lead-in) once revealed. */
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="sidenote"].tufte-sidenote-revealed .callout-title {
+    float: none !important;
+    display: inline !important;
+    margin: 0 0.3em 0 0 !important;
+  }
+
+  /* Marginnote: keep the block in the flow but collapse it to a ⊕ toggle. */
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] {
+    display: block !important;
+    float: none !important;
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0.25rem 0 1rem 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 0.95em !important;
+    line-height: 1.45 !important;
+    color: var(--tufte-ink) !important;
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-title {
+    display: inline-block !important;
+    float: none !important;
+    margin: 0 !important;
+    color: var(--tufte-accent) !important;
+    font-family: var(--font-text-theme) !important;
+    font-size: 0.95em !important;
+    line-height: 1 !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-title::before {
+    content: "⊕";
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-title-inner {
+    display: none !important;
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"] .callout-content {
+    display: none !important;
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"].tufte-marginnote-revealed {
+    margin: 0.6rem 0 1rem 1.25rem !important;
+    border-left: 2px solid var(--tufte-accent) !important;
+    padding-left: 0.75rem !important;
+  }
+
+  body.tufte-sidenotes-enabled .markdown-preview-view .callout[data-callout="marginnote"].tufte-marginnote-revealed .callout-content {
+    display: block !important;
+    margin-top: 0.45rem !important;
+  }
+}
