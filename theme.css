@@ -521,12 +521,19 @@ body.theme-dark {
   --file-line-width: var(--tufte-editor-width);
 }
 .markdown-source-view.mod-cm6 .cm-sizer {
+  /* !important on this rule and the .cm-content one below: the competitor
+     is app.css's `.markdown-source-view.mod-cm6.is-readable-line-width
+     .cm-sizer` (0,4,0), which outranks this (0,3,0). A class repeat would
+     clear it on paper, but Live Preview geometry is a real CodeMirror
+     widget and cannot be verified in a static harness — so the provable
+     tool is used instead of the clever one. */
   max-width: var(--tufte-editor-width) !important;
   width: 100% !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 .markdown-source-view.mod-cm6 .cm-content {
+  /* Same reason as .cm-sizer above. */
   padding-left: 1.5rem !important;
   padding-right: 1.5rem !important;
   max-width: none !important;
@@ -559,8 +566,15 @@ body.theme-dark {
    Both margins are !important because Obsidian's app.css spaces headings
    with `h1..h6 { margin-block: var(--p-spacing) }` and headings-after-content
    with `… + div > :is(h1..h6){ margin-top: var(--heading-spacing) }` (0,2,3),
-   and zeroes the first block's margin-top — none of which is itself
-   !important, so ours wins. The block after a heading also carries its own
+   and zeroes the FIRST block's margin-top with
+   `… > .markdown-preview-pusher + div:not(.mod-ui) > :first-child
+   sets margin-top to 0` (0,5,1). Both margins are !important because that
+   second rule is the one that matters: a note, embed or hover-popover
+   whose first block IS a heading must still keep its top margin, and
+   out-specifying (0,5,1) would take a six-class selector stack — worse
+   craft than one documented !important. (A (0,3,1) class repeat was
+   tried and reverted: it clears the (0,2,3) rule but loses to the
+   first-block one.) The block after a heading also carries its own
    top margin (a paragraph's --p-spacing = 1 line); since adjacent vertical
    margins collapse to the larger, a 1-line "after" simply coincides with
    that gap while H1's 2-line "after" overrides it — so each value renders as
@@ -573,6 +587,7 @@ body.theme-dark {
   margin-bottom: calc(var(--tufte-line) * 2) !important;  /* 2 lines after H1  */
 }
 .markdown-preview-view h2 {
+  /* Same two competitors as H1 — see the comment above that rule. */
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -581,6 +596,7 @@ body.theme-dark {
 }
 .markdown-preview-view h3,
 .markdown-preview-view h4 {
+  /* Same two competitors as H1 — see the comment above that rule. */
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -732,6 +748,11 @@ body.theme-dark {
 .markdown-preview-view thead tr,
 .markdown-source-view.mod-cm6 .cm-content thead tr,
 .markdown-rendered thead tr {
+  /* !important throughout the table rules: these selector lists are shared
+     with Live Preview (`.cm-content table`), whose arm competes with
+     app.css's `.cm-table-widget th, td` (0,3,1) inside a real CodeMirror
+     widget — not reproducible in a static harness, so the reading-view arm
+     keeps the same declaration rather than being split off. */
   border-bottom: 1px solid var(--tufte-ink) !important;
   background: transparent !important;
 }
@@ -741,6 +762,7 @@ body.theme-dark {
 .markdown-source-view.mod-cm6 .cm-content td,
 .markdown-rendered th,
 .markdown-rendered td {
+  /* Same reason as the thead rule above. */
   border: none !important;
   padding: 0.45em 1.8em 0.45em 0 !important;   /* right padding = column gap */
   text-align: left;
@@ -754,6 +776,7 @@ body.theme-dark {
 .markdown-source-view.mod-cm6 .cm-content td:last-child,
 .markdown-rendered th:last-child,
 .markdown-rendered td:last-child {
+  /* Same reason as the thead rule above. */
   padding-right: 0 !important;
 }
 .markdown-preview-view th,
@@ -766,6 +789,7 @@ body.theme-dark {
 .markdown-preview-view tbody tr,
 .markdown-source-view.mod-cm6 .cm-content tbody tr,
 .markdown-rendered tbody tr {
+  /* Same reason as the thead rule above. */
   border: none !important;
   background: transparent !important;
 }
@@ -819,17 +843,24 @@ body.theme-dark {
      | ------ | ------ |
 */
 .markdown-preview-view h5 {
-  font-family: var(--font-gill-sans) !important;
-  font-weight: 600 !important;
-  font-style: normal !important;
-  font-size: 1.1em !important;
+  /* Type properties need no !important: app.css's `.markdown-rendered h5`
+     (0,1,1) is not important and loses to this rule on order. The two
+     MARGINS below are a different fight — see their comment. */
+  font-family: var(--font-gill-sans);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.1em;
   letter-spacing: 0.005em;
   color: var(--tufte-ink);
+  /* !important for the same two competitors as H1-H4 — see their comment. */
   margin-top: 1.8rem !important;
   margin-bottom: 0.15rem !important;
 }
 .markdown-source-view.mod-cm6 .cm-header-5,
 .markdown-source-view.mod-cm6 .HyperMD-header-5 {
+  /* Must be !important: app.css declares `.HyperMD-header .cm-header-1..6
+     sets font-size to inherit, itself !important — and no specificity beats an
+     important declaration. */
   font-family: var(--font-gill-sans) !important;
   font-weight: 600 !important;
   font-style: normal !important;
@@ -855,21 +886,29 @@ body.theme-dark {
 .markdown-preview-view pre,
 .markdown-preview-view pre > code,
 .markdown-preview-view :not(pre) > code {
-  font-family: var(--font-monospace-theme) !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--tufte-ink) !important;
-  border: none !important;
-  border-radius: 0 !important;
+  /* No !important needed: the competitor is `.markdown-rendered code`
+     (0,1,1), same specificity as ours and NOT important — and a theme
+     sheet loads after app.css, so ours wins on order alone. */
+  font-family: var(--font-monospace-theme);
+  background: transparent;
+  background-color: transparent;
+  color: var(--tufte-ink);
+  border: none;
+  border-radius: 0;
   line-height: 1.42;
   -webkit-text-size-adjust: 100%;
 }
 .markdown-preview-view code,
 .markdown-preview-view :not(pre) > code {
-  font-size: 0.65em !important;
-  padding: 0 !important;
+  /* Same cascade note as the block above — order beats app.css's
+     `.markdown-rendered code` without !important. */
+  font-size: 0.65em;
+  padding: 0;
 }
 .markdown-preview-view pre {
+  /* Kept: this padding is what the language-label overlay further down is
+     positioned against — the two are read together, and unpicking them is
+     not worth a count. */
   font-size: 0.65em !important;
   margin: 1.4rem 0 1.4rem 2.5rem;
   padding: 1.6em 0 0 0 !important;     /* top room for the language label */
@@ -877,8 +916,8 @@ body.theme-dark {
   overflow-x: auto;
 }
 .markdown-preview-view pre > code {
-  font-size: 1em !important;            /* inherit from <pre>, don't double-shrink */
-  padding: 0 !important;
+  font-size: 1em;            /* inherit from <pre>, don't double-shrink */
+  padding: 0;
 }
 /* Code inside headings: 0.8em of the heading (Tufte's rule). */
 .markdown-preview-view h1 code,
@@ -887,20 +926,29 @@ body.theme-dark {
 .markdown-preview-view h4 code,
 .markdown-preview-view h5 code,
 .markdown-preview-view h6 code {
-  font-size: 0.8em !important;
+  /* Competitor is `.markdown-rendered code` (0,1,1); ours is (0,1,2)
+     and later — no !important required. */
+  font-size: 0.8em;
 }
 
 /* Disable Obsidian's Prism-style syntax highlighting — every token
    renders in the body ink color, matching Tufte CSS's plain-monospace
    approach. */
-.markdown-preview-view pre [class*="token"],
-.markdown-preview-view code [class*="token"],
-.markdown-preview-view pre [class*="hljs-"],
-.markdown-preview-view code [class*="hljs-"] {
-  color: var(--tufte-ink) !important;
-  background: transparent !important;
-  font-style: normal !important;
-  font-weight: normal !important;
+.markdown-preview-view.markdown-preview-view pre [class*="token"],
+.markdown-preview-view.markdown-preview-view code [class*="token"],
+.markdown-preview-view.markdown-preview-view pre [class*="hljs-"],
+.markdown-preview-view.markdown-preview-view code [class*="hljs-"] {
+  /* No !important, by specificity instead. Most Prism rules are
+     `.token.comment` and friends (0,2,0), but the language-scoped forms
+     `.language-css .token.string` and `.style .token.string` reach
+     (0,3,0) — the highest any token rule in app.css reaches — and would
+     win a css-fenced block. The doubled lead class puts this at (0,3,1),
+     which clears them all; the match set is unchanged (same class,
+     tested twice). */
+  color: var(--tufte-ink);
+  background: transparent;
+  font-style: normal;
+  font-weight: normal;
 }
 
 /* Hide Obsidian's default "Copy" button so it doesn't collide with
@@ -1014,10 +1062,14 @@ body.theme-dark {
   border-radius: 0 !important;
 }
 .markdown-source-view.mod-cm6 .cm-inline-code {
+  /* Live Preview surface: CodeMirror decorates these spans, so the result
+     is not reproducible in a static harness — the audit's conservative
+     default applies and the declaration stays important. */
   font-size: 0.65em !important;
 }
 .markdown-source-view.mod-cm6 .HyperMD-codeblock,
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  /* Live Preview surface — see the .cm-inline-code note above. */
   font-size: 0.65em !important;
 }
 
@@ -1046,6 +1098,7 @@ body.theme-dark {
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre,
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > code,
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout :not(pre) > code {
+  /* Live Preview callout surface — see the cluster note above. */
   font-family: var(--font-monospace-theme) !important;
   background: transparent !important;
   background-color: transparent !important;
@@ -1056,25 +1109,30 @@ body.theme-dark {
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code,
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout :not(pre) > code {
+  /* Live Preview callout surface — see the cluster note above. */
   font-size: 0.85em !important;
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre {
+  /* Live Preview callout surface — see the cluster note above. */
   font-size: 0.85em !important;
   margin: 0.6em 0 !important;
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > code {
+  /* Live Preview callout surface — see the cluster note above. */
   font-size: 1em !important;
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre [class*="token"],
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code [class*="token"],
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre [class*="hljs-"],
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code [class*="hljs-"] {
+  /* Live Preview callout surface — see the cluster note above. */
   color: var(--tufte-ink) !important;
   background: transparent !important;
   font-style: normal !important;
   font-weight: normal !important;
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > button.copy-code-button {
+  /* Live Preview callout surface — see the cluster note above. */
   display: none !important;
 }
 
@@ -1259,6 +1317,9 @@ mjx-container[display="false"] {
 .markdown-preview-view sup a:hover,
 .markdown-preview-view sup.footnote-ref a.footnote-link:hover,
 .markdown-preview-view a.footnote-link:hover {
+  /* Must be !important: the RESTING sup rule above is important, and an
+     important declaration beats a normal one whatever the specificity — a
+     normal hover colour here would simply never apply. */
   color: var(--tufte-accent) !important;
   text-decoration: none !important;
 }
@@ -1296,13 +1357,18 @@ mjx-container[display="false"] {
   --callout-padding: 0;
   --callout-border-width: 0;
   --callout-border-opacity: 0;
-  background: transparent !important;
-  background-color: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  /* No !important on the box suppression below: app.css's own `.callout` is
+     (0,1,0) — equal specificity, earlier in the cascade — and it paints
+     background, padding and border THROUGH the --callout-* tokens zeroed
+     just above; the per-type `[data-callout="…"]` rules set only
+     --callout-color/-icon, and nothing there gives a callout a box-shadow. */
+  background: transparent;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   color: var(--tufte-ink);
-  padding: 0 !important;
+  padding: 0;
   margin: 1.4rem 0 1.4rem 2.5rem;
   mix-blend-mode: normal;
 }
@@ -1332,13 +1398,20 @@ mjx-container[display="false"] {
 .callout-icon {
   display: none;
 }
+/* Callout interior: zeroed against app.css's --callout-content-padding and
+   the first/last-child margins it leaves in place. !important because this
+   same trio is what the editor's `.cm-embed-block.cm-callout` copies render
+   through — a CodeMirror surface, unverifiable statically, so both views
+   keep one declaration. */
 .callout-content {
   padding: 0 !important;
 }
 .callout-content > *:first-child {
+  /* Same reason as .callout-content above. */
   margin-top: 0 !important;
 }
 .callout-content > *:last-child {
+  /* Same reason as .callout-content above. */
   margin-bottom: 0 !important;
 }
 
@@ -1395,10 +1468,14 @@ mjx-container[display="false"] {
   transform: none !important;
   box-sizing: border-box !important;
 }
+/* Epigraph: no title row, no interior padding — the quote IS the callout.
+   !important for the same shared-with-Live-Preview reason as the base
+   .callout-content rule above. */
 .callout[data-callout="epigraph"] .callout-title {
   display: none !important;
 }
 .callout[data-callout="epigraph"] .callout-content {
+  /* Same reason as the epigraph title rule above. */
   padding: 0 !important;
 }
 .callout[data-callout="epigraph"] .callout-content p:last-child {
@@ -2684,15 +2761,19 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
     padding-right: 1rem !important;
   }
   .markdown-source-view.mod-cm6 .cm-sizer {
+    /* Same Live Preview reason as the desktop .cm-sizer rule. */
     max-width: 100% !important;
   }
 
+  /* Phone type scale. A media query adds no specificity, so each of these
+     simply repeats its base selector from earlier in this file and wins on
+     source order — no !important needed. */
   .markdown-preview-view .inline-title,
-  .markdown-source-view .inline-title { font-size: 2em !important; }
+  .markdown-source-view .inline-title { font-size: 2em; }
   .markdown-reading-view .markdown-preview-view .inline-title { margin-right: 0; }
-  .markdown-preview-view h1 { font-size: 1.8em !important; }
-  .markdown-preview-view h2 { font-size: 1.45em !important; }
-  .markdown-preview-view h3 { font-size: 1.2em !important; }
+  .markdown-preview-view h1 { font-size: 1.8em; }
+  .markdown-preview-view h2 { font-size: 1.45em; }
+  .markdown-preview-view h3 { font-size: 1.2em; }
 
   /* Banner: flush with the phone page, in a squarer 3:1 band (a 4:1
      sliver is illegibly short at phone widths). */
