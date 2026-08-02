@@ -1,6 +1,6 @@
 {
   "id": "tufte-figures",
-  "name": "Tufte Figures",
+  "name": "Tufte Figure Helper",
   "version": "1.7.0",
   "minAppVersion": "1.4.0",
   "description": "Drop-to-insert Tufte-style figures: column, full-width, and margin figures with captions, size adjustment, multi-image rows, an image-quilt generator, click-to-enlarge, edit-at-cursor, and auto-numbered clickable references. Renders in Reading view.",
