@@ -15,6 +15,30 @@ An [Obsidian](https://obsidian.md) theme adapted from [Tufte CSS](https://edward
 
 Light and dark modes throughout; WCAG AA contrast documented in the stylesheet.
 
+
+### Sidenote Function as Edward Tufte's Handout Design
+One of the core features of Tufte's handout and book design is the sidenote, which can be traced back to the [Marginalia](https://en.wikipedia.org/wiki/Marginalia) commentary. I found this feature helpful for my note-taking process—once I started to use it, I gradually found many places to insert a sidenote where I didn't notice before.
+
+<img width="809" height="167" alt="Sidenote-1" src="https://github.com/user-attachments/assets/fc615a85-6823-48c3-a30b-ed5bbc84c1d0" />
+<img width="813" height="218" alt="Sidenote-2" src="https://github.com/user-attachments/assets/2feea790-b8b5-477a-936e-c3d05449cc8e" />
+
+### Backlink Renderer
+Backlinks are a core feature of the [Zettelkasten](https://en.wikipedia.org/wiki/Zettelkasten) (or slipbox) note-taking method. I made a plugin so that it renders the Markdown format instead of displaying the source code directly.
+
+<img width="819" height="289" alt="BacklinkRender" src="https://github.com/user-attachments/assets/b8335034-de97-4816-85d8-5b86c93ec1aa" />
+
+### Enhancing Figure Function 
+The theme supports three modes of figure display, including displaying figures on the sidenote area.
+
+<img width="812" height="518" alt="FigureMode-1" src="https://github.com/user-attachments/assets/4b41b036-0d3e-470e-97db-90364d71e714" />
+<img width="860" height="607" alt="FigureMode-2" src="https://github.com/user-attachments/assets/24bbcb28-e240-4b35-bfa9-1bd83b463d72" />
+<img width="833" height="606" alt="FigureMode-3" src="https://github.com/user-attachments/assets/c521476d-d62f-46f1-a280-8271e50662bb" />
+
+If you drag the image into the pane, a modal will pop up and ask you for more details of that figure, including captions, numbers, and names. It also supports multiple image displays and [image quilts](http://imagequilts.com/).
+
+<img width="545" height="707" alt="FigureSetting" src="https://github.com/user-attachments/assets/a9f18cc3-0c6a-4b59-8c57-26cbbe8516d9" />
+<img width="851" height="453" alt="ImageQuilt" src="https://github.com/user-attachments/assets/08cc4703-e9dc-4003-9ed2-6746cab96853" />
+
 ## Companion plugins
 
 The theme stands alone, but four plugins in [`plugins/`](plugins) complete the Tufte writing system:
