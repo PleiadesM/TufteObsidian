@@ -36,16 +36,32 @@ Notes for review:
 - The stylesheet uses `!important` in places (tables, banner geometry) where it must beat Obsidian's inline styles; the guidelines discourage casual use, so if a reviewer asks, each instance is commented with its reason in `theme.css`.
 - `modes` for the directory entry: both light and dark are supported.
 
-## The plugins (separate track, when ready)
+## The plugins (separate track)
 
-Community **plugins** (unlike themes) each need their **own repository** — the submission form takes one repo per plugin, and the release must attach `main.js`, `manifest.json`, and `styles.css` as loose assets (not a zip). To submit later:
+Community **plugins** (unlike themes) each need their **own repository** — the submission form takes one repo per plugin, and the release must attach `main.js`, `manifest.json`, and `styles.css` as loose assets (not a zip). The four release-mirror repos exist, each with `README.md` (pointing back here), MIT `LICENSE`, and the plugin files at the repo root:
 
-1. Create `PleiadesM/tufte-sidenotes`, `PleiadesM/tufte-figures`, `PleiadesM/tufte-inline`; move each plugin's files to its repo root (they live in `plugins/` here for now).
-2. Each repo: `README.md`, `LICENSE`, `manifest.json` at root; release tagged with the manifest version, assets `main.js` + `manifest.json` (+ `styles.css`).
-3. Submit each at community.obsidian.md the same way.
-4. The plugin ids (`tufte-sidenotes`, `tufte-figures`, `tufte-inline`) must stay stable forever once published.
+| Plugin id | Repository | First release |
+|---|---|---|
+| `tufte-sidenotes` | [PleiadesM/Tufte-Sidenotes](https://github.com/PleiadesM/Tufte-Sidenotes) | 1.7.0 |
+| `tufte-figures` | [PleiadesM/Tufte-Figures](https://github.com/PleiadesM/Tufte-Figures) | 1.7.0 |
+| `tufte-inline` | [PleiadesM/Tufte-Inline](https://github.com/PleiadesM/Tufte-Inline) | 1.2.0 |
+| `tufte-backlinks` | [PleiadesM/Tufte-Backlinks](https://github.com/PleiadesM/Tufte-Backlinks) | 1.0.0 |
 
-Until then, users install the plugins manually from this repo's release zips, or beta-test them via BRAT once they have their own repos.
+Cutting a plugin release (every version, after the change lands in `plugins/<id>/` here):
+
+1. Copy the plugin's files from `plugins/<id>/` to its own repo's root; commit and push.
+2. Create a release whose **tag exactly matches the manifest version** (no `v` prefix):
+
+```bash
+gh release create 1.7.1 main.js manifest.json styles.css --title "Tufte Sidenotes 1.7.1" --notes "…"
+```
+
+(`tufte-inline` has no `styles.css` — its styling lives in the theme.)
+
+3. Submit each plugin once at community.obsidian.md, same flow as the theme.
+4. The plugin ids must stay stable forever once published.
+
+The full change flow — dev vault → this repo → plugin repos — is documented in the dev vault's `CLAUDE.md` (sync discipline).
 
 ## Testing a release before announcing
 
