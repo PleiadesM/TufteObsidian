@@ -958,10 +958,20 @@ body.theme-dark {
 }
 
 /* Language fence label — Tufte red italic, upper-right of the block.
-   Pure CSS: each common language class sets `--tufte-lang`, and a
-   single ::before rule reads it. Unknown languages render no label. */
-.markdown-preview-view pre[class*="language-"]::before,
-.markdown-preview-view pre:has(> code[class*="language-"])::before {
+   Pure CSS: each common language class sets `--tufte-lang`, and a single
+   ::before rule reads it. Unknown languages render no label.
+
+   Both the variable and the ::before sit on the CODE element, because
+   that is the only node Obsidian classes. Both construction paths agree
+   (verified in the 1.13.4 bundle): the reading-view hast builder sets
+   `className: ["language-" + lang]` on the code node and creates the
+   pre with no class at all, and the Live Preview widget does the same —
+   `createEl("pre")`, then `createEl("code", "language-" + lang)`. So
+   this needs neither `:has()` nor a class the pre never gets. The pre
+   stays `position: relative` and the code is never positioned, so the
+   ::before's containing block is still the pre — same corner, same
+   coordinates as before. */
+.markdown-preview-view pre > code[class*="language-"]::before {
   content: var(--tufte-lang, "");
   position: absolute;
   top: 0.1em;
@@ -975,78 +985,42 @@ body.theme-dark {
   line-height: 1.2;
   pointer-events: none;
 }
-.markdown-preview-view pre.language-css,
-.markdown-preview-view pre:has(> code.language-css) { --tufte-lang: "css"; }
-.markdown-preview-view pre.language-html,
-.markdown-preview-view pre:has(> code.language-html) { --tufte-lang: "html"; }
-.markdown-preview-view pre.language-js,
-.markdown-preview-view pre.language-javascript,
-.markdown-preview-view pre:has(> code.language-js),
-.markdown-preview-view pre:has(> code.language-javascript) { --tufte-lang: "javascript"; }
-.markdown-preview-view pre.language-ts,
-.markdown-preview-view pre.language-typescript,
-.markdown-preview-view pre:has(> code.language-ts),
-.markdown-preview-view pre:has(> code.language-typescript) { --tufte-lang: "typescript"; }
-.markdown-preview-view pre.language-jsx,
-.markdown-preview-view pre:has(> code.language-jsx) { --tufte-lang: "jsx"; }
-.markdown-preview-view pre.language-tsx,
-.markdown-preview-view pre:has(> code.language-tsx) { --tufte-lang: "tsx"; }
-.markdown-preview-view pre.language-md,
-.markdown-preview-view pre.language-markdown,
-.markdown-preview-view pre:has(> code.language-md),
-.markdown-preview-view pre:has(> code.language-markdown) { --tufte-lang: "markdown"; }
-.markdown-preview-view pre.language-py,
-.markdown-preview-view pre.language-python,
-.markdown-preview-view pre:has(> code.language-py),
-.markdown-preview-view pre:has(> code.language-python) { --tufte-lang: "python"; }
-.markdown-preview-view pre.language-r,
-.markdown-preview-view pre:has(> code.language-r) { --tufte-lang: "r"; }
-.markdown-preview-view pre.language-sh,
-.markdown-preview-view pre.language-bash,
-.markdown-preview-view pre.language-shell,
-.markdown-preview-view pre.language-zsh,
-.markdown-preview-view pre:has(> code.language-sh),
-.markdown-preview-view pre:has(> code.language-bash),
-.markdown-preview-view pre:has(> code.language-shell),
-.markdown-preview-view pre:has(> code.language-zsh) { --tufte-lang: "bash"; }
-.markdown-preview-view pre.language-json,
-.markdown-preview-view pre:has(> code.language-json) { --tufte-lang: "json"; }
-.markdown-preview-view pre.language-yaml,
-.markdown-preview-view pre.language-yml,
-.markdown-preview-view pre:has(> code.language-yaml),
-.markdown-preview-view pre:has(> code.language-yml) { --tufte-lang: "yaml"; }
-.markdown-preview-view pre.language-toml,
-.markdown-preview-view pre:has(> code.language-toml) { --tufte-lang: "toml"; }
-.markdown-preview-view pre.language-rust,
-.markdown-preview-view pre.language-rs,
-.markdown-preview-view pre:has(> code.language-rust),
-.markdown-preview-view pre:has(> code.language-rs) { --tufte-lang: "rust"; }
-.markdown-preview-view pre.language-go,
-.markdown-preview-view pre:has(> code.language-go) { --tufte-lang: "go"; }
-.markdown-preview-view pre.language-c,
-.markdown-preview-view pre:has(> code.language-c) { --tufte-lang: "c"; }
-.markdown-preview-view pre.language-cpp,
-.markdown-preview-view pre:has(> code.language-cpp) { --tufte-lang: "c++"; }
-.markdown-preview-view pre.language-java,
-.markdown-preview-view pre:has(> code.language-java) { --tufte-lang: "java"; }
-.markdown-preview-view pre.language-sql,
-.markdown-preview-view pre:has(> code.language-sql) { --tufte-lang: "sql"; }
-.markdown-preview-view pre.language-ruby,
-.markdown-preview-view pre.language-rb,
-.markdown-preview-view pre:has(> code.language-ruby),
-.markdown-preview-view pre:has(> code.language-rb) { --tufte-lang: "ruby"; }
-.markdown-preview-view pre.language-php,
-.markdown-preview-view pre:has(> code.language-php) { --tufte-lang: "php"; }
-.markdown-preview-view pre.language-swift,
-.markdown-preview-view pre:has(> code.language-swift) { --tufte-lang: "swift"; }
-.markdown-preview-view pre.language-kotlin,
-.markdown-preview-view pre:has(> code.language-kotlin) { --tufte-lang: "kotlin"; }
-.markdown-preview-view pre.language-scss,
-.markdown-preview-view pre:has(> code.language-scss) { --tufte-lang: "scss"; }
-.markdown-preview-view pre.language-xml,
-.markdown-preview-view pre:has(> code.language-xml) { --tufte-lang: "xml"; }
-.markdown-preview-view pre.language-dataview,
-.markdown-preview-view pre:has(> code.language-dataview) { --tufte-lang: "dataview"; }
+.markdown-preview-view pre > code.language-css { --tufte-lang: "css"; }
+.markdown-preview-view pre > code.language-html { --tufte-lang: "html"; }
+.markdown-preview-view pre > code.language-js,
+.markdown-preview-view pre > code.language-javascript { --tufte-lang: "javascript"; }
+.markdown-preview-view pre > code.language-ts,
+.markdown-preview-view pre > code.language-typescript { --tufte-lang: "typescript"; }
+.markdown-preview-view pre > code.language-jsx { --tufte-lang: "jsx"; }
+.markdown-preview-view pre > code.language-tsx { --tufte-lang: "tsx"; }
+.markdown-preview-view pre > code.language-md,
+.markdown-preview-view pre > code.language-markdown { --tufte-lang: "markdown"; }
+.markdown-preview-view pre > code.language-py,
+.markdown-preview-view pre > code.language-python { --tufte-lang: "python"; }
+.markdown-preview-view pre > code.language-r { --tufte-lang: "r"; }
+.markdown-preview-view pre > code.language-sh,
+.markdown-preview-view pre > code.language-bash,
+.markdown-preview-view pre > code.language-shell,
+.markdown-preview-view pre > code.language-zsh { --tufte-lang: "bash"; }
+.markdown-preview-view pre > code.language-json { --tufte-lang: "json"; }
+.markdown-preview-view pre > code.language-yaml,
+.markdown-preview-view pre > code.language-yml { --tufte-lang: "yaml"; }
+.markdown-preview-view pre > code.language-toml { --tufte-lang: "toml"; }
+.markdown-preview-view pre > code.language-rust,
+.markdown-preview-view pre > code.language-rs { --tufte-lang: "rust"; }
+.markdown-preview-view pre > code.language-go { --tufte-lang: "go"; }
+.markdown-preview-view pre > code.language-c { --tufte-lang: "c"; }
+.markdown-preview-view pre > code.language-cpp { --tufte-lang: "c++"; }
+.markdown-preview-view pre > code.language-java { --tufte-lang: "java"; }
+.markdown-preview-view pre > code.language-sql { --tufte-lang: "sql"; }
+.markdown-preview-view pre > code.language-ruby,
+.markdown-preview-view pre > code.language-rb { --tufte-lang: "ruby"; }
+.markdown-preview-view pre > code.language-php { --tufte-lang: "php"; }
+.markdown-preview-view pre > code.language-swift { --tufte-lang: "swift"; }
+.markdown-preview-view pre > code.language-kotlin { --tufte-lang: "kotlin"; }
+.markdown-preview-view pre > code.language-scss { --tufte-lang: "scss"; }
+.markdown-preview-view pre > code.language-xml { --tufte-lang: "xml"; }
+.markdown-preview-view pre > code.language-dataview { --tufte-lang: "dataview"; }
 
 /* Editing view: smaller monospace, ink color, no ribbon. The source
    block stays flush-left (no margin indent) so the cursor sits where
@@ -1154,8 +1128,22 @@ body.theme-dark {
    ------------------------------------------------------------------ */
 
 /* Ink color — MathJax output sets no foreground of its own, so this is
-   a defensive pin (dark mode already works via inheritance). */
-mjx-container {
+   a defensive pin (dark mode already works via inheritance).
+
+   These rules target `.MathJax`, not the `mjx-container` element name:
+   a custom element name is an unknown type selector to a CSS linter,
+   and MathJax v3 stamps the class itself — its output jax builds the
+   node by calling `html` with tag "mjx-container" and class "MathJax"
+   (verified in the 1.13.4 bundle; the error path emits
+   "MathJax mjx-output-error", which still matches). The move costs a
+   specificity step, type (0,0,1) → class (0,1,0), which flips nothing:
+   app.css contains exactly two mjx rules — a bare `mjx-container`
+   setting only `outline`, a property nothing here sets, and
+   `.markdown-source-view.mod-cm6 .math-block > mjx-container`, whose
+   overflow-x is the same `auto` this file already declares — and the
+   theme loads after app.css, so every one of these rules won its
+   cascade before the change and still does. */
+.MathJax {
   color: var(--tufte-ink);
 }
 
@@ -1163,7 +1151,7 @@ mjx-container {
    blends with 21px prose. CM math reads slightly large next to
    et-book at equal nominal size, hence the modest downscale.
    (display="false" is MathJax v3's own inline marker attribute.) */
-mjx-container[display="false"] {
+.MathJax[display="false"] {
   font-size: 0.95em;
   vertical-align: -0.1em;   /* GUI-check: nudge until it sits on the et-book baseline */
 }
@@ -1178,22 +1166,22 @@ mjx-container[display="false"] {
    stylesheet (`mjx-container[display="true"]{text-align:center}`) —
    not app.css — whose load order vs. the theme isn't guaranteed
    (MathJax loads lazily, per note). !important reaches past it. */
-.markdown-preview-view .math-block mjx-container[display="true"],
-.markdown-source-view.mod-cm6 .math-block mjx-container[display="true"] {
+.markdown-preview-view .math-block .MathJax[display="true"],
+.markdown-source-view.mod-cm6 .math-block .MathJax[display="true"] {
   text-align: left !important;
 }
 
 /* Long equations scroll inside their own box instead of widening the
    page or wrapping mid-formula — and without scrollbar furniture. */
-.markdown-preview-view .math-block > mjx-container,
-.markdown-source-view.mod-cm6 .math-block > mjx-container {
+.markdown-preview-view .math-block > .MathJax,
+.markdown-source-view.mod-cm6 .math-block > .MathJax {
   overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;
   scrollbar-width: none;            /* Firefox syntax; inert on Chromium */
 }
-.markdown-preview-view .math-block > mjx-container::-webkit-scrollbar,
-.markdown-source-view.mod-cm6 .math-block > mjx-container::-webkit-scrollbar {
+.markdown-preview-view .math-block > .MathJax::-webkit-scrollbar,
+.markdown-source-view.mod-cm6 .math-block > .MathJax::-webkit-scrollbar {
   display: none;                    /* Obsidian is Chromium/Electron — this hides it */
 }
 
@@ -1458,7 +1446,18 @@ mjx-container[display="false"] {
 
 /* Live Preview: pin the epigraph widget to the text column so it
    doesn't bleed into the right gutter. The wrapper otherwise
-   inherits whatever width CodeMirror gives it. */
+   inherits whatever width CodeMirror gives it.
+
+   The one unavoidable `:has()` in the theme. CodeMirror builds this
+   wrapper with the bare class string "cm-callout" and copies NO
+   per-type marker onto it (verified in the 1.13.4 bundle), so the
+   callout's own `[data-callout="epigraph"]` is reachable only by
+   looking down into the child — there is no ancestor test, sibling
+   trick or token that identifies an epigraph widget from the wrapper
+   alone, and the alternative is a JS plugin for one width fix. The
+   performance cost is bounded: the subject is already narrowed to
+   three classes, so the browser evaluates the :has() only on
+   cm-callout wrappers inside a CM6 source view. */
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout:has(.callout[data-callout="epigraph"]) {
   width: auto !important;
   max-width: 100% !important;
@@ -1571,6 +1570,14 @@ mjx-container[display="false"] {
    paragraph — embed, <br>, caption text — so a paragraph-level
    selector can't isolate it (`:not(:has(.internal-embed))` never
    matched that shape, and the caption rendered as full-size body ink).
+   The two `:not(:has(.internal-embed))` guards below are kept for the
+   OTHER shape — an image and caption that do land in separate
+   paragraphs — where a parent must be excluded by what it contains,
+   which no other selector expresses. On the performance warning: both
+   sit behind `.callout[data-callout="banner"] .callout-content >` and
+   a `:last-child` test, so the :has() is evaluated only for the final
+   child of a banner callout's content — a handful of elements per
+   note, never a document-wide scan.
    Style the callout CONTENT instead: a banner holds only the plate and
    its caption, so every piece of text in it IS caption text, whichever
    paragraph shape Obsidian emits; the image inherits none of this.
