@@ -5,6 +5,6 @@
   "minAppVersion": "1.4.0",
   "description": "Renders Tufte sidenotes and marginnotes in Reading view while keeping the editor single-column.",
   "author": "Daocheng Lin",
-  "authorUrl": "https://github.com/PleiadesM/TufteObsidian",
+  "authorUrl": "https://github.com/PleiadesM",
   "isDesktopOnly": false
 }

@@ -3,8 +3,8 @@
   "name": "Tufte Figures",
   "version": "1.7.0",
   "minAppVersion": "1.4.0",
-  "description": "Drop-to-insert Tufte-style figures: column figures with margin captions, full-width figures, and margin figures, with size adjustment, multi-image rows, an image-quilt generator (drag-arrange tiles into one transparent PNG), click-to-enlarge, an edit-at-cursor command, and auto-numbered clickable references. Renders in Reading view.",
+  "description": "Drop-to-insert Tufte-style figures: column, full-width, and margin figures with captions, size adjustment, multi-image rows, an image-quilt generator, click-to-enlarge, edit-at-cursor, and auto-numbered clickable references. Renders in Reading view.",
   "author": "Daocheng Lin",
-  "authorUrl": "https://github.com/PleiadesM/TufteObsidian",
+  "authorUrl": "https://github.com/PleiadesM",
   "isDesktopOnly": false
 }
