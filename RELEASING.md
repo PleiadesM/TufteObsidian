@@ -42,7 +42,7 @@ Community **plugins** (unlike themes) each need their **own repository** — the
 
 | Plugin id | Repository | First release |
 |---|---|---|
-| `tufte-sidenotes` | [PleiadesM/Tufte-Sidenotes](https://github.com/PleiadesM/Tufte-Sidenotes) | 1.7.0 |
+| `tufte-sidenotes` | [PleiadesM/Tufte-Sidenote](https://github.com/PleiadesM/Tufte-Sidenote) | 1.7.0 |
 | `tufte-figures` | [PleiadesM/Tufte-Figures](https://github.com/PleiadesM/Tufte-Figures) | 1.7.0 |
 | `tufte-inline` | [PleiadesM/Tufte-Inline](https://github.com/PleiadesM/Tufte-Inline) | 1.2.0 |
 | `tufte-backlinks` | [PleiadesM/Tufte-Backlinks](https://github.com/PleiadesM/Tufte-Backlinks) | 1.0.0 |
