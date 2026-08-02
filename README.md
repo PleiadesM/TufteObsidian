@@ -2,7 +2,7 @@
 
 An [Obsidian](https://obsidian.md) theme adapted from [Tufte CSS](https://edwardtufte.github.io/tufte-css/), carrying Edward Tufte's book design — ET Book type, marginalia, restrained rules, one deliberate red — into every corner of the app, with a full Chinese typographic system (宋体正文、楷体示例、黑体数据) alongside the Latin one.
 
-![Tufte for Obsidian — the Bases bookshelf gallery, light and dark.](screenshot.png)
+![Tufte for Obsidian — the Bases bookshelf gallery, light and dark.](banner.png)
 
 ## What the theme covers
 
