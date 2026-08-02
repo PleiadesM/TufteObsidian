@@ -357,17 +357,24 @@ body.theme-dark {
      entirely through Obsidian's own --metadata-* token layer (see the
      Metadata section below for the element-level rules and rationale). */
   --metadata-label-font:            var(--font-gill-sans);
-  --metadata-label-font-size:       var(--font-ui-small);   /* the fixed 13px UI-small, not the 21px body scale */
+  --metadata-label-font-size:       var(--font-ui-medium);  /* the fixed 15px UI-medium, not the 21px body scale */
+  /* (No -font-weight token: bold keys were tried at 1.15.3 and read as
+     too insistent beside the larger values — the 15px size and the
+     Gill Sans face already separate keys from the serif. Left unset so
+     app.css's stock `inherit` applies.) */
   --metadata-label-text-color:      var(--tufte-muted);
   /* (No -hover label token: app.css defines but never consumes it —
      the hover brightening is a real element rule in the Metadata
      section below instead.) */
   --metadata-input-font:            var(--font-text-theme);  /* values are note content → serif */
   --metadata-input-text-color:      var(--tufte-ink);
-  /* Values sit a clear step below prose — same 0.78em register as the
-     theme's tables — so front matter reads as front matter, not as
-     five lines of body text before the note starts. */
-  --metadata-input-font-size:       0.78em;
+  /* Values sit a step below prose — front matter reads as front matter,
+     not as five lines of body text before the note starts — but a step,
+     not a whisper: 0.83em (≈17.4px) keeps them comfortably readable
+     next to the 15px keys. NB Bases cells are metadata inputs
+     internally and must stay in the tables' 0.78 register; the Bases
+     section re-pins this token locally for exactly that reason. */
+  --metadata-input-font-size:       0.83em;
   /* No rounded corners, no hover/focus ring — a ring is still a box.
      Feedback comes from the per-row divider hairline instead:
      transparent at rest, plain rule on hover, red on focus. */
@@ -380,13 +387,16 @@ body.theme-dark {
   --metadata-divider-color:         transparent;
   --metadata-divider-color-hover:   var(--tufte-rule);
   --metadata-divider-color-focus:   var(--tufte-accent);
-  /* Hairline under the whole properties block; a little more air
-     between rows than Obsidian's cramped 3px default — reads as a
-     short list of front-matter, not a form. Vertical measures in
-     --tufte-line units so they track the body size at breakpoints. */
+  /* Hairline under the whole properties block, and rows set close: a
+     little more air than Obsidian's cramped 3px default, but tight
+     enough to read as a short list of front-matter rather than a form
+     — the type carries the hierarchy now, not the spacing. The gap
+     still clears the per-row divider hairline (1px inside a ~30px
+     row). Vertical measures in --tufte-line units so they track the
+     body size at breakpoints. */
   --metadata-border-width:          0 0 1px 0;
-  --metadata-padding:               calc(var(--tufte-line) * 0.15) 0 calc(var(--tufte-line) * 0.55) 0;
-  --metadata-gap:                   0.4rem;
+  --metadata-padding:               calc(var(--tufte-line) * 0.15) 0 calc(var(--tufte-line) * 0.25) 0;
+  --metadata-gap:                   0.25rem;
 
   /* graph view — wire Obsidian's --graph-* hooks to the paper/ink
      world. Focus/highlight red comes through --text-accent /
@@ -1703,6 +1713,14 @@ body {
   box-shadow: none;
   overflow: visible;
   color: var(--tufte-muted);
+  /* One notch up from the app's `--font-ui-smaller` (12px) base for snippets:
+     mentions are reading matter, not chrome. No !important needed — this
+     selector (0,2,0) outranks the app's (0,1,0). Everything scaled in em goes
+     with it: the Tufte Backlinks plugin's rendered code at 0.9em (12.6px),
+     its task lines, its heading net. Native and rendered snippets alike,
+     sidebar pane and in-document block alike; the Search pane, which is not a
+     backlink pane, keeps the app's size. */
+  font-size: 14px;
 }
 
 /* The whole panel set in Gill Sans, like the to-do lists. */
@@ -2013,6 +2031,20 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
   color: var(--tufte-accent);
 }
 
+/* The "Properties" title is a label for the block, not a heading over
+   it. app.css sets `max(var(--font-ui-small), 1em)` — the 1em arm wins
+   inside a note and lands it at full body size (21px), competing with
+   the note's own title. Italic serif at 18px puts it in the same
+   register as the theme's other quiet labels (captions, attributions)
+   and lets the keys below carry the weight. Overriding size, weight,
+   family and style together, since app.css declares all but style. */
+.metadata-properties-title {
+  font-family: var(--font-italic-theme);
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 400;
+}
+
 /* "Properties" heading focus ring — thinned to a hairline, accent
    colored. (Overrides app.css's 2px --background-modifier-border-focus
    ring: identical selector, later in the cascade. That global token is
@@ -2162,6 +2194,14 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
      (a declared value beats the Gill Sans inherited from .bases-view
      above). Data cells are data, not prose. */
   --metadata-input-font: var(--font-gill-sans);
+
+  /* And their SIZE stays in the tables' 0.78 register, whatever the
+     front-matter token does. app.css re-pins this alias itself on
+     .bases-table-container — but cards read the global token through
+     .metadata-input-longtext and would otherwise follow front matter
+     up to 0.83em. Pinning at the Bases root covers both views from
+     one place. */
+  --metadata-input-font-size: var(--bases-table-font-size);
 
   /* Cards view: no frames at all — app.css draws each card as a 1px
      border PLUS a coincident 1px ring-shadow with a filled cover

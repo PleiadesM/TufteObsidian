@@ -17,13 +17,14 @@ Light and dark modes throughout; WCAG AA contrast documented in the stylesheet.
 
 ## Companion plugins
 
-The theme stands alone, but three plugins in [`plugins/`](plugins) complete the Tufte writing system:
+The theme stands alone, but four plugins in [`plugins/`](plugins) complete the Tufte writing system:
 
 | Plugin | What it does |
 |---|---|
 | **Tufte Sidenotes** | Renders `[^…]` footnotes and `[!sidenote]`/`[!marginnote]` callouts as true sidenotes in the margin gutter (Reading view), keeping the editor single-column. |
 | **Tufte Figures** | Drop or paste an image to compose column, full-width, and margin figures with proper captions; multi-image rows; an image-quilt generator; auto-numbered references. |
 | **Tufte Inline** | Inline shorthands: `^^text^^` small-caps openers, `&&text&&` italic run-ins, `@@字@@` two-line CJK drop caps. |
+| **Tufte Backlinks** | Renders Linked/Unlinked mention snippets as formatted Markdown — headings at body size, the backlink reference itself bold, underlined and accent red. |
 
 ## Install
 

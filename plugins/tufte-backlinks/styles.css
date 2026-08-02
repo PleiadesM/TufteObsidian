@@ -1,0 +1,146 @@
+/* ============================================================================
+   Tufte Backlinks plugin styles
+
+   Every rule is scoped to the plugin's own rendered wrapper inside a backlink
+   match, so nothing here can reach the global Search pane or ordinary note
+   content. The rules are STRUCTURAL — the theme keeps ownership of colour and
+   type in the backlinks pane (theme.css, "Backlinks" section), which still
+   applies because the rendered content re-uses Obsidian's own
+   `.search-result-file-matched-text` class.
+
+   The one exception is the target-link rule: that treatment IS the feature,
+   and it uses the theme's accent with a fallback to Obsidian's, so the plugin
+   also looks right under other themes.
+   ============================================================================ */
+
+/* The backlink reference itself — the link in the snippet that resolves to
+   the page whose mentions are being listed. Bold + underlined + accent red so
+   it stands apart from whatever else the snippet renders. Specificity is kept
+   modest on purpose, so theme.css can refine it (underline thickness, offset)
+   later without reaching for !important. */
+.backlink-pane
+  .search-result-file-match
+  .tufte-backlinks-rendered
+  a.internal-link.tufte-backlinks-target {
+  font-weight: bold;
+  text-decoration: underline;
+  color: var(--tufte-accent, var(--text-accent));
+}
+
+/* A mention is one line of context, not a document: flatten the block spacing
+   so a rendered paragraph occupies the same visual slot the raw text did, and
+   zero the outer edges so the match keeps the theme's own padding. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered p,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered ul,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered ol,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered blockquote,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered pre,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered table {
+  margin: 0.15em 0;
+}
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered > :first-child {
+  margin-top: 0;
+}
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered > :last-child {
+  margin-bottom: 0;
+}
+
+/* Heading safety net. Markers are stripped before rendering, so this only
+   catches what the stripper can't see (an embed's own heading, a future
+   Obsidian snippet shape) — but a display-size heading inside a mention list
+   would wreck the pane, so the net stays. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h1,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h2,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h3,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h4,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h5,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered h6 {
+  /* !important: inside the embedded block the theme's preview heading sizes
+     are themselves important — see "Note-context insulation" below. */
+  font-size: 1em !important;
+  font-weight: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  margin: 0.15em 0;
+}
+
+/* Lists: enough indent to read as a list, far less than the editor's. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered ul,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered ol {
+  padding-inline-start: 1.2em;
+}
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered li {
+  margin: 0;
+}
+
+/* Code blocks wrap instead of raising a horizontal scrollbar in a pane this
+   narrow. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  /* !important for the same reason as the inline-code rule below. */
+  font-size: 0.9em !important;
+}
+
+/* ---- Note-context insulation --------------------------------------------
+   The in-document backlinks block lives INSIDE the note's
+   `.markdown-preview-view`, so the theme's note typography — tuned for a 21px
+   body — cascades straight into these snippets, which the app sets at 12px
+   (`.search-result-file-matches` → `--font-ui-smaller`). Measured against the
+   real app.css + theme.css stack, inline code landed at 7.8px and task lines
+   at 10.2px. Anything the theme sizes relative to the note body has to be
+   re-anchored to the snippet's own size here. Sidebar-pane snippets are
+   unaffected either way — these rules are simply neutral there.
+   ------------------------------------------------------------------------- */
+
+/* Inline code: the theme's rule is `.markdown-preview-view :not(pre) > code
+   { font-size: 0.65em !important }`. Important-vs-important resolves on
+   specificity, and this selector (0,3,1) outranks that one (0,1,2) — so the
+   !important here is required, not decorative. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered code {
+  font-size: 0.9em !important;
+}
+
+/* Task lines sit at snippet size like every other line. The theme's
+   `.markdown-preview-view li.task-list-item { font-size: 0.85em }` is not
+   important, so specificity alone settles it. */
+.backlink-pane
+  .search-result-file-match
+  .tufte-backlinks-rendered
+  li.task-list-item {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Media net: embeds are demoted to links before rendering, so this only backs
+   that up — a mention must never turn into a picture or a player. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered img,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered video,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered audio,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered iframe,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered .internal-embed {
+  display: none;
+}
+
+/* The whole snippet stays ONE affordance — click anywhere to jump to the
+   mention, exactly as before the plugin. Inert sub-elements also mean a
+   checkbox in a rendered task line can never mutate the source file. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered a,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered input,
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered button {
+  pointer-events: none;
+}
+
+/* MathJax ships its own display margins, which push a mention out of line. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered mjx-container {
+  margin: 0 !important;
+}
+
+/* A snippet that starts at the top of a note can render its frontmatter. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered .frontmatter,
+.backlink-pane
+  .search-result-file-match
+  .tufte-backlinks-rendered
+  .frontmatter-container {
+  display: none;
+}

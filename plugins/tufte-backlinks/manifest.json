@@ -1,0 +1,10 @@
+{
+  "id": "tufte-backlinks",
+  "name": "Tufte Backlinks",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Renders Linked/Unlinked mention snippets as formatted Markdown in the Backlinks pane and the in-document backlinks block: headings sit at body size, the backlink reference itself is bold, underlined and accent red, and the match highlights are preserved. The global Search pane is left untouched.",
+  "author": "Daocheng Lin",
+  "authorUrl": "https://github.com/PleiadesM/TufteObsidian",
+  "isDesktopOnly": false
+}
