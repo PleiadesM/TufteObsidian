@@ -1209,10 +1209,16 @@ body.theme-dark {
    Highlight — `==text==` renders as red ink, not a highlighter-pen
    ground. Reading view emits <mark>; Live Preview emits a
    .cm-highlight span. Both get the Tufte accent color with no
-   background, no padding, no rounding.
+   background, no padding, no rounding. The third selector covers the
+   Tufte Backlinks plugin's rendered snippets in the SIDEBAR pane,
+   which sits outside every .markdown-preview-view/.markdown-rendered
+   container — without it a ==highlight== in a mention falls back to
+   the browser's default yellow <mark>. (The in-document backlinks
+   block lives inside the preview view and is already covered.)
    ------------------------------------------------------------------ */
 .markdown-preview-view mark,
 .markdown-rendered mark,
+.backlink-pane .tufte-backlinks-rendered mark,
 .markdown-source-view.mod-cm6 .cm-highlight {
   background: transparent !important;
   background-color: transparent !important;
