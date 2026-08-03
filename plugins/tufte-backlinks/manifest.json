@@ -1,7 +1,7 @@
 {
   "id": "tufte-backlinks",
   "name": "Tufte Backlinks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minAppVersion": "1.4.0",
   "description": "Renders Linked and Unlinked mention snippets as formatted Markdown in the Backlinks pane and the in-document backlinks block: headings at body size, the backlink reference bold, underlined and accent red, highlights preserved. Search is untouched.",
   "author": "Daocheng Lin",
