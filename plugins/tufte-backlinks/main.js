@@ -393,7 +393,36 @@ function preprocessSnippet(raw) {
   }
   // Everything else is left alone: a snippet truncated mid-syntax renders as
   // literal text, which is exactly the status quo for that fragment.
-  return out.join("\n");
+  return dedentSnippet(out).join("\n");
+}
+
+// A snippet sliced from the middle of a nested list keeps its source
+// indentation, but the fragment carries no parent list to anchor it — so a
+// shared margin of a tab / 4+ spaces reads as an INDENTED CODE BLOCK and the
+// whole mention renders monospace. Stripping the longest literal whitespace
+// prefix the non-blank lines share restores the shallowest line to column 0
+// while preserving relative nesting, so nested (task) lists render as lists.
+// Literal prefix, not column math: a tab is never split, and if lines mix
+// tabs and spaces the common prefix simply ends early (partial dedent — the
+// status quo for that fragment). Known trade-off: a mention inside an
+// INDENTED code block (the rare, non-fenced kind) is flattened to prose;
+// fenced blocks keep their fences and still render as code.
+function dedentSnippet(lines) {
+  let prefix = null;
+  for (const line of lines) {
+    if (!line.trim()) continue; // blank lines don't vote
+    const indent = (line.match(/^[ \t]*/) || [""])[0];
+    if (prefix === null) {
+      prefix = indent;
+    } else {
+      let i = 0;
+      while (i < prefix.length && i < indent.length && prefix[i] === indent[i]) i++;
+      prefix = prefix.slice(0, i);
+    }
+    if (!prefix) return lines;
+  }
+  if (!prefix) return lines;
+  return lines.map((line) => (line.startsWith(prefix) ? line.slice(prefix.length) : line));
 }
 
 // Resolving links relative to the note the mention lives in (not the note
