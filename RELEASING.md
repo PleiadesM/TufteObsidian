@@ -43,9 +43,11 @@ Community **plugins** (unlike themes) each need their **own repository** — the
 | Plugin id | Repository | First release |
 |---|---|---|
 | `tufte-sidenotes` | [PleiadesM/Tufte-Sidenote](https://github.com/PleiadesM/Tufte-Sidenote) | 1.7.0 |
-| `tufte-figure-helper` | [PleiadesM/Tufte-Figure-Helper](https://github.com/PleiadesM/Tufte-Figure-Helper) | 1.7.0 |
+| `tufte-figures` | [PleiadesM/Tufte-Sidenotes](https://github.com/PleiadesM/Tufte-Sidenotes) ⚠️ | 1.7.0 |
 | `tufte-inline` | [PleiadesM/Tufte-Inline](https://github.com/PleiadesM/Tufte-Inline) | 1.2.0 |
 | `tufte-backlinks` | [PleiadesM/Tufte-Backlinks](https://github.com/PleiadesM/Tufte-Backlinks) | 1.0.0 |
+
+⚠️ **The figures plugin's repo is named `Tufte-Sidenotes` (plural) on purpose** — the community portal's registry row from the first (mixed-up) submission maps id `tufte-figures` to a repo of that name, and the row can't be changed from our side, so the repo was renamed to satisfy it. The *actual* sidenotes plugin lives in `Tufte-Sidenote` (singular). Double-check which repo you're pushing to before every figures or sidenotes release.
 
 Cutting a plugin release (every version, after the change lands in `plugins/<id>/` here):
 

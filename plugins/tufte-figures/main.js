@@ -484,7 +484,7 @@ module.exports = class TufteFiguresPlugin extends Plugin {
       embed = this.buildEmbed(tfile, sourcePath);
       altDefault = tfile.basename || "";
     } catch (e) {
-      console.error("tufte-figure-helper: failed to save dropped image", e);
+      console.error("tufte-figures: failed to save dropped image", e);
       new Notice("Tufte Figures: couldn't save the image.");
       return;
     }
@@ -715,7 +715,7 @@ function toArrayBuffer(u8) {
 // The hidden per-quilt folder under the vault config dir (e.g. `.obsidian`),
 // so it never shows in the file explorer.
 function quiltDir(app, id) {
-  return `${app.vault.configDir}/plugins/tufte-figure-helper/quilts/${id}`;
+  return `${app.vault.configDir}/plugins/tufte-figures/quilts/${id}`;
 }
 
 // Normalise the user's quilt-output folder setting to a clean vault-relative
@@ -2368,7 +2368,7 @@ class FigureModal extends Modal {
       const tfile = await this.app.vault.createBinary(path, buffer);
       this.addEntryFromTFile(tfile);
     } catch (e) {
-      console.error("tufte-figure-helper: failed to save image", e);
+      console.error("tufte-figures: failed to save image", e);
       new Notice("Tufte Figures: couldn't save the image.");
     }
   }
@@ -2641,7 +2641,7 @@ class FigureModal extends Modal {
       const buffer = await file.arrayBuffer();
       await this.addQuiltTile(new Uint8Array(buffer), ext, file.name || `image.${ext}`);
     } catch (e) {
-      console.error("tufte-figure-helper: failed to read quilt image", e);
+      console.error("tufte-figures: failed to read quilt image", e);
       new Notice("Tufte Figures: couldn't read the image.");
     }
   }
@@ -2652,7 +2652,7 @@ class FigureModal extends Modal {
       const ext = tfile.extension || "png";
       await this.addQuiltTile(new Uint8Array(buffer), ext, tfile.name);
     } catch (e) {
-      console.error("tufte-figure-helper: failed to read vault image", e);
+      console.error("tufte-figures: failed to read vault image", e);
     }
   }
 
@@ -2798,7 +2798,7 @@ class FigureModal extends Modal {
       try {
         ctx.drawImage(img, sx, sy, sw, sh, p.x, p.y, p.w, p.h);
       } catch (e) {
-        console.error("tufte-figure-helper: failed to draw quilt tile", e);
+        console.error("tufte-figures: failed to draw quilt tile", e);
       }
     }
 
@@ -2885,7 +2885,7 @@ class FigureModal extends Modal {
       new Notice(this.isEdit ? "Quilt updated" : "Quilt inserted");
       this.close();
     } catch (e) {
-      console.error("tufte-figure-helper: failed to generate quilt", e);
+      console.error("tufte-figures: failed to generate quilt", e);
       new Notice("Tufte Figures: couldn't generate the quilt.");
     }
   }
@@ -2939,12 +2939,12 @@ class FigureModal extends Modal {
           });
           tiles.push(tile);
         } catch (e) {
-          console.error("tufte-figure-helper: failed to load quilt tile", ct, e);
+          console.error("tufte-figures: failed to load quilt tile", ct, e);
         }
       }
       this.quilt.tiles = tiles;
     } catch (e) {
-      console.error("tufte-figure-helper: failed to load quilt config", e);
+      console.error("tufte-figures: failed to load quilt config", e);
       new Notice("Tufte Figures: couldn't load the saved quilt.");
     } finally {
       this.quilt.loading = false;
