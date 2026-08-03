@@ -55,9 +55,12 @@
 .backlink-pane .search-result-file-match .tufte-backlinks-rendered h4,
 .backlink-pane .search-result-file-match .tufte-backlinks-rendered h5,
 .backlink-pane .search-result-file-match .tufte-backlinks-rendered h6 {
-  /* !important: inside the embedded block the theme's preview heading sizes
-     are themselves important — see "Note-context insulation" below. */
-  font-size: 1em !important;
+  /* Every heading font-size competitor is a normal declaration — app.css's
+     `.markdown-rendered hN { font-size: var(--hN-size) }` (0,1,1) and the
+     Tufte theme's mobile `.markdown-preview-view hN` (0,1,1); since the
+     theme's 1.15.6 !important audit none is important — so this (0,3,1)
+     wins on specificity alone. */
+  font-size: 1em;
   font-weight: inherit;
   font-family: inherit;
   line-height: inherit;
@@ -78,8 +81,13 @@
 .backlink-pane .search-result-file-match .tufte-backlinks-rendered pre {
   white-space: pre-wrap;
   word-break: break-word;
-  /* !important for the same reason as the inline-code rule below. */
-  font-size: 0.9em !important;
+  /* Under third-party themes this (0,3,1) beats any normal pre sizing. The
+     one important competitor is the Tufte theme's own
+     `.markdown-preview-view pre { font-size: 0.65em !important }`, which a
+     normal declaration cannot outrank — so THAT fight is settled by an
+     insulation rule in theme.css's Backlinks section, keeping this
+     stylesheet !important-free per the community-directory guideline. */
+  font-size: 0.9em;
 }
 
 /* ---- Note-context insulation --------------------------------------------
@@ -93,12 +101,12 @@
    unaffected either way — these rules are simply neutral there.
    ------------------------------------------------------------------------- */
 
-/* Inline code: the theme's rule is `.markdown-preview-view :not(pre) > code
-   { font-size: 0.65em !important }`. Important-vs-important resolves on
-   specificity, and this selector (0,3,1) outranks that one (0,1,2) — so the
-   !important here is required, not decorative. */
+/* Inline code: the theme's `.markdown-preview-view :not(pre) > code
+   { font-size: 0.65em }` has been a normal declaration since the theme's
+   1.15.6 !important audit, so this (0,3,1) outranks it (0,1,2) — and any
+   third-party theme's code sizing — on specificity alone. */
 .backlink-pane .search-result-file-match .tufte-backlinks-rendered code {
-  font-size: 0.9em !important;
+  font-size: 0.9em;
 }
 
 /* Task lines sit at snippet size like every other line. The theme's
@@ -131,9 +139,14 @@
   pointer-events: none;
 }
 
-/* MathJax ships its own display margins, which push a mention out of line. */
-.backlink-pane .search-result-file-match .tufte-backlinks-rendered mjx-container {
-  margin: 0 !important;
+/* MathJax ships its own display margins, which push a mention out of line.
+   Targets the `.MathJax` class MathJax v3 stamps on its container (the error
+   path emits "MathJax mjx-output-error", so it still matches): this (0,4,0)
+   outranks MathJax's runtime `mjx-container[jax][display]` margins (0,2,1)
+   and the theme's `.math-block > .MathJax` margins (0,3,0) — all normal
+   declarations — so no !important is needed. */
+.backlink-pane .search-result-file-match .tufte-backlinks-rendered .MathJax {
+  margin: 0;
 }
 
 /* A snippet that starts at the top of a note can render its frontmatter. */

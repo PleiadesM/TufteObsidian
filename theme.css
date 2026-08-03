@@ -1804,6 +1804,19 @@ body {
   font-size: 14px;
 }
 
+/* Insulation for the Tufte Backlinks plugin's rendered snippets: this theme's
+   own `.markdown-preview-view pre { font-size: 0.65em !important }` (kept for
+   the language-label geometry, see the code section) would shrink a code
+   block inside an in-document mention to ~8px of the snippet base. Among
+   important declarations specificity decides, so this (0,2,1) beats that
+   (0,1,1) and re-anchors the block to the snippet's own size. The flag lives
+   HERE and not in the plugin because the community directory discourages
+   !important in plugin stylesheets — and only this theme needs the fight at
+   all; the plugin's normal 0.9em rule handles every other theme. */
+.markdown-preview-view .tufte-backlinks-rendered pre {
+  font-size: 0.9em !important;
+}
+
 /* The whole panel set in Gill Sans, like the to-do lists. */
 .backlink-pane {
   font-family: var(--font-gill-sans);
