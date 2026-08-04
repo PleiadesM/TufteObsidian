@@ -1228,6 +1228,27 @@ function findDefaultFigureParts(content) {
   return { imageBlock, captionBlock };
 }
 
+// Last-resort caption recovery for the single-figure decorators. In PDF
+// export `getSectionInfo` returns nothing AND the common authoring pattern
+//   > ![[image.png]]
+//   > A caption line.
+// renders as ONE <p> (image + <br> + text), so `findDefaultFigureParts`
+// sees only an image block: the caption text is trapped inside it and
+// would be destroyed with `emptyElement(content)`. Rebuild the callout's
+// source-style lines from the rendered DOM (the multi-image path's proven
+// export-safe device), drop image leads and anchors, and hand back the
+// remaining text as caption markdown to re-render.
+function recoverCaptionMarkdownFromDom(content) {
+  const lines = [];
+  for (const line of reconstructFigureLines(content)) {
+    if (ANCHOR_LINE_RE.test(line)) continue;
+    const lead = line.match(IMAGE_LEAD_RE);
+    const text = (lead ? lead[2] || "" : line).replace(CAPTION_MARKER_RE, "").trim();
+    if (text) lines.push(text);
+  }
+  return lines.join("\n");
+}
+
 function getSectionInfo(ctx, el, fallbackEl) {
   try {
     return (
@@ -1691,8 +1712,39 @@ async function decorateDefaultFigure(callout, ctx, app, component, sectionEl) {
     } else if (captionBlock && captionBlock !== imageBlock) {
       captionHolder.appendChild(captionBlock);
     } else {
-      const synthetic = doc.createElement("p");
-      captionHolder.appendChild(synthetic);
+      // PDF export path: no section source and no separate caption block —
+      // the `> ![[img]]` + `> caption` authoring renders as ONE <p>, so the
+      // caption is trapped in the image block. The embed visual has already
+      // been moved to the image holder above, so when the holder really
+      // holds a visual and the block still carries text, that text IS the
+      // caption, inline markup intact — adopt it. Odder shapes fall back
+      // to re-rendering lines reconstructed from the DOM
+      // (recoverCaptionMarkdownFromDom). Both stages are gated on a real
+      // image being present: an imageless figure callout keeps its legacy
+      // shape (prose in the main column, empty caption) instead of having
+      // its prose migrate into the caption column.
+      const holderVisual = imageHolder.querySelector(".internal-embed, .image-embed, img");
+      if (!imageMarkdown && imageBlock && holderVisual && (imageBlock.textContent || "").trim()) {
+        stripCaptionMarker(imageBlock);
+        while (
+          imageBlock.firstChild &&
+          ((imageBlock.firstChild.nodeType === 3 &&
+            !(imageBlock.firstChild.nodeValue || "").trim()) ||
+            imageBlock.firstChild.tagName === "BR")
+        ) {
+          imageBlock.removeChild(imageBlock.firstChild);
+        }
+        captionHolder.appendChild(imageBlock);
+      } else {
+        const recovered =
+          imageMarkdown || holderVisual ? recoverCaptionMarkdownFromDom(content) : "";
+        if (recovered) {
+          await renderMarkdown(app, recovered, captionHolder, ctx?.sourcePath || "", component);
+        } else {
+          const synthetic = doc.createElement("p");
+          captionHolder.appendChild(synthetic);
+        }
+      }
     }
 
     const labelInserted = prependFigureLabel(captionHolder, titleText);
@@ -1762,8 +1814,39 @@ async function decorateFullFigure(callout, ctx, app, component, sectionEl) {
     } else if (captionBlock && captionBlock !== imageBlock) {
       captionHolder.appendChild(captionBlock);
     } else {
-      const synthetic = doc.createElement("p");
-      captionHolder.appendChild(synthetic);
+      // PDF export path: no section source and no separate caption block —
+      // the `> ![[img]]` + `> caption` authoring renders as ONE <p>, so the
+      // caption is trapped in the image block. The embed visual has already
+      // been moved to the image holder above, so when the holder really
+      // holds a visual and the block still carries text, that text IS the
+      // caption, inline markup intact — adopt it. Odder shapes fall back
+      // to re-rendering lines reconstructed from the DOM
+      // (recoverCaptionMarkdownFromDom). Both stages are gated on a real
+      // image being present: an imageless figure callout keeps its legacy
+      // shape (prose in the main column, empty caption) instead of having
+      // its prose migrate into the caption column.
+      const holderVisual = imageHolder.querySelector(".internal-embed, .image-embed, img");
+      if (!imageMarkdown && imageBlock && holderVisual && (imageBlock.textContent || "").trim()) {
+        stripCaptionMarker(imageBlock);
+        while (
+          imageBlock.firstChild &&
+          ((imageBlock.firstChild.nodeType === 3 &&
+            !(imageBlock.firstChild.nodeValue || "").trim()) ||
+            imageBlock.firstChild.tagName === "BR")
+        ) {
+          imageBlock.removeChild(imageBlock.firstChild);
+        }
+        captionHolder.appendChild(imageBlock);
+      } else {
+        const recovered =
+          imageMarkdown || holderVisual ? recoverCaptionMarkdownFromDom(content) : "";
+        if (recovered) {
+          await renderMarkdown(app, recovered, captionHolder, ctx?.sourcePath || "", component);
+        } else {
+          const synthetic = doc.createElement("p");
+          captionHolder.appendChild(synthetic);
+        }
+      }
     }
 
     const labelInserted = prependFigureLabel(captionHolder, titleText);
@@ -1833,8 +1916,39 @@ async function decorateMarginFigure(callout, ctx, app, component, sectionEl) {
     } else if (captionBlock && captionBlock !== imageBlock) {
       captionHolder.appendChild(captionBlock);
     } else {
-      const synthetic = doc.createElement("p");
-      captionHolder.appendChild(synthetic);
+      // PDF export path: no section source and no separate caption block —
+      // the `> ![[img]]` + `> caption` authoring renders as ONE <p>, so the
+      // caption is trapped in the image block. The embed visual has already
+      // been moved to the image holder above, so when the holder really
+      // holds a visual and the block still carries text, that text IS the
+      // caption, inline markup intact — adopt it. Odder shapes fall back
+      // to re-rendering lines reconstructed from the DOM
+      // (recoverCaptionMarkdownFromDom). Both stages are gated on a real
+      // image being present: an imageless figure callout keeps its legacy
+      // shape (prose in the main column, empty caption) instead of having
+      // its prose migrate into the caption column.
+      const holderVisual = imageHolder.querySelector(".internal-embed, .image-embed, img");
+      if (!imageMarkdown && imageBlock && holderVisual && (imageBlock.textContent || "").trim()) {
+        stripCaptionMarker(imageBlock);
+        while (
+          imageBlock.firstChild &&
+          ((imageBlock.firstChild.nodeType === 3 &&
+            !(imageBlock.firstChild.nodeValue || "").trim()) ||
+            imageBlock.firstChild.tagName === "BR")
+        ) {
+          imageBlock.removeChild(imageBlock.firstChild);
+        }
+        captionHolder.appendChild(imageBlock);
+      } else {
+        const recovered =
+          imageMarkdown || holderVisual ? recoverCaptionMarkdownFromDom(content) : "";
+        if (recovered) {
+          await renderMarkdown(app, recovered, captionHolder, ctx?.sourcePath || "", component);
+        } else {
+          const synthetic = doc.createElement("p");
+          captionHolder.appendChild(synthetic);
+        }
+      }
     }
 
     const labelInserted = prependFigureLabel(captionHolder, titleText);

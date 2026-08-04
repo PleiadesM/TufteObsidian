@@ -117,10 +117,19 @@ settings:
                                       4.67:1 on --tufte-bg-alt (the tab strip). Both
                                       must stay ≥ 4.5:1 (WCAG AA). */
   --tufte-rule:         #cccccc;
-  --tufte-accent:       #a00000;   /* Tufte red */
+  --tufte-accent:       #a00000;   /* Tufte red — a Shinshu warm (#CB4042) was tried and
+                                      rolled back the same day, 2026-08-04 */
   --tufte-link:         #1a1a1a;
+  --tufte-unresolved:   #877F6C;   /* stone ink for [[links]] whose note doesn't exist
+                                      yet — user-chosen; quiet by design (≈4.0:1 on the
+                                      cream, 3.7:1 on --tufte-bg-alt, both a shade
+                                      under AA — watch-items), plainly not the accent,
+                                      so a missing note never shouts */
   --tufte-code-bg:      #f0f0e8;   /* reserved — currently unused (code went transparent) */
-  --tufte-mark:         #fff3a8;   /* reserved — currently unused (highlight went red-ink) */
+  --tufte-mark:         rgba(213, 106, 118, 0.20);   /* the Playfair tint — the rose wash of
+                                      the Denmark & Norway plate, at 20% (was 40% for a
+                                      day) so it stays a whisper of ground under
+                                      full-strength ink (==highlights==) */
   --tufte-paper:        var(--tufte-bg);  /* read by the Tufte Figures lightbox */
   /* The one shared "this is selected" wash — selected Bases/table cells,
      keyboard-selected property rows, multi-selected nav rows. One value
@@ -156,8 +165,12 @@ settings:
   --tufte-rule:         #3a3a36;
   --tufte-accent:       #d97474;   /* lifted Tufte red */
   --tufte-link:         #e8e6d9;
+  --tufte-unresolved:   #877F6C;   /* the same stone reads on both papers (4.6:1 on
+                                      #151515) — one value, one meaning */
   --tufte-code-bg:      #232320;
-  --tufte-mark:         #5a4a00;
+  --tufte-mark:         rgba(213, 106, 118, 0.15);   /* Playfair tint, thinned a step below
+                                      the light paper's 20% so the wash stays a ground
+                                      on dark paper */
   --tufte-paper:        var(--tufte-bg);
   --tufte-wash-select:  color-mix(in srgb, var(--tufte-accent) 12%, transparent);
   /* Tag palette, lifted for the dark paper — hues held from light mode,
@@ -297,9 +310,9 @@ body.theme-dark {
   --link-color-hover:     var(--tufte-accent);
   --link-decoration:      underline;
   --link-decoration-hover:underline;
-  --link-unresolved-color:        var(--tufte-accent);
-  --link-unresolved-opacity:      0.7;
-  --link-unresolved-decoration-style: dotted;
+  --link-unresolved-color:        var(--tufte-unresolved);
+  --link-unresolved-opacity:      1;
+  --link-unresolved-decoration-style: solid;
 
   /* code — Tufte CSS uses no background and the body ink color. The
      monospace stack matches GitHub's, "shifts gracefully along the
@@ -317,6 +330,16 @@ body.theme-dark {
   --table-border-color:         var(--tufte-rule);
   --table-row-background-hover: transparent;
   --table-row-alt-background:   transparent;
+  /* app.css sizes th/td DIRECTLY from this token (cells never inherit the
+     <table>'s size), and its stock value substitutes on body against the
+     full screen --font-text-size — which held cell text at body size while
+     the table element sat in the 0.84 register. Same trap, screen edition:
+     see the print palette's remap. Re-pointed here so app.css's own cell
+     rules land at 0.84 × the body setting; the cell rules further down
+     also pin font-size: 1em, the belt to this brace. --table-header-size
+     needs no remap — app.css chains it to this token, and the chain
+     resolves against this cascaded value. */
+  --table-text-size:            calc(var(--font-text-size) * 0.84);
 
   /* blockquote */
   --blockquote-background-color: transparent;
@@ -348,7 +371,12 @@ body.theme-dark {
      also feeds --table-selection-blend-mode, so neutralizing it keeps
      the select wash painted normally instead of composited. */
   --highlight-mix-blend-mode: normal;
-  --text-highlight-bg:    transparent;
+  --text-highlight-bg:    transparent;   /* NOT the tint: this token also paints
+                                      Obsidian's search/backlink matched text (the
+                                      "Linked mentions" of the current note), which
+                                      must stay wash-free — those carry the plugin's
+                                      bold-red treatment instead. ==Highlights== take
+                                      the tint straight from the mark rule below. */
 
   /* metadata / properties — quiet Tufte front-matter, driven almost
      entirely through Obsidian's own --metadata-* token layer (see the
@@ -723,26 +751,37 @@ body.theme-dark {
 }
 
 /* ------------------------------------------------------------------
-   Tables — modelled on the cancer-survival table from Tufte's
-   "Beautiful Evidence" (p. 174): Gill Sans body, no outer rules,
-   a single hairline under the column headers, generous column gap.
-   Selectors target both Reading view and Live Preview.
+   Tables — modelled on the tables of Tufte's own books as codified by
+   Tufte-LaTeX + booktabs ("book-quality tables") and shown in the
+   css4.pub "Printing Tufte with CSS" specimens: set in the SERIF body
+   face, a heavy rule above and below the whole table (booktabs
+   \toprule/\bottomrule, 0.08em), a lighter rule under the column
+   headers (\midrule, 0.05em), NO vertical rules, no fills, bold serif
+   headers, generous column gaps. Em-based rule weights scale with the
+   table's size on screen and in print alike. (Through 1.15.9 this
+   register was the Beautiful-Evidence Gill Sans specimen; the sans
+   voice now lives on only in Bases and the H5 table-title device —
+   both deliberate.) Selectors target Reading view and Live Preview.
    ------------------------------------------------------------------ */
 .markdown-preview-view table,
 .markdown-source-view.mod-cm6 .cm-content table,
 .markdown-rendered table {
   border-collapse: collapse !important;
-  font-family: var(--font-gill-sans) !important;
+  font-family: var(--font-text-theme) !important;
   /* Lining + tabular figures: with no vertical rules and no fill,
-     digit alignment is the only thing constructing the columns — and
-     it must survive fallback faces (Trebuchet/Calibri default to
-     old-style, non-tabular figures). */
+     digit alignment is the only thing constructing the columns. The
+     embedded et-book roman IS the line-figures cut, so this mostly
+     guards the fallback faces (Palatino/Georgia default to old-style,
+     non-tabular figures). */
   font-variant-numeric: lining-nums tabular-nums;
-  /* Tables read smaller than body in both views — clearly less weight
-     than surrounding prose, matching Tufte's specimen tables. */
-  font-size: 0.78em !important;
+  /* Tables read a clear step smaller than body in both views —
+     0.84em ≈ 16px at a 19px body, the user's calibration. */
+  font-size: 0.84em !important;
+  line-height: 1.45;
   margin: 1.6rem 0 !important;
   border: none !important;
+  border-top: 0.08em solid var(--tufte-ink) !important;      /* \toprule  — booktabs heavy */
+  border-bottom: 0.08em solid var(--tufte-ink) !important;   /* \bottomrule */
   background: transparent !important;
 }
 .markdown-preview-view thead tr,
@@ -753,7 +792,7 @@ body.theme-dark {
      app.css's `.cm-table-widget th, td` (0,3,1) inside a real CodeMirror
      widget — not reproducible in a static harness, so the reading-view arm
      keeps the same declaration rather than being split off. */
-  border-bottom: 1px solid var(--tufte-ink) !important;
+  border-bottom: 0.05em solid var(--tufte-ink) !important;   /* \midrule — booktabs light */
   background: transparent !important;
 }
 .markdown-preview-view th,
@@ -768,7 +807,13 @@ body.theme-dark {
   text-align: left;
   background: transparent !important;
   vertical-align: baseline;
-  font-family: var(--font-gill-sans) !important;
+  font-family: var(--font-text-theme) !important;
+  /* Cells at the table's own size: app.css sets font-size ON th/td (from
+     --table-text-size — remapped in the token block), so without this pin
+     the cells ignore the table's 0.84em and render at full body size — the
+     print round-4 bug, screen edition. 1em keeps the no-double-shrink
+     contract; the print block's 9.5pt cell rule out-specifies it. */
+  font-size: 1em !important;
 }
 .markdown-preview-view th:last-child,
 .markdown-preview-view td:last-child,
@@ -782,7 +827,7 @@ body.theme-dark {
 .markdown-preview-view th,
 .markdown-source-view.mod-cm6 .cm-content th,
 .markdown-rendered th {
-  font-weight: 400;
+  font-weight: 600;   /* bold serif headers, as in the books' front-matter tables */
   font-style: normal;
   color: var(--tufte-ink);
 }
@@ -865,6 +910,26 @@ body.theme-dark {
   font-weight: 600 !important;
   font-style: normal !important;
   font-size: 1.1em !important;
+}
+
+/* Title grouping — the H5 title, its optional italic subtitle line, and
+   the table hug each other as one object (the book's caption stack)
+   instead of drifting apart on paragraph rhythm. Both DOM shapes are
+   covered: Reading view wraps top-level blocks in `.el-*` divs, while
+   callouts and some export shapes sit bare — the bare arm never
+   matches where the wrapped one does, so the pairs can share rules. */
+.markdown-preview-view .el-h5 + .el-p > p,
+.markdown-preview-view h5 + p {
+  margin-top: 0.15rem;
+  margin-bottom: 0;
+}
+.markdown-preview-view .el-h5 + .el-p + .el-table > table,
+.markdown-preview-view .el-h5 + .el-table > table,
+.markdown-preview-view h5 + p + table,
+.markdown-preview-view h5 + table {
+  /* !important: the base table rule's margin is important (LP-widget
+     fight); same importance, higher specificity wins here. */
+  margin-top: 0.7rem !important;
 }
 
 /* ------------------------------------------------------------------
@@ -1206,11 +1271,16 @@ body.theme-dark {
 }
 
 /* ------------------------------------------------------------------
-   Highlight — `==text==` renders as red ink, not a highlighter-pen
-   ground. Reading view emits <mark>; Live Preview emits a
-   .cm-highlight span. Both get the Tufte accent color with no
-   background, no padding, no rounding. The third selector covers the
-   Tufte Backlinks plugin's rendered snippets in the SIDEBAR pane,
+   Highlight — `==text==` renders as ink over the Playfair tint: the
+   rose wash of the Denmark & Norway plate (--tufte-mark; strength
+   set in the palettes — 20% light / 15% dark),
+   finished with a bold accent-red rule beneath — Playfair's own
+   device of a colored ground bounded by a strong line. Text keeps
+   full ink strength (color: inherit); the wash and the rule carry
+   the emphasis. (Red-ink-only highlights, 1.11.0–1.15.9, were rolled
+   back 2026-08-04 in favor of this.) Reading view emits <mark>;
+   Live Preview emits a .cm-highlight span. The third selector covers
+   the Tufte Backlinks plugin's rendered snippets in the SIDEBAR pane,
    which sits outside every .markdown-preview-view/.markdown-rendered
    container — without it a ==highlight== in a mention falls back to
    the browser's default yellow <mark>. (The in-document backlinks
@@ -1220,9 +1290,14 @@ body.theme-dark {
 .markdown-rendered mark,
 .backlink-pane .tufte-backlinks-rendered mark,
 .markdown-source-view.mod-cm6 .cm-highlight {
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--tufte-accent) !important;
+  background: var(--tufte-mark) !important;
+  background-color: var(--tufte-mark) !important;
+  color: inherit !important;
+  text-decoration-line: underline !important;
+  text-decoration-style: solid !important;
+  text-decoration-color: var(--tufte-accent) !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 3px !important;
   padding: 0 !important;
   border-radius: 0 !important;
   mix-blend-mode: normal !important;
@@ -1245,9 +1320,16 @@ body.theme-dark {
   text-decoration-color: var(--tufte-accent);
 }
 .markdown-preview-view a.internal-link.is-unresolved {
+  color: var(--tufte-unresolved);
+  text-decoration-style: solid;
+  opacity: 1;
+}
+/* Hover restores the accent — the invitation to create the note.
+   Needed explicitly: the rest-state rule above outranks the generic
+   a.internal-link:hover rule on source order at equal (0,3,1). */
+.markdown-preview-view a.internal-link.is-unresolved:hover {
   color: var(--tufte-accent);
-  text-decoration-style: dotted;
-  opacity: 0.8;
+  text-decoration-color: var(--tufte-accent);
 }
 
 /* ------------------------------------------------------------------
@@ -2822,5 +2904,322 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
   }
   .markdown-reading-view .markdown-preview-view .callout[data-callout="banner"] .internal-embed.image-embed img {
     aspect-ratio: 3 / 1;
+  }
+}
+
+/* ============================================================================
+   Print — Export to PDF (@media print only; zero effect on screen)
+
+   Obsidian exports into `body > div.print > .markdown-preview-view
+   .markdown-rendered` — body keeps its .theme-light/.theme-dark class
+   and the plugin body classes — applies print media, then Electron
+   printToPDF. The `.markdown-reading-view` query container does NOT
+   exist there: `@container tufte-pane` rules (the marginalia collapse)
+   never fire, and every `cqi` falls back to unreliable viewport units.
+   So this block restates the page in % of the containing block: the
+   gutter is 30% of the paper, the column 70%, and each screen measure
+   converts as  x-of-pane ÷ 0.70.  Type follows the css4.pub Tufte
+   print model: 11pt body on a 5mm baseline (--tufte-line: 5mm re-times
+   the existing rhythm math), marginalia and captions 9.5pt/4mm. Paper
+   size and margins belong to the export dialog — no @page rules here.
+   The body-level token remaps substitute their var()s ON body, so a
+   dark vault inherits dark literals into .print; every consumed token
+   is re-declared here so substitution happens with the print palette
+   (keep the literals in sync with .theme-light above). Plugin
+   overrides repeat the plugins' own selectors with `.print` inserted —
+   strictly higher specificity than their !important base rules,
+   whatever the stylesheet load order.
+   ============================================================================ */
+@media print {
+
+  /* 1 · Palette + rhythm — true white paper, whatever the app theme. */
+  .print {
+    --tufte-bg:           #ffffff;
+    --tufte-bg-alt:       #ffffff;
+    --tufte-ink:          #111111;
+    --tufte-muted:        #555555;
+    --tufte-muted-rgb:    85, 85, 85;
+    --tufte-muted-warm:   #6d6755;
+    --tufte-faint:        #6f6f6f;
+    --tufte-rule:         #cccccc;
+    --tufte-accent:       #a00000;   /* the red prints — Tufte's books keep it */
+    --tufte-link:         #1a1a1a;
+    --tufte-unresolved:   #877F6C;
+    --tufte-mark:         rgba(213, 106, 118, 0.20);   /* the Playfair tint prints too */
+    --tufte-paper:        #ffffff;
+    /* re-wired Obsidian tokens (the body-substitution trap) */
+    --background-primary:        var(--tufte-bg);
+    --background-primary-alt:    var(--tufte-bg);
+    --background-secondary:      var(--tufte-bg);
+    --text-normal:               var(--tufte-ink);
+    --text-muted:                var(--tufte-muted);
+    --text-faint:                var(--tufte-faint);
+    --text-accent:               var(--tufte-accent);
+    --text-accent-hover:         var(--tufte-accent);
+    --link-color:                var(--tufte-ink);
+    --link-color-hover:          var(--tufte-ink);
+    --link-unresolved-color:     var(--tufte-unresolved);
+    --h1-color: var(--tufte-ink);
+    --h2-color: var(--tufte-ink);
+    --h3-color: var(--tufte-ink);
+    --h4-color: var(--tufte-ink);
+    --h5-color: var(--tufte-ink);
+    --h6-color: var(--tufte-ink);
+    --code-normal:               var(--tufte-ink);
+    --code-background:           transparent;
+    --blockquote-color:          var(--tufte-muted);
+    --bold-color:                var(--tufte-ink);
+    --italic-color:              var(--tufte-ink);
+    --hr-color:                  var(--tufte-rule);
+    --table-header-border-color: var(--tufte-ink);
+    --table-border-color:        var(--tufte-rule);
+    /* app.css sizes table CELLS directly (font-size on th/td from these two
+       tokens), and both compute on body from the SCREEN --font-text-size —
+       never from the 11pt print body. Left alone they leak ~14pt screen type
+       onto paper: the "table still huge" of export rounds 3–4, immune to any
+       size set on <table>. Re-declared here so substitution happens with the
+       print register; the cells are also set directly in §3, as the belt to
+       this brace. */
+    --table-text-size:           9.5pt;
+    --table-header-size:         9.5pt;
+    --tag-color:                 var(--tufte-accent);
+    --text-highlight-bg:         transparent;   /* matched-text washes stay off in print too */
+    --metadata-label-text-color: var(--tufte-muted);
+    --metadata-input-text-color: var(--tufte-ink);
+    /* border tokens: consumed by app.css (embed, table, callout hairlines),
+       so a dark vault would otherwise draw them at #3a3a36 on the white page */
+    --background-modifier-border:       var(--tufte-rule);
+    --background-modifier-border-hover: var(--tufte-rule);
+    --background-modifier-border-focus: var(--tufte-rule);
+    --background-secondary-alt:         var(--tufte-bg);
+    --background-modifier-hover:        transparent;
+    /* the 5mm baseline — re-times every existing rhythm rule */
+    --font-text-size:      11pt;
+    --line-height-normal:  1.289;    /* 5mm ÷ 11pt */
+    --tufte-line:          5mm;
+    --p-spacing:           var(--tufte-line);
+    --heading-spacing:     var(--tufte-line);
+    /* paint .print itself — a document shorter than the page must not
+       fall through to the app shell behind it */
+    background-color: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* 2 · Page + measure — the 7:3 gutter in %, cqi neutralized. */
+  .print .markdown-preview-view {
+    background-color: #ffffff !important;
+    color: var(--tufte-ink);
+    font-size: 11pt !important;
+    line-height: 5mm;
+    text-align: left;                 /* ragged right, per Tufte */
+    orphans: 2;
+    widows: 2;
+    padding-left: 0 !important;       /* dialog margin is the left margin */
+    padding-right: 30% !important;    /* was 30cqi */
+    --file-line-width: 100%;          /* defuse readable-line-width */
+  }
+  /* Defensive: geometry holds with or without a sizer in the print DOM. */
+  .print .markdown-preview-view .markdown-preview-sizer {
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  /* No scroll containers on paper. app.css makes callout-content (and the
+     view itself, via the overflow axis-pairing rule) scrollable; in paged
+     output a scroll container can bake the macOS overlay scrollbar into
+     the PDF — the grey "slide" printed beside Fig. 1 in the round-3
+     export. Everything opens up, and any residual scroller prints bare. */
+  .print,
+  .print .markdown-preview-view,
+  .print .markdown-preview-view .callout-content,
+  .print .markdown-preview-view .el-table {
+    overflow: visible !important;
+  }
+  .print ::-webkit-scrollbar {
+    display: none !important;
+  }
+  /* Title spans column + gutter, as on screen: −30 ÷ 0.70 = −42.86%. */
+  .print .inline-title {
+    margin-right: -42.86%;
+    break-after: avoid;
+    break-inside: avoid;
+  }
+
+  /* 3 · Small print — code and tables in real points. */
+  .print .markdown-preview-view pre {
+    font-size: 8.5pt !important;      /* 0.65em of 11pt would be 7.15pt */
+    margin: 5mm 0 5mm 10mm;
+  }
+  .print .markdown-preview-view code,
+  .print .markdown-preview-view :not(pre) > code {
+    font-size: 8.5pt;
+  }
+  .print .markdown-preview-view pre > code {
+    font-size: 1em;                   /* keep the no-double-shrink contract */
+  }
+  .print .markdown-preview-view pre,
+  .print .markdown-preview-view pre code {
+    white-space: pre-wrap;            /* paper can't scroll: a long code line
+                                         wraps instead of clipping silently at
+                                         the box edge now that print scrollbars
+                                         are suppressed */
+    overflow-wrap: anywhere;
+  }
+  /* Tables: one clear step under the 11pt body — the print analogue of the
+     screen's 0.84 register — on the marginalia's 9.5pt/4mm sub-baseline.
+     th/td are set alongside <table> because app.css sizes the cells
+     DIRECTLY (font-size: var(--table-text-size)): rounds 3–4 set the
+     <table> ever smaller ("still way too large" at 9pt, then 8pt) while
+     the cells never listened — see the §1 token remap for the mechanism. */
+  .print .markdown-preview-view table {
+    font-size: 9.5pt !important;
+    line-height: 4mm;
+    margin: 5mm 0 !important;
+  }
+  .print .markdown-preview-view th,
+  .print .markdown-preview-view td {
+    font-size: 9.5pt !important;
+    line-height: 4mm !important;     /* th otherwise keeps app.css's
+                                        line-height-tight, a screen ratio */
+  }
+  .print .markdown-preview-view blockquote {
+    margin: 5mm 0 5mm 10mm;
+  }
+  .print .markdown-preview-view hr {
+    margin: 5mm 0;
+    break-after: avoid;               /* no rule stranded at a page foot */
+  }
+
+  /* 4 · Marginalia — Tufte Sidenotes. 22/−24 of the pane ÷ 0.70. */
+  body.tufte-sidenotes-enabled .print .markdown-preview-view .callout[data-callout="sidenote"],
+  body.tufte-sidenotes-enabled .print .markdown-preview-view .callout[data-callout="marginnote"] {
+    width: 31.43% !important;               /* 22 ÷ 70 */
+    margin: 1mm -34.29% 4mm 4mm !important; /* 24 ÷ 70 */
+    font-size: 9.5pt !important;
+    line-height: 4mm !important;
+    break-inside: avoid;
+    -webkit-hyphens: auto;
+    hyphens: auto;                    /* narrow measure; needs a lang attr */
+  }
+
+  /* 5 · Figures — Tufte Figures, same conversion. */
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure"] {
+    margin: 5mm 0 !important;
+    break-inside: avoid;
+  }
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure"] .callout-content {
+    grid-template-columns: minmax(0, 1fr) 23.91% !important;  /* 22 ÷ 92: the −margin widens the grid box to 92 pane-units */
+    margin-right: -31.43% !important;                          /* 22 ÷ 70 */
+    column-gap: 4mm !important;
+  }
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure-full"] {
+    margin: 5mm -42.86% 5mm 0 !important;   /* 30 ÷ 70 */
+    break-inside: avoid;
+  }
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure-margin"] {
+    width: 31.43% !important;
+    margin: 1mm -34.29% 4mm 4mm !important;
+    font-size: 9.5pt !important;
+    line-height: 4mm !important;
+    break-inside: avoid;
+  }
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure"] .callout-content > .tufte-fig-caption-holder,
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure-full"] .callout-content > .tufte-fig-caption-holder,
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure-margin"] .callout-content > .tufte-fig-caption-holder,
+  body.tufte-figures-enabled .print .markdown-preview-view .tufte-fig-cell-caption,
+  body.tufte-figures-enabled .print .markdown-preview-view .tufte-fig-overall-caption {
+    font-size: 9.5pt !important;
+    line-height: 4mm !important;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+  /* 6 · Banner — its screen rules are scoped under .markdown-reading-view,
+     which is absent in print; restate the full-bleed 4:1 band. */
+  .print .markdown-preview-view .callout[data-callout="banner"] {
+    margin: 5mm -42.86% 5mm 0;
+    break-inside: avoid;
+  }
+  .print .markdown-preview-view .callout[data-callout="banner"] .callout-title,
+  .print .markdown-preview-view .callout[data-callout="banner"] .callout-icon {
+    display: none !important;
+  }
+  .print .markdown-preview-view .callout[data-callout="banner"] img {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 4 / 1;
+    object-fit: cover !important;
+  }
+
+  /* 7 · Links — ink, not signage. Internal links drop the underline
+     (paper has no click affordance; Tufte's pages carry none); external
+     links keep the 0.5px hairline — they stay live in the PDF — and
+     lose app.css's arrow icon. No URL is printed after them.
+     Unresolved keeps its stone solid hairline; declared AFTER the
+     generic rule so it wins its tie. */
+  .print .markdown-preview-view a.internal-link {
+    color: var(--tufte-ink);
+    text-decoration: none;
+  }
+  .print .markdown-preview-view a.external-link {
+    color: var(--tufte-ink);
+    background-image: none;
+    padding-right: 0;
+  }
+  .print .markdown-preview-view a.internal-link.is-unresolved {
+    color: var(--tufte-unresolved);
+    text-decoration: underline solid;
+    text-decoration-thickness: 0.5px;
+    text-underline-offset: 3px;
+  }
+
+  /* 8 · Page-break discipline. (A float cannot be tied to its anchor
+     paragraph — CSS has no keep-with-anchor primitive; break-inside on
+     the float itself is what's achievable.) Chromium repeats a <thead>
+     on its own when a table fragments. */
+  .print .markdown-preview-view h1,
+  .print .markdown-preview-view h2,
+  .print .markdown-preview-view h3,
+  .print .markdown-preview-view h4,
+  .print .markdown-preview-view h5,
+  .print .markdown-preview-view h6 {
+    break-after: avoid;
+    break-inside: avoid;
+  }
+  /* The H5 title stack: the subtitle line must not strand at a page foot
+     with its table on the next page (round-3 export, the style table).
+     break-after propagates out of the .el-* wrapper when one exists. */
+  .print .markdown-preview-view h5 + p,
+  .print .markdown-preview-view .el-h5 + .el-p > p {
+    break-after: avoid;
+    break-inside: avoid;
+  }
+  .print .markdown-preview-view .callout,
+  .print .markdown-preview-view img,
+  .print .markdown-preview-view figure,
+  .print .markdown-preview-view blockquote,
+  .print .markdown-preview-view pre,
+  .print .markdown-preview-view table,
+  .print .markdown-preview-view tr {
+    break-inside: avoid;              /* taller-than-a-page content still breaks */
+  }
+
+  /* 9 · Chrome that leaks into the export container. */
+  .print .metadata-container,
+  .print .frontmatter,
+  .print pre.frontmatter {
+    display: none !important;         /* front-matter is workspace furniture */
+  }
+  .print .collapse-indicator,
+  .print .heading-collapse-indicator,
+  .print button.copy-code-button,
+  .print .edit-block-button {
+    display: none !important;
+  }
+  .tufte-fig-lightbox,
+  .popover.hover-popover {
+    display: none !important;         /* body-level overlays; print-gated only */
   }
 }
