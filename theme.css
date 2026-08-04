@@ -2315,6 +2315,19 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
   --bases-cards-background: transparent;   /* the paper is the card */
 }
 
+/* The embed-border zero above never reaches the table layout: app.css
+   re-arms the token ON the consuming element itself —
+   `.bases-view[data-view-type="table"]` redeclares
+   --bases-embed-border-width: var(--border-width), and a value declared
+   on the element beats anything inherited from the contexts above — so
+   bases embedded in notes still drew a grey box around the grid. Re-zero
+   at the same level: equal specificity (0,2,0), theme loads after
+   app.css, so this wins; [data-view-type] catches every layout that
+   carries the attribute (table, list, cards) in one declaration. */
+.bases-view[data-view-type] {
+  --bases-embed-border-width: 0;
+}
+
 /* The single hairline under the header row — same weight and color as
    the prose table's thead rule (--tufte-ink, not the fainter
    --tufte-rule: the one deliberate rule in an otherwise ruleless grid). */

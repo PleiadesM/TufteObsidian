@@ -271,9 +271,12 @@ module.exports = class TufteFiguresPlugin extends Plugin {
       this.app.workspace.getActiveFile()?.path ||
       "";
     const embed = this.buildEmbed(tfile, sourcePath);
+    // Insertions never seed alt text: a `|alt` display segment on the embed
+    // renders as a grey caption box under the figure, so alt stays opt-in
+    // via the modal's Alt field. Same rule on every insertion path below.
     new FigureModal(this.app, this, editor, {
       embed,
-      altDefault: tfile.basename || "",
+      altDefault: "",
       pos,
       sourcePath
     }).open();
@@ -434,7 +437,7 @@ module.exports = class TufteFiguresPlugin extends Plugin {
         const embed = this.buildEmbed(tfile, sourcePath);
         new FigureModal(this.app, this, editor, {
           embed,
-          altDefault: tfile.basename || "",
+          altDefault: "",
           pos,
           sourcePath
         }).open();
@@ -468,7 +471,6 @@ module.exports = class TufteFiguresPlugin extends Plugin {
       info?.file?.path || this.app.workspace.getActiveFile()?.path || "";
 
     let embed = "";
-    let altDefault = "";
     try {
       const ext = extFromType(file.type) || fileExt(file.name) || "png";
       const baseName =
@@ -482,14 +484,13 @@ module.exports = class TufteFiguresPlugin extends Plugin {
       const buffer = await file.arrayBuffer();
       const tfile = await this.app.vault.createBinary(path, buffer);
       embed = this.buildEmbed(tfile, sourcePath);
-      altDefault = tfile.basename || "";
     } catch (e) {
       console.error("tufte-figures: failed to save dropped image", e);
       new Notice("Tufte Figures: couldn't save the image.");
       return;
     }
 
-    new FigureModal(this.app, this, editor, { embed, altDefault, pos, sourcePath }).open();
+    new FigureModal(this.app, this, editor, { embed, altDefault: "", pos, sourcePath }).open();
   }
 
   buildEmbed(tfile, sourcePath) {
@@ -2876,7 +2877,9 @@ class FigureModal extends Modal {
       const embed = this.plugin.buildEmbed(tfile, this.sourcePath);
       const block = buildFigureBlock(mode, {
         embed,
-        alt: `Image quilt ${this.number || ""}`.trim(),
+        // Alt stays empty like every other insertion path — a `|alt`
+        // segment renders as a grey caption box under the figure.
+        alt: "",
         caption: (this.caption || "").trim(),
         number: this.number || "1",
         labelPrefix: this.plugin.settings.labelPrefix
