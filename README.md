@@ -1,5 +1,7 @@
 # Tufte for Obsidian
 
+![Obsidian Theme](https://img.shields.io/badge/Obsidian-Theme-7B2FBF) ![license MIT](https://img.shields.io/badge/license-MIT-4C9A2A) ![Dark & Light Supported](https://img.shields.io/badge/Dark_%26_Light-Supported-C9A227) ![Mobile Supported](https://img.shields.io/badge/Mobile-Supported-1E88C7)
+
 **English** | [简体中文](README.zh.md)
 
 An [Obsidian](https://obsidian.md) theme adapted from [Tufte CSS](https://edwardtufte.github.io/tufte-css/), carrying Edward Tufte's book design — ET Book type, marginalia, restrained rules, one deliberate red — into every corner of the app, with a full Chinese typographic system (宋体正文、楷体示例、黑体数据) alongside the Latin one.
@@ -41,16 +43,21 @@ If you drag the image into the pane, a modal will pop up and ask you for more de
 <img width="545" height="707" alt="FigureSetting" src="https://github.com/user-attachments/assets/a9f18cc3-0c6a-4b59-8c57-26cbbe8516d9" />
 <img width="851" height="453" alt="ImageQuilt" src="https://github.com/user-attachments/assets/08cc4703-e9dc-4003-9ed2-6746cab96853" />
 
-## Companion plugins
+## The companion plugin — Tufte Suite
 
-The theme stands alone, but four plugins in [`plugins/`](plugins) complete the Tufte writing system:
+The theme stands alone, but one plugin completes the Tufte writing system: **[Tufte Suite](https://github.com/PleiadesM/tufte-suite)**. It carries four modules, each switchable on its own in Settings → Tufte Suite:
 
-| Plugin | What it does |
+| Module | What it does |
 |---|---|
 | **Tufte Sidenotes** | Renders `[^…]` footnotes and `[!sidenote]`/`[!marginnote]` callouts as true sidenotes in the margin gutter (Reading view), keeping the editor single-column. |
 | **Tufte Figures** | Drop or paste an image to compose column, full-width, and margin figures with proper captions; multi-image rows; an image-quilt generator; auto-numbered references. |
 | **Tufte Inline** | Inline shorthands: `^^text^^` small-caps openers, `&&text&&` italic run-ins, `@@字@@` two-line CJK drop caps. |
 | **Tufte Backlinks** | Renders Linked/Unlinked mention snippets as formatted Markdown — headings at body size, the backlink reference itself bold, underlined and accent red. |
+
+> **These four used to be four separate plugins, and are now archived.**
+> They shipped individually until August 2026 (Tufte Sidenotes 1.7.0, Tufte Figures 1.7.2, Tufte Inline 1.2.0, Tufte Backlinks 1.0.1); four installs, four update prompts, four sets of settings for what is one writing system. Tufte Suite 1.0.0 supersedes all four, and **all future plugin work happens there** — the standalone repositories and the frozen copies in [`plugins/`](plugins) receive no further updates.
+>
+> Nothing is lost in the move: the Suite embeds each plugin's code byte-for-byte as a module, so behavior is unchanged, and turning a module off leaves you exactly where the standalone plugin was uninstalled. **If you already run the four, disable them before enabling the Suite** — otherwise everything renders twice. The Suite imports their settings and image-quilt store on first load, and keeps the old command ids so bound hotkeys keep working.
 
 ## Install
 
@@ -60,11 +67,11 @@ The theme stands alone, but four plugins in [`plugins/`](plugins) complete the T
 2. Put them in `YourVault/.obsidian/themes/Tufte/`.
 3. Settings → Appearance → Themes → select **Tufte**.
 
-**Plugins (manual):**
+**Plugin (manual):**
 
-1. Download the plugin zips from the [latest release](../../releases/latest).
-2. Unzip into `YourVault/.obsidian/plugins/` (one folder per plugin).
-3. Settings → Community plugins → enable each one.
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [Tufte Suite release](https://github.com/PleiadesM/tufte-suite/releases/latest).
+2. Put all three in `YourVault/.obsidian/plugins/tufte-suite/`.
+3. Settings → Community plugins → enable **Tufte Suite**.
 
 Optional: install the community **Style Settings** plugin to get sliders for the glass chrome (opacity, blur, translucent-window sheet).
 

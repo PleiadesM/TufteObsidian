@@ -36,34 +36,48 @@ Notes for review:
 - The stylesheet uses `!important` in places (tables, banner geometry) where it must beat Obsidian's inline styles; the guidelines discourage casual use, so if a reviewer asks, each instance is commented with its reason in `theme.css`.
 - `modes` for the directory entry: both light and dark are supported.
 
-## The plugins (separate track)
+## The plugin (separate track)
 
-Community **plugins** (unlike themes) each need their **own repository** — the submission form takes one repo per plugin, and the release must attach `main.js`, `manifest.json`, and `styles.css` as loose assets (not a zip). The four release-mirror repos exist, each with `README.md` (pointing back here), MIT `LICENSE`, and the plugin files at the repo root:
+Community **plugins** (unlike themes) need their **own repository**, and the release must attach `main.js`, `manifest.json`, and `styles.css` as loose assets (not a zip).
 
-| Plugin id | Repository | First release |
-|---|---|---|
-| `tufte-sidenotes` | [PleiadesM/Tufte-Sidenote](https://github.com/PleiadesM/Tufte-Sidenote) | 1.7.0 |
-| `tufte-figures` | [PleiadesM/Tufte-Sidenotes](https://github.com/PleiadesM/Tufte-Sidenotes) ⚠️ | 1.7.0 |
-| `tufte-inline` | [PleiadesM/Tufte-Inline](https://github.com/PleiadesM/Tufte-Inline) | 1.2.0 |
-| `tufte-backlinks` | [PleiadesM/Tufte-Backlinks](https://github.com/PleiadesM/Tufte-Backlinks) | 1.0.0 |
+Since 2026-08-05 there is exactly one: **[PleiadesM/tufte-suite](https://github.com/PleiadesM/tufte-suite)** — Tufte Suite, which carries the former four plugins as switchable modules. It has its own `README.md`, MIT `LICENSE`, the plugin files at the repo root, the four module sources under `src/modules/`, and a jsdom equivalence harness under `tests/`.
 
-⚠️ **The figures plugin's repo is named `Tufte-Sidenotes` (plural) on purpose** — the community portal's registry row from the first (mixed-up) submission maps id `tufte-figures` to a repo of that name, and the row can't be changed from our side, so the repo was renamed to satisfy it. The *actual* sidenotes plugin lives in `Tufte-Sidenote` (singular). Double-check which repo you're pushing to before every figures or sidenotes release.
+Cutting a Suite release:
 
-Cutting a plugin release (every version, after the change lands in `plugins/<id>/` here):
-
-1. Copy the plugin's files from `plugins/<id>/` to its own repo's root; commit and push.
-2. Create a release whose **tag exactly matches the manifest version** (no `v` prefix):
+1. In the dev vault, land and GUI-confirm the change in `.obsidian/plugins/<module-id>/` as before.
+2. Copy the changed module files to the Suite repo's `src/modules/<module-id>/`, bump `version` in the Suite's root `manifest.json`, and rebuild:
 
 ```bash
-gh release create 1.7.1 main.js manifest.json styles.css --title "Tufte Sidenotes 1.7.1" --notes "…"
+node build-tufte-suite.js   # regenerates main.js + styles.css from src/modules/
+cd tests && npm install && node run-all.js
 ```
 
-(`tufte-inline` has no `styles.css` — its styling lives in the theme.)
+3. Commit and push, then create a release whose **tag exactly matches the manifest version** (no `v` prefix):
 
-3. Submit each plugin once at community.obsidian.md, same flow as the theme.
-4. The plugin ids must stay stable forever once published.
+```bash
+gh release create 1.0.1 main.js manifest.json styles.css --title "Tufte Suite 1.0.1" --notes "…"
+```
 
-The full change flow — dev vault → this repo → plugin repos — is documented in the dev vault's `CLAUDE.md` (sync discipline).
+Never hand-edit the Suite's `main.js` — it is generated, and the build asserts that every embedded module matches its source byte-for-byte.
+
+### The four standalone plugins are archived
+
+Tufte Sidenotes, Tufte Figures, Tufte Inline, and Tufte Backlinks shipped separately until 2026-08-05 (final versions 1.7.0 / 1.7.2 / 1.2.0 / 1.0.1). Tufte Suite 1.0.0 supersedes all four. Their repositories and the copies in [`plugins/`](plugins) are **frozen** — kept for history, never updated:
+
+| Plugin id | Archived repository | Final release |
+|---|---|---|
+| `tufte-sidenotes` | [PleiadesM/Tufte-Sidenote](https://github.com/PleiadesM/Tufte-Sidenote) | 1.7.0 |
+| `tufte-figures` | [PleiadesM/Tufte-Sidenotes](https://github.com/PleiadesM/Tufte-Sidenotes) ⚠️ | 1.7.2 |
+| `tufte-inline` | [PleiadesM/Tufte-Inline](https://github.com/PleiadesM/Tufte-Inline) | 1.2.0 |
+| `tufte-backlinks` | [PleiadesM/Tufte-Backlinks](https://github.com/PleiadesM/Tufte-Backlinks) | 1.0.1 |
+
+⚠️ **The figures plugin's repo is named `Tufte-Sidenotes` (plural) on purpose** — the community portal's registry row from the first (mixed-up) submission maps id `tufte-figures` to a repo of that name, and the row can't be changed from our side, so the repo was renamed to satisfy it. The *actual* sidenotes plugin lives in `Tufte-Sidenote` (singular). The trap only matters now if you ever revisit those archived repos.
+
+Plugin ids stay stable forever once published — including the four module ids inside the Suite, which is why the Suite keeps them (and their command ids, so users' hotkeys survive the move).
+
+Submission: the Suite needs its own one-time submission at community.obsidian.md, same flow as the theme. If any of the four were already accepted into the directory, deprecate those entries rather than updating them.
+
+The full change flow — dev vault → Suite repo → release — is documented in the dev vault's `CLAUDE.md` (sync discipline).
 
 ## Testing a release before announcing
 

@@ -1,5 +1,7 @@
 # Tufte for Obsidian
 
+![Obsidian Theme](https://img.shields.io/badge/Obsidian-Theme-7B2FBF) ![license MIT](https://img.shields.io/badge/license-MIT-4C9A2A) ![Dark & Light Supported](https://img.shields.io/badge/Dark_%26_Light-Supported-C9A227) ![Mobile Supported](https://img.shields.io/badge/Mobile-Supported-1E88C7)
+
 [English](README.md) | **简体中文**
 
 一款改写自 [Tufte CSS](https://edwardtufte.github.io/tufte-css/) 的 [Obsidian](https://obsidian.md) 主题，把 Edward Tufte 的书籍设计——ET Book 字体、页边旁注、克制的细线、一处刻意的红——带进应用的每一个角落，并在拉丁排印系统之外，配备一套完整的中文排印系统（宋体正文、楷体示例、黑体数据）。
@@ -41,16 +43,21 @@
 <img width="545" height="707" alt="FigureSetting" src="https://github.com/user-attachments/assets/a9f18cc3-0c6a-4b59-8c57-26cbbe8516d9" />
 <img width="851" height="453" alt="ImageQuilt" src="https://github.com/user-attachments/assets/08cc4703-e9dc-4003-9ed2-6746cab96853" />
 
-## 配套插件
+## 配套插件 —— Tufte Suite
 
-主题可以独立使用，但 [`plugins/`](plugins) 中的四个插件补全了整套 Tufte 写作系统：
+主题可以独立使用，但有一个插件补全了整套 Tufte 写作系统：**[Tufte Suite](https://github.com/PleiadesM/tufte-suite)**。它内含四个模块，每个都可在「设置 → Tufte Suite」中单独开关：
 
-| 插件 | 功能 |
+| 模块 | 功能 |
 |---|---|
 | **Tufte Sidenotes** | 在阅读视图中，把 `[^…]` 脚注与 `[!sidenote]`/`[!marginnote]` 标注块渲染为真正的页边旁注，编辑器保持单栏。 |
 | **Tufte Figures** | 拖入或粘贴图片，即可编排正文栏、全宽、页边三种插图，图注得体；多图并排；图片拼贴生成器；自动编号的文内引用。 |
 | **Tufte Inline** | 行内简写：`^^text^^` 小型大写开篇词，`&&text&&` 斜体引导句，`@@字@@` 两行中文首字下沉。 |
 | **Tufte Backlinks** | 把「链接提及／未链接提及」的片段渲染为排版后的 Markdown——标题落回正文字号，反链引用本身加粗、下划线并作红色。 |
+
+> **这四者原本是四个独立插件，现已归档。**
+> 它们各自发布至 2026 年 8 月（Tufte Sidenotes 1.7.0、Tufte Figures 1.7.2、Tufte Inline 1.2.0、Tufte Backlinks 1.0.1）；本是一套写作系统，却要装四次、更新四次、分设四处设置。Tufte Suite 1.0.0 取代这四者，**此后所有插件更新只在那里进行**——各独立仓库与本仓库 [`plugins/`](plugins) 中的副本均已冻结，不再更新。
+>
+> 迁移不会损失任何功能：Suite 逐字节内嵌了各插件的代码作为模块，行为完全一致；关闭某个模块，就等同于卸载了原来的那个插件。**若你已安装这四个插件，请在启用 Suite 之前先禁用它们**，否则一切都会渲染两遍。Suite 会在首次加载时导入它们的设置与图片拼贴数据，并沿用原有的命令 ID，已绑定的快捷键照常可用。
 
 ## 安装
 
@@ -62,9 +69,9 @@
 
 **插件（手动安装）：**
 
-1. 从[最新 Release](../../releases/latest) 下载各插件压缩包。
-2. 解压至 `YourVault/.obsidian/plugins/`（每个插件一个文件夹）。
-3. 设置 → 第三方插件 → 逐一启用。
+1. 从 [Tufte Suite 的最新 Release](https://github.com/PleiadesM/tufte-suite/releases/latest) 下载 `main.js`、`manifest.json` 与 `styles.css`。
+2. 三个文件一并放入 `YourVault/.obsidian/plugins/tufte-suite/`。
+3. 设置 → 第三方插件 → 启用 **Tufte Suite**。
 
 可选：安装社区插件 **Style Settings**，即可获得玻璃界面的三个滑块（不透明度、模糊、整窗半透明）。
 
