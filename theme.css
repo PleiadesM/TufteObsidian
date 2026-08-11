@@ -588,7 +588,7 @@ body.theme-dark {
    them (Title > H1 > H2 > H3). Spacing is set explicitly in *lines of body
    text* (--tufte-line = one body line), before (margin-top) and after
    (margin-bottom) each level:
-       H1    — 3 lines before, 2 lines after
+       H1    — 3 lines before, 1 line after
        H2    — 1 line  before, 1 line  after
        H3/H4 — 1 line  before, 1 line  after
    Both margins are !important because Obsidian's app.css spaces headings
@@ -604,15 +604,18 @@ body.theme-dark {
    tried and reverted: it clears the (0,2,3) rule but loses to the
    first-block one.) The block after a heading also carries its own
    top margin (a paragraph's --p-spacing = 1 line); since adjacent vertical
-   margins collapse to the larger, a 1-line "after" simply coincides with
-   that gap while H1's 2-line "after" overrides it — so each value renders as
-   written regardless of what follows. */
+   margins collapse to the larger, every level's 1-line "after" simply
+   coincides with that gap — so each value renders as written regardless of
+   what follows. (H1 carried 2 lines after until 2026-08-11, which read as
+   an extra blank line under the heading; narrowed to 1 so the heading
+   binds to its section — the asymmetric 3-before/1-after is the classic
+   heading-belongs-to-what-follows cue.) */
 .markdown-preview-view h1 {
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.005em;
   margin-top: calc(var(--tufte-line) * 3) !important;     /* 3 lines before H1 */
-  margin-bottom: calc(var(--tufte-line) * 2) !important;  /* 2 lines after H1  */
+  margin-bottom: var(--tufte-line) !important;            /* 1 line after H1   */
 }
 .markdown-preview-view h2 {
   /* Same two competitors as H1 — see the comment above that rule. */
@@ -717,7 +720,10 @@ body.theme-dark {
    Example:  &&Background.&& The study began in earnest once… */
 .tufte-leadin {
   font-style: italic;
-  margin-right: 1.25em;   /* the indentation after the lead-in label */
+  font-size: 1.1em;       /* a step above body — under .newthought's 1.2em —
+                             so the label reads as stressed, not just slanted */
+  margin-right: 1.25em;   /* the indentation after the lead-in label
+                             (in label ems: scales with the 1.1em above) */
 }
 
 /* Live Preview: CodeMirror splits the lead-in mark into several spans
@@ -731,6 +737,8 @@ body.theme-dark {
 }
 .markdown-source-view.mod-cm6 .cm-line .tufte-leadin-indent {
   display: inline-block;
+  font-size: 1.1em;       /* match .tufte-leadin, so the 1.25em indent below
+                             equals Reading view's margin-right exactly */
   width: 1.25em;
 }
 
