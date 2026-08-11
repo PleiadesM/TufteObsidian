@@ -720,6 +720,20 @@ body.theme-dark {
   margin-right: 1.25em;   /* the indentation after the lead-in label */
 }
 
+/* Live Preview: CodeMirror splits the lead-in mark into several spans
+   around nested formatting (links, bold, italics), and a per-span
+   margin would open gaps inside the label. Zero it there; the plugin's
+   .tufte-leadin-indent widget — rendered in place of the concealed
+   closing && — carries the indentation instead (it is absent while the
+   cursor is on the line, when the raw delimiters show). */
+.markdown-source-view.mod-cm6 .cm-line .tufte-leadin {
+  margin-right: 0;
+}
+.markdown-source-view.mod-cm6 .cm-line .tufte-leadin-indent {
+  display: inline-block;
+  width: 1.25em;
+}
+
 /* Inline bold/italic kept restrained */
 .markdown-preview-view strong { font-weight: 600; }
 .markdown-preview-view em     { font-style: italic; }
