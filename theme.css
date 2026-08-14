@@ -521,19 +521,28 @@ body.theme-dark {
      so both code paths agree… */
   --file-line-width: 55rem;
 }
-.markdown-preview-view {
+/* Scoped under .markdown-reading-view: a bare `.markdown-preview-view`
+   also matches every OTHER surface that renders markdown — Obsidian's
+   Release Notes tab, hover popovers, modals — none of which sit inside
+   a tufte-pane container, so `30cqi` falls back to ≈30% of the WINDOW
+   there and crushed the Release Notes column to a sliver (reported
+   2026-08-13). Real file panes are the only place the marginalia
+   gutter exists; every other surface keeps Obsidian's own geometry
+   (the Tufte type itself still inherits). The responsive-tail and
+   phone overrides repeat this scope so they keep outranking it. */
+.markdown-reading-view .markdown-preview-view {
   padding-left: clamp(2rem, 4cqi, 5rem);
   padding-right: 30cqi;            /* the marginalia gutter ≈ 30% of the pane */
 }
 
-.markdown-preview-view .markdown-preview-sizer {
+.markdown-reading-view .markdown-preview-view .markdown-preview-sizer {
   max-width: 55rem;
 }
 /* …and left-anchor the sizer against the readable-line-width centering:
-   same selector and specificity as app.css's rule, later in the
-   cascade, so the column sits flush on the left padding edge exactly
+   app.css's rule is (0,3,0); the reading-view scope lifts this to
+   (0,4,0), so the column sits flush on the left padding edge exactly
    as it does with the setting off. */
-.markdown-preview-view.is-readable-line-width .markdown-preview-sizer {
+.markdown-reading-view .markdown-preview-view.is-readable-line-width .markdown-preview-sizer {
   margin-left: 0;
   margin-right: auto;
 }
@@ -2866,7 +2875,7 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
    notes collapse — and pull every full-bleed element (title, banner)
    back to normal width so nothing overshoots the narrower padding box. */
 @container tufte-pane (max-width: 760px) {
-  .markdown-preview-view {
+  .markdown-reading-view .markdown-preview-view {
     padding-right: clamp(2rem, 4cqi, 5rem);
   }
   .markdown-reading-view .markdown-preview-view .inline-title {
@@ -2885,7 +2894,7 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
     --font-text-size: 17px;
   }
 
-  .markdown-preview-view {
+  .markdown-reading-view .markdown-preview-view {
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -2894,7 +2903,7 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
   .markdown-reading-view {
     --file-line-width: 100%;
   }
-  .markdown-preview-view .markdown-preview-sizer {
+  .markdown-reading-view .markdown-preview-view .markdown-preview-sizer {
     max-width: 100%;
   }
 
@@ -3130,10 +3139,14 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
     margin: 5mm 0 !important;
     break-inside: avoid;
   }
-  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure"] .callout-content {
-    grid-template-columns: minmax(0, 1fr) 23.91% !important;  /* 22 ÷ 92: the −margin widens the grid box to 92 pane-units */
-    margin-right: -31.43% !important;                          /* 22 ÷ 70 */
-    column-gap: 4mm !important;
+  /* The default figure's caption is a FLOAT (2026-08-13, in the plugin's
+     styles.css) so it joins the sidenotes' clear:right queue instead of a
+     grid column; convert its cqi pull to % exactly like the sidenote rule
+     in §4 (the float/clear themselves cascade in from the plugin). */
+  body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure"] .callout-content > .tufte-fig-caption-holder {
+    width: 31.43% !important;                  /* 22 ÷ 70 */
+    margin: 0.5mm -34.29% 4mm 4mm !important;  /* 24 ÷ 70 */
+    break-inside: avoid;
   }
   body.tufte-figures-enabled .print .markdown-preview-view .callout[data-callout="figure-full"] {
     margin: 5mm -42.86% 5mm 0 !important;   /* 30 ÷ 70 */

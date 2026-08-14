@@ -89,3 +89,11 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 ## License
 
 [MIT](LICENSE) © 2026 Daocheng Lin. The embedded ET Book fonts remain under their own MIT license and copyright.
+
+## Changelog
+
+- **1.16.3** (2026-08-14) — Obsidian's Release Notes tab (and every other non-file view) no longer renders as a narrow sliver: the reading-pane layout — the 30% marginalia gutter and the 55rem measure — is now scoped to real file panes, where the `tufte-pane` container exists. Print converts the default figure's margin caption in its new float geometry. Pair with Tufte Suite 1.0.2, which ends the sidenote/caption overlap and aligns the margin left edges.
+- **1.16.2** (2026-08-11) — the `&&lead-in&&` label steps up to 1.1em (above body, under `^^new thought^^`'s 1.2em); H1's after-gap narrows to one line so the heading binds to its section.
+- **1.16.1** (2026-08-11) — inline shorthands survive nested markup (`[[links]]`, bold, italic inside `&&…&&` / `^^…^^` / `@@…@@`); the Live Preview lead-in indent rides a widget instead of repeating per fragment. Ships with Tufte Suite 1.0.1.
+- **1.16.0** (2026-08-04) — print / PDF export on the css4.pub Tufte model: 11pt body on a 5mm baseline, 9.5pt/4mm marginalia and captions, the 7:3 gutter preserved on paper, true-white pages even from dark mode; tables re-registered on the Tufte-LaTeX / booktabs canon (serif, three rules, no verticals) on screen and in print; `==highlights==` become the Playfair tint; unresolved links settle into stone.
+- Earlier releases (1.11.0's `[!banner]`, the 1.15.x stream, …) — see [Releases](https://github.com/PleiadesM/TufteObsidian/releases).
