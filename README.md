@@ -10,7 +10,7 @@ An [Obsidian](https://obsidian.md) theme adapted from [Tufte CSS](https://edward
 
 ## What the theme covers
 
-- **Typography** — ET Book (embedded, offline; MIT-licensed) with Palatino/Georgia fallbacks; Gill Sans for data and chrome; a 55rem reading measure with a marginalia gutter; lining tabular figures wherever digits stack.
+- **Typography** — ET Book (embedded, offline; MIT-licensed) with Palatino/Georgia fallbacks; Gill Sans for data, chrome, and (since 1.17.0) the whole interface; a 55rem reading measure with a marginalia gutter; lining tabular figures wherever digits stack. **Every face and weight is a knob**: serif, sans and the Chinese companions — Source Han presets, the bundled Cabin, or any installed font — are chosen from Tufte Suite's Typefaces settings.
 - **Tables and Bases** — prose tables and Obsidian's Bases database views share one specimen-table register modeled on *Beautiful Evidence*: a single hairline under the head, no vertical rules, alignment does the work. The Bases **cards view renders as a bookshelf gallery** — frameless covers on a shelf line with centered title-page captions.
 - **Banners** — a CSS-native `[!banner]` callout that opens a note with a full-bleed plate, the way Tufte's chapters open.
 - **Quiet chrome** — sidebars, tabs, menus, and the graph in paper-and-ink; glass chrome at 95% opacity with a frost, including a whole-window translucent mode (three Style Settings sliders).
@@ -73,25 +73,27 @@ The theme stands alone, but one plugin completes the Tufte writing system: **[Tu
 2. Put all three in `YourVault/.obsidian/plugins/tufte-suite/`.
 3. Settings → Community plugins → enable **Tufte Suite**.
 
-Optional: install the community **Style Settings** plugin to get sliders for the glass chrome (opacity, blur, translucent-window sheet).
+Optional: install the community **Style Settings** plugin to get sliders for the glass chrome (opacity, blur, translucent-window sheet). Typeface choices live in **Tufte Suite's own settings** (the Typefaces tabs), not in Style Settings.
 
 ## Requirements
 
 - Obsidian 1.4.0 or newer (Bases styling targets 1.9+).
-- No fonts to install and no network access needed — ET Book is embedded in the stylesheet.
+- No fonts to install and no network access needed — ET Book and Cabin are embedded in the stylesheet.
 
 ## Credits
 
 - [Tufte CSS](https://github.com/edwardtufte/tufte-css) by Dave Liepmann and contributors — the typographic source this theme adapts.
 - [ET Book](https://github.com/edwardtufte/et-book) © Dmitry Krasny, Bonnie Scranton, Edward Tufte, Adam Schwartz — MIT license, embedded in `theme.css`.
+- [Cabin](https://github.com/impallari/Cabin) © the Cabin Project Authors — SIL OFL 1.1, embedded in `theme.css` as the bundled sans of the typeface settings.
 - Edward Tufte's books — *The Visual Display of Quantitative Information*, *Envisioning Information*, *Visual Explanations*, *Beautiful Evidence* — the design authority behind every decision here.
 
 ## License
 
-[MIT](LICENSE) © 2026 Daocheng Lin. The embedded ET Book fonts remain under their own MIT license and copyright.
+[MIT](LICENSE) © 2026 Daocheng Lin. The embedded ET Book (MIT) and Cabin (SIL OFL 1.1) fonts remain under their own licenses and copyrights.
 
 ## Changelog
 
+- **1.17.0** (2026-08-14) — the typeface release: faces and weights become knobs. Six CSS custom properties — Latin serif/sans faces and weights, Chinese 宋体/黑体 companions (楷体 deliberately stays fixed) — driven from Tufte Suite 1.1.0's new **Typefaces** settings: Latin/Chinese tabs, Monotype-leaning recommendations, Source Han presets, an "Other…" picker of your installed fonts (the Chinese picker filtered by a real glyph probe), and fixed Chinese weights that hold steady whatever the Latin weight does. Bold now derives from the body weight (+200, through Obsidian's own weight tokens) so it keeps its step at every setting; the interface joins the sans register — Gill Sans, one scale step larger (13/14/16px); **Cabin** (SIL OFL 1.1) is embedded as a variable 400–700 so one recommended sans renders on every machine; the default sans chain gains Gill Sans Nova on Windows. Style Settings keeps only the glass sliders. Pair with **Tufte Suite 1.1.0** — without it the theme simply renders its defaults.
 - **1.16.3** (2026-08-14) — Obsidian's Release Notes tab (and every other non-file view) no longer renders as a narrow sliver: the reading-pane layout — the 30% marginalia gutter and the 55rem measure — is now scoped to real file panes, where the `tufte-pane` container exists. Print converts the default figure's margin caption in its new float geometry. Pair with Tufte Suite 1.0.2, which ends the sidenote/caption overlap and aligns the margin left edges.
 - **1.16.2** (2026-08-11) — the `&&lead-in&&` label steps up to 1.1em (above body, under `^^new thought^^`'s 1.2em); H1's after-gap narrows to one line so the heading binds to its section.
 - **1.16.1** (2026-08-11) — inline shorthands survive nested markup (`[[links]]`, bold, italic inside `&&…&&` / `^^…^^` / `@@…@@`); the Live Preview lead-in indent rides a widget instead of repeating per fragment. Ships with Tufte Suite 1.0.1.

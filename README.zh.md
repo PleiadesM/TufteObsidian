@@ -10,7 +10,7 @@
 
 ## 主题涵盖什么
 
-- **排印** —— ET Book（内嵌、离线可用；MIT 许可），回落至 Palatino/Georgia；数据与界面用 Gill Sans；55rem 的阅读栏宽，外加一条边注栏；凡数字成列之处，一律使用表格用正体数字。
+- **排印** —— ET Book（内嵌、离线可用；MIT 许可），回落至 Palatino/Georgia；数据、界面乃至（自 1.17.0 起）整个应用外壳皆用 Gill Sans；55rem 的阅读栏宽，外加一条边注栏；凡数字成列之处，一律使用表格用正体数字。**字族与字重皆可调**——衬线、无衬线与中文伴随字体（思源预设、内嵌 Cabin，或任意已装字体）均在 Tufte Suite 的字体设置中选择。
 - **表格与 Bases** —— 散文表格与 Obsidian 的 Bases 数据库视图共用一套取法《Beautiful Evidence》的样张表格规范：表头之下一条细线，不设竖线，对齐自会说话。Bases 的**卡片视图渲染为书架画廊**——无框封面立于同一条架线之上，配以居中的扉页式图注。
 - **章首题图** —— 纯 CSS 实现的 `[!banner]` 标注块，以一幅通栏图版开启一篇笔记，如同 Tufte 书中的章首。
 - **安静的界面** —— 侧边栏、标签页、菜单与关系图谱皆是纸墨本色；玻璃界面为 95% 不透明度加磨砂，并提供整窗半透明模式（三个 Style Settings 滑块）。
@@ -73,25 +73,27 @@
 2. 三个文件一并放入 `YourVault/.obsidian/plugins/tufte-suite/`。
 3. 设置 → 第三方插件 → 启用 **Tufte Suite**。
 
-可选：安装社区插件 **Style Settings**，即可获得玻璃界面的三个滑块（不透明度、模糊、整窗半透明）。
+可选：安装社区插件 **Style Settings**，即可获得玻璃界面的三个滑块（不透明度、模糊、整窗半透明）。字体选择位于 **Tufte Suite 自身的设置**（字体标签页），不在 Style Settings 中。
 
 ## 环境要求
 
 - Obsidian 1.4.0 或更新版本（Bases 样式面向 1.9+）。
-- 无需安装字体，也无需联网——ET Book 已内嵌于样式表。
+- 无需安装字体，也无需联网——ET Book 与 Cabin 已内嵌于样式表。
 
 ## 致谢
 
 - [Tufte CSS](https://github.com/edwardtufte/tufte-css)，Dave Liepmann 与诸位贡献者——本主题所改写的排印源头。
 - [ET Book](https://github.com/edwardtufte/et-book) © Dmitry Krasny、Bonnie Scranton、Edward Tufte、Adam Schwartz——MIT 许可，内嵌于 `theme.css`。
+- [Cabin](https://github.com/impallari/Cabin) © the Cabin Project Authors——SIL OFL 1.1 许可，内嵌于 `theme.css`，作为字体设置随主题分发的无衬线字体。
 - Edward Tufte 的著作——《The Visual Display of Quantitative Information》《Envisioning Information》《Visual Explanations》《Beautiful Evidence》——这里每一个设计决定背后的权威。
 
 ## 许可
 
-[MIT](LICENSE) © 2026 Daocheng Lin。内嵌的 ET Book 字体保留其自身的 MIT 许可与版权。
+[MIT](LICENSE) © 2026 Daocheng Lin。内嵌的 ET Book（MIT）与 Cabin（SIL OFL 1.1）字体保留其自身的许可与版权。
 
 ## 更新日志
 
+- **1.17.0**（2026-08-14）— 字体版：字族与字重全部成为可调旋钮。六个 CSS 自定义属性——拉丁衬线/无衬线的字族与字重，以及中文宋体/黑体伴随字体（楷体有意保持固定）——由 Tufte Suite 1.1.0 全新的**字体（Typefaces）设置**驱动：拉丁/中文双标签页、以 Monotype 为主的推荐清单、思源宋体/思源黑体预设、从系统字体任选的「其他…」选择器（中文侧经真实字形探测过滤，只列能排中文的字体），以及不随拉丁字重变动的中文固定字重。粗体改由正文字重推导（+200，借 Obsidian 自身的权重体系），任何设置下都保持层级；应用界面并入无衬线声部——Gill Sans，界面字号整体上调一档（13/14/16px）；内嵌 **Cabin**（SIL OFL 1.1）可变字体（400–700 真实字重），保证至少一款推荐无衬线随处可用；默认无衬线回落链在 Windows 上新增 Gill Sans Nova。Style Settings 仅保留玻璃滑块。请与 **Tufte Suite 1.1.0** 搭配——不装 Suite 时主题按默认字体渲染。
 - **1.16.3**（2026-08-14）— Obsidian 自带的「更新说明」标签页（以及一切非笔记视图）不再被挤成一条窄缝：阅读视图的版面规则——30% 旁注栏与 55rem 栏宽——现在只作用于真正的笔记窗格（`tufte-pane` 容器所在之处）。打印样式同步换用默认插图边栏题注的新浮动几何。请与 Tufte Suite 1.0.2 搭配使用：该版本终结了旁注与题注的重叠，并对齐了页边内容的左缘。
 - **1.16.2**（2026-08-11）— `&&导语&&` 字号提升至 1.1em（高于正文、低于 `^^新思^^` 的 1.2em）；H1 标题后间距收窄为一行，使标题与其章节相贴。
 - **1.16.1**（2026-08-11）— 行内速记不再被嵌套标记（`[[链接]]`、粗体、斜体）破坏；Live Preview 的导语缩进改由 widget 承载，不再逐段重复。与 Tufte Suite 1.0.1 同步发布。
