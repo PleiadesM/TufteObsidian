@@ -21,14 +21,18 @@ settings:
     -
         id: glass-heading
         title: Glass chrome
+        title.zh: 玻璃界面
         description: The interface at partial opacity with a backdrop frost. See the Glass chrome section of theme.css.
+        description.zh: 界面以半透明呈现，背后带一层磨砂。详见 theme.css 的 Glass chrome 一节。
         type: heading
         level: 1
         collapsed: false
     -
         id: tufte-glass-opacity
         title: Glass opacity
+        title.zh: 玻璃不透明度
         description: 'How opaque every interface surface is (the document page follows only in Translucent-window mode). 100% turns the glass off.'
+        description.zh: '各界面表面的不透明程度（文档页面仅在“半透明窗口”模式下跟随）。设为 100% 即关闭玻璃效果。'
         type: variable-number-slider
         default: 95
         min: 70
@@ -38,7 +42,9 @@ settings:
     -
         id: tufte-glass-blur-radius
         title: Frost blur radius
+        title.zh: 磨砂模糊半径
         description: 'Backdrop blur behind floating surfaces. 0 gives clear glass. (Auto-disabled while Translucent window is on — macOS vibrancy supplies the blur there.)'
+        description.zh: '浮动界面背后的背景模糊。设为 0 即为清透玻璃。（开启“半透明窗口”时自动停用——那时由 macOS 的活力材质提供模糊。）'
         type: variable-number-slider
         default: 12
         min: 0
@@ -48,7 +54,9 @@ settings:
     -
         id: tufte-sheet-opacity
         title: Window sheet opacity (Translucent window)
+        title.zh: 窗口底片不透明度（半透明窗口）
         description: 'How opaque the whole window is over the desktop wallpaper when Settings → Appearance → Translucent window is on. Lower = more wallpaper. At 95%+ the wallpaper is barely perceptible through the macOS vibrancy material.'
+        description.zh: '当“设置 → 外观 → 半透明窗口”开启时，整个窗口叠在桌面壁纸之上的不透明程度。数值越低，透出的壁纸越多；到 95% 以上，隔着 macOS 的活力材质几乎已看不出壁纸。'
         type: variable-number-slider
         default: 85
         min: 50
@@ -567,21 +575,37 @@ body.theme-dark {
      an inheritable font-weight. */
   --metadata-label-font-weight:     var(--tufte-sans-weight);
   --metadata-label-text-color:      var(--tufte-muted);
-  /* (No -hover label token: app.css defines but never consumes it —
-     the hover brightening is a real element rule in the Metadata
-     section below instead.) */
-  --metadata-input-font:            var(--font-text-theme);  /* values are note content → serif */
+  /* (No -hover token for the label's TEXT COLOR: app.css defines
+     --metadata-label-text-color-hover but never consumes it — the
+     hover brightening from muted to ink is a real element rule in the
+     Metadata section below instead. The label BACKGROUND hover token
+     just below is a different token and is consumed normally.) */
+  /* The key cell takes the theme's standard warm-grey wash on hover —
+     the same one every other hover surface in the interface uses, so
+     front matter answers the pointer the way a nav row or a tab does.
+     The -active pairing is what app.css already resolves to on its
+     own; pinning it here records the intent rather than leaving the
+     focus wash to an inherited accident. */
+  --metadata-label-background-hover:  var(--background-modifier-hover);
+  --metadata-label-background-active: var(--background-modifier-hover);
+  --metadata-input-font:            var(--font-gill-sans);
   --metadata-input-text-color:      var(--tufte-ink);
-  /* Values sit a step below prose — front matter reads as front matter,
-     not as five lines of body text before the note starts — but a step,
-     not a whisper: 0.83em (≈17.4px) keeps them comfortably readable
-     next to the 15px keys. NB Bases cells are metadata inputs
-     internally and must stay in the tables' 0.78 register; the Bases
-     section re-pins this token locally for exactly that reason. */
-  --metadata-input-font-size:       0.83em;
-  /* No rounded corners, no hover/focus ring — a ring is still a box.
-     Feedback comes from the per-row divider hairline instead:
-     transparent at rest, plain rule on hover, red on focus. */
+  /* Keys and values share ONE register: Gill Sans at the fixed
+     UI-medium size, exactly the treatment the Bases specimen tables
+     give their cells — and Bases is literally the same metadata-input
+     machinery, so front matter and a base now speak in the same voice.
+     Hierarchy comes from color alone: muted keys, ink values. (The
+     "Properties" title stays italic serif — it is a document heading,
+     like the Bases title, not a data cell.) NB Bases cells must stay
+     in the tables' own 0.78 register; the Bases section re-pins this
+     token locally for exactly that reason. */
+  --metadata-input-font-size:       var(--font-ui-medium);
+  /* No rounded corners, no hover/focus ring, and no hairlines either —
+     a ring is still a box, and a rule that blinks under a row is a box
+     drawn one side at a time. Feedback is the warm-grey wash: on the
+     key cell under the pointer (--metadata-label-background-hover
+     above), and app.css's own --metadata-*-background-active wash on
+     focus. The same wash as every other hover surface in the theme. */
   --metadata-property-radius:       0;
   --metadata-property-radius-hover: 0;
   --metadata-property-radius-focus: 0;
@@ -589,16 +613,16 @@ body.theme-dark {
   --metadata-property-box-shadow-focus: none;
   --metadata-divider-width:         1px;
   --metadata-divider-color:         transparent;
-  --metadata-divider-color-hover:   var(--tufte-rule);
-  --metadata-divider-color-focus:   var(--tufte-accent);
-  /* Hairline under the whole properties block, and rows set close: a
-     little more air than Obsidian's cramped 3px default, but tight
-     enough to read as a short list of front-matter rather than a form
-     — the type carries the hierarchy now, not the spacing. The gap
-     still clears the per-row divider hairline (1px inside a ~30px
-     row). Vertical measures in --tufte-line units so they track the
+  --metadata-divider-color-hover:   transparent;
+  --metadata-divider-color-focus:   transparent;
+  /* Rows set close: a little more air than Obsidian's cramped 3px
+     default, but tight enough to read as a short list of front-matter
+     rather than a form — the type carries the hierarchy now, not the
+     spacing. The block itself ends with plain air: no rule under the
+     properties, since the note's first line of prose is boundary
+     enough. Vertical measures in --tufte-line units so they track the
      body size at breakpoints. */
-  --metadata-border-width:          0 0 1px 0;
+  --metadata-border-width:          0;
   --metadata-padding:               calc(var(--tufte-line) * 0.15) 0 calc(var(--tufte-line) * 0.25) 0;
   --metadata-gap:                   0.25rem;
 
@@ -2431,14 +2455,35 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
    the token half lives in the --metadata-* block at the top).
 
    Covers the in-note properties block and the sidebar "File
-   properties" pane — both read the same tokens. Keys in small muted
-   Gill Sans (the data/label face); values in the serif, since a
-   property's value is note content, not chrome. No boxes: hover and
-   focus speak through the per-row divider hairline (plain rule on
-   hover, red on focus) instead of rings. Reading view and editor are
-   deliberately NOT differentiated beyond the type icon — both are
-   directly-editable surfaces in Obsidian.
+   properties" pane — both read the same tokens. Keys and values both
+   in Gill Sans at one size (the data/label face), separated by color
+   alone: muted keys, ink values. No boxes, no rings, no hairlines:
+   hover and focus speak through the warm-grey wash on the key cell,
+   the same wash every other hover surface in the theme uses. Reading
+   view and editor are deliberately NOT differentiated beyond the type
+   icon — both are directly-editable surfaces in Obsidian.
    ------------------------------------------------------------------ */
+
+/* Properties inputs are transparent, at rest and under the pointer.
+   The property key is a real input[type='text'], and app.css's generic
+   `input[type='text']:not(:disabled):hover` (specificity 0,3,1)
+   outranks its own `input.metadata-property-key-input:hover {
+   background-color: transparent }` (0,2,1) — so hovering a key paints
+   --background-modifier-form-field-hover → --background-modifier-form-field
+   → --color-base-00: stock WHITE, one of the few base tokens this
+   theme never remaps, and the actual source of the white slab that
+   used to flash under a key. The same specificity fight reaches the
+   date and number VALUE inputs, whose own rule
+   (`.metadata-property-value .metadata-input-text:hover`) is only
+   0,3,0. Zeroing both form-field tokens inside the container settles
+   every properties input at transparent — rest, hover and focus — and
+   leaves the cell-level --metadata-label-background-hover wash to
+   carry the hover feedback on its own. (Verified against the
+   extracted app.css 1.13.7.) */
+.metadata-container {
+  --background-modifier-form-field:       transparent;
+  --background-modifier-form-field-hover: transparent;
+}
 
 /* Type icon — muted, not removed, in editing contexts: it's the only
    mouse affordance for changing a property's type. Scoped custom
@@ -2461,6 +2506,15 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
    it (verified 1.12.4) — so the hover is a real element rule instead. */
 .metadata-property:hover input.metadata-property-key-input {
   color: var(--tufte-ink);
+}
+
+/* Values ride the sans knob, not the serif one — each sans site
+   declares its weight beside its family, since the preview container
+   carries the serif knob's weight as an inheritable font-weight and
+   inputs take no weight from UA defaults. */
+.metadata-property-value,
+.metadata-property-value input {
+  font-weight: var(--tufte-sans-weight);
 }
 
 /* "Add property" / "Show source" — quiet at rest, accent on hover,
@@ -2502,17 +2556,6 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
 .metadata-container:focus-within .metadata-property.is-selected {
   color: var(--tufte-ink);
   background-color: var(--tufte-wash-select);
-}
-
-/* The sidebar pane and phone/drawer variants pin their own, more
-   specific --metadata-divider-color-hover back to the resting color,
-   which would silently cancel the hover/focus hairline — restore it
-   at the same selectors. */
-.workspace > .workspace-split:not(.mod-root) .metadata-container,
-.is-phone .metadata-container,
-.workspace-drawer .metadata-container {
-  --metadata-divider-color-hover: var(--tufte-rule);
-  --metadata-divider-color-focus: var(--tufte-accent);
 }
 
 /* ------------------------------------------------------------------
