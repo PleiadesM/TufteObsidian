@@ -6,6 +6,8 @@
 
 一款改写自 [Tufte CSS](https://edwardtufte.github.io/tufte-css/) 的 [Obsidian](https://obsidian.md) 主题，把 Edward Tufte 的书籍设计——ET Book 字体、页边旁注、克制的细线、一处刻意的红——带进应用的每一个角落，并在拉丁排印系统之外，配备一套完整的中文排印系统（宋体正文、楷体示例、黑体数据）。
 
+请访问完整文档获得更完整的展示：[文档](https://dclin.me/TufteObsidian/)
+
 ![Tufte for Obsidian——Bases 书架画廊，明暗两色。](screenshot.png)
 
 ## 主题涵盖什么
