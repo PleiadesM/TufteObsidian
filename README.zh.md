@@ -61,17 +61,12 @@
 
 ## 安装
 
-**主题（手动安装，直至上架社区目录）：**
+主题与插件均已上架 Obsidian 社区目录，无需手动下载：
 
-1. 从[最新 Release](../../releases/latest) 下载 `theme.css` 与 `manifest.json`。
-2. 放入 `YourVault/.obsidian/themes/Tufte/`。
-3. 设置 → 外观 → 主题 → 选择 **Tufte**。
+- **主题：**设置 → 外观 → 主题 → *管理* → 搜索 **Tufte** → 安装并使用。（或打开 `obsidian://show-theme?name=Tufte`。）
+- **插件：**设置 → 第三方插件 → *浏览* → 搜索 **Tufte Suite** → 安装 → 启用。（或打开 `obsidian://show-plugin?id=tufte-suite`。）
 
-**插件（手动安装）：**
-
-1. 从 [Tufte Suite 的最新 Release](https://github.com/PleiadesM/tufte-suite/releases/latest) 下载 `main.js`、`manifest.json` 与 `styles.css`。
-2. 三个文件一并放入 `YourVault/.obsidian/plugins/tufte-suite/`。
-3. 设置 → 第三方插件 → 启用 **Tufte Suite**。
+手动安装依然可行：把[最新 Release](../../releases/latest) 中的 `theme.css` 与 `manifest.json` 放入 `YourVault/.obsidian/themes/Tufte/`；把 [Tufte Suite Release](https://github.com/PleiadesM/tufte-suite/releases/latest) 中的 `main.js`、`manifest.json` 与 `styles.css` 放入 `YourVault/.obsidian/plugins/tufte-suite/`，再在第三方插件中启用。
 
 可选：安装社区插件 **Style Settings**，即可获得玻璃界面的三个滑块（不透明度、模糊、整窗半透明）。字体选择位于 **Tufte Suite 自身的设置**（字体标签页），不在 Style Settings 中。
 
@@ -93,10 +88,26 @@
 
 ## 更新日志
 
-- **1.18.0**（2026-08-14）— 属性面板并入体系，设置界面开口说中文。悬停属性名时，如今呈现与主题其他悬停表面一致的暖灰底色——原先的白色闪现，是 Obsidian 通用文本输入框的悬停规则以更高优先级压过其自身的元数据规则、落到一个未经主题映射的底层令牌所致，现已在容器内中和；悬停/聚焦时的细下划线与整个属性块底部的分隔线一并移除（反馈只余那层灰晕）；属性名与属性值归入同一声部——Gill Sans、界面字号，灰色的名与墨色的值相区分，即 Bases 数据表的处理方式——而 *Properties* 标题保持斜体衬线，作为标题存在。当 Obsidian 语言设为中文时，Style Settings 面板（玻璃滑块）显示中文标题与说明。请与 **Tufte Suite 1.2.0** 搭配——其全部界面（设置、插图对话框、命令、通知）同样如此。
-- **1.17.0**（2026-08-14）— 字体版：字族与字重全部成为可调旋钮。六个 CSS 自定义属性——拉丁衬线/无衬线的字族与字重，以及中文宋体/黑体伴随字体（楷体有意保持固定）——由 Tufte Suite 1.1.0 全新的**字体（Typefaces）设置**驱动：拉丁/中文双标签页、以 Monotype 为主的推荐清单、思源宋体/思源黑体预设、从系统字体任选的「其他…」选择器（中文侧经真实字形探测过滤，只列能排中文的字体），以及不随拉丁字重变动的中文固定字重。粗体改由正文字重推导（+200，借 Obsidian 自身的权重体系），任何设置下都保持层级；应用界面并入无衬线声部——Gill Sans，界面字号整体上调一档（13/14/16px）；内嵌 **Cabin**（SIL OFL 1.1）可变字体（400–700 真实字重），保证至少一款推荐无衬线随处可用；默认无衬线回落链在 Windows 上新增 Gill Sans Nova。Style Settings 仅保留玻璃滑块。请与 **Tufte Suite 1.1.0** 搭配——不装 Suite 时主题按默认字体渲染。
-- **1.16.3**（2026-08-14）— Obsidian 自带的「更新说明」标签页（以及一切非笔记视图）不再被挤成一条窄缝：阅读视图的版面规则——30% 旁注栏与 55rem 栏宽——现在只作用于真正的笔记窗格（`tufte-pane` 容器所在之处）。打印样式同步换用默认插图边栏题注的新浮动几何。请与 Tufte Suite 1.0.2 搭配使用：该版本终结了旁注与题注的重叠，并对齐了页边内容的左缘。
-- **1.16.2**（2026-08-11）— `&&导语&&` 字号提升至 1.1em（高于正文、低于 `^^新思^^` 的 1.2em）；H1 标题后间距收窄为一行，使标题与其章节相贴。
-- **1.16.1**（2026-08-11）— 行内速记不再被嵌套标记（`[[链接]]`、粗体、斜体）破坏；Live Preview 的导语缩进改由 widget 承载，不再逐段重复。与 Tufte Suite 1.0.1 同步发布。
-- **1.16.0**（2026-08-04）— 依 css4.pub 的 Tufte 印刷模型重做打印 / PDF 导出：11pt 正文、5mm 基线，旁注与题注 9.5pt/4mm，纸面保留 7:3 栏沟，暗色模式导出亦为纯白纸面；表格回归 Tufte-LaTeX / booktabs 正典（衬线、三线、无竖线），屏幕与纸面一致；`==高亮==` 改为 Playfair 淡彩；未创建链接改用石色。
-- 更早版本（1.11.0 的 `[!banner]`、1.15.x 系列等）——见 [Releases](https://github.com/PleiadesM/TufteObsidian/releases)。
+- **1.18.0**（2026-08-14）
+  - 调整属性面板
+  - Style Settings 面板现已支持中文
+  - 请与 Tufte Suite 1.2.0 搭配
+- **1.17.0**（2026-08-14）
+  - 字体可调：西文与中文的字族与字重（Tufte Suite → 字体）
+  - 粗体随正文字重变化
+  - 界面改用 Gill Sans，字号上调一档
+  - 内嵌 Cabin 作为随主题分发的无衬线体
+  - 请与 Tufte Suite 1.1.0 搭配
+- **1.16.3**（2026-08-14）
+  - 阅读版面只作用于笔记窗格
+  - 更新插图题注的打印几何
+- **1.16.2**（2026-08-11）
+  - 导语略微放大
+  - 收紧 H1 之后的间距
+- **1.16.1**（2026-08-11）
+  - 行内简写现可容纳嵌套标记
+- **1.16.0**（2026-08-04）
+  - 新增 Tufte 风格的打印／PDF 导出
+  - 表格改为 booktabs 样式
+  - 高亮改为淡彩；未创建链接的颜色变淡
+- 更早版本——见 [Releases](https://github.com/PleiadesM/TufteObsidian/releases)。

@@ -61,17 +61,12 @@ The theme stands alone, but one plugin completes the Tufte writing system: **[Tu
 
 ## Install
 
-**Theme (manual, until it reaches the community directory):**
+Both halves are in Obsidian's community directories — nothing to download by hand:
 
-1. Download `theme.css` and `manifest.json` from the [latest release](../../releases/latest).
-2. Put them in `YourVault/.obsidian/themes/Tufte/`.
-3. Settings → Appearance → Themes → select **Tufte**.
+- **Theme:** Settings → Appearance → Themes → *Manage* → search **Tufte** → Install and use. (Or open `obsidian://show-theme?name=Tufte`.)
+- **Plugin:** Settings → Community plugins → *Browse* → search **Tufte Suite** → Install → Enable. (Or `obsidian://show-plugin?id=tufte-suite`.)
 
-**Plugin (manual):**
-
-1. Download `main.js`, `manifest.json`, and `styles.css` from the [Tufte Suite release](https://github.com/PleiadesM/tufte-suite/releases/latest).
-2. Put all three in `YourVault/.obsidian/plugins/tufte-suite/`.
-3. Settings → Community plugins → enable **Tufte Suite**.
+Manual install still works: put `theme.css` and `manifest.json` from the [latest release](../../releases/latest) in `YourVault/.obsidian/themes/Tufte/`; put `main.js`, `manifest.json`, and `styles.css` from the [Tufte Suite release](https://github.com/PleiadesM/tufte-suite/releases/latest) in `YourVault/.obsidian/plugins/tufte-suite/`, then enable it under Community plugins.
 
 Optional: install the community **Style Settings** plugin to get sliders for the glass chrome (opacity, blur, translucent-window sheet). Typeface choices live in **Tufte Suite's own settings** (the Typefaces tabs), not in Style Settings.
 
@@ -93,10 +88,26 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 
 ## Changelog
 
-- **1.18.0** (2026-08-14) — the Properties panel joins the system, and the settings speak Chinese. Hovering a property key now washes it with the same warm grey as every other hover surface — the white flash was Obsidian's generic text-input hover rule out-specifying its own metadata rule and resolving to an unthemed base token, now neutralized inside the container; the hover/focus hairline underlines and the rule under the block are gone (feedback is the wash alone); and keys and values share one register — Gill Sans at UI size, muted keys against ink values, the Bases specimen treatment — while the *Properties* title stays italic serif, as a heading. The Style Settings panel (glass sliders) now displays 中文 titles and descriptions when Obsidian's language is Chinese. Pair with **Tufte Suite 1.2.0**, whose entire UI — settings, figure modals, commands, notices — does the same.
-- **1.17.0** (2026-08-14) — the typeface release: faces and weights become knobs. Six CSS custom properties — Latin serif/sans faces and weights, Chinese 宋体/黑体 companions (楷体 deliberately stays fixed) — driven from Tufte Suite 1.1.0's new **Typefaces** settings: Latin/Chinese tabs, Monotype-leaning recommendations, Source Han presets, an "Other…" picker of your installed fonts (the Chinese picker filtered by a real glyph probe), and fixed Chinese weights that hold steady whatever the Latin weight does. Bold now derives from the body weight (+200, through Obsidian's own weight tokens) so it keeps its step at every setting; the interface joins the sans register — Gill Sans, one scale step larger (13/14/16px); **Cabin** (SIL OFL 1.1) is embedded as a variable 400–700 so one recommended sans renders on every machine; the default sans chain gains Gill Sans Nova on Windows. Style Settings keeps only the glass sliders. Pair with **Tufte Suite 1.1.0** — without it the theme simply renders its defaults.
-- **1.16.3** (2026-08-14) — Obsidian's Release Notes tab (and every other non-file view) no longer renders as a narrow sliver: the reading-pane layout — the 30% marginalia gutter and the 55rem measure — is now scoped to real file panes, where the `tufte-pane` container exists. Print converts the default figure's margin caption in its new float geometry. Pair with Tufte Suite 1.0.2, which ends the sidenote/caption overlap and aligns the margin left edges.
-- **1.16.2** (2026-08-11) — the `&&lead-in&&` label steps up to 1.1em (above body, under `^^new thought^^`'s 1.2em); H1's after-gap narrows to one line so the heading binds to its section.
-- **1.16.1** (2026-08-11) — inline shorthands survive nested markup (`[[links]]`, bold, italic inside `&&…&&` / `^^…^^` / `@@…@@`); the Live Preview lead-in indent rides a widget instead of repeating per fragment. Ships with Tufte Suite 1.0.1.
-- **1.16.0** (2026-08-04) — print / PDF export on the css4.pub Tufte model: 11pt body on a 5mm baseline, 9.5pt/4mm marginalia and captions, the 7:3 gutter preserved on paper, true-white pages even from dark mode; tables re-registered on the Tufte-LaTeX / booktabs canon (serif, three rules, no verticals) on screen and in print; `==highlights==` become the Playfair tint; unresolved links settle into stone.
-- Earlier releases (1.11.0's `[!banner]`, the 1.15.x stream, …) — see [Releases](https://github.com/PleiadesM/TufteObsidian/releases).
+- **1.18.0** (2026-08-14)
+  - Adjust the Properties panel
+  - Now, the Style Settings panel speaks Chinese
+  - Pair with Tufte Suite 1.2.0
+- **1.17.0** (2026-08-14)
+  - Make typefaces adjustable: Latin and Chinese faces and weights (Tufte Suite → Typefaces)
+  - Bold follows the body weight
+  - Set the interface in Gill Sans, one size larger
+  - Embed Cabin as the bundled sans
+  - Pair with Tufte Suite 1.1.0
+- **1.16.3** (2026-08-14)
+  - Limit the reading layout to note panes
+  - Update the print geometry for figure captions
+- **1.16.2** (2026-08-11)
+  - Enlarge the lead-in slightly
+  - Tighten the space after H1
+- **1.16.1** (2026-08-11)
+  - Inline shorthands now survive nested markup
+- **1.16.0** (2026-08-04)
+  - Add print / PDF export in the Tufte style
+  - Reset tables on the booktabs model
+  - Tint highlights; tone down unresolved links
+- Earlier releases — see [Releases](https://github.com/PleiadesM/TufteObsidian/releases).
