@@ -90,6 +90,9 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 
 ## Changelog
 
+- **1.19.0** (2026-08-29)
+  - Now, the Style Settings panel speaks 23 languages
+  - Pair with Tufte Suite 1.3.0
 - **1.18.0** (2026-08-14)
   - Adjust the Properties panel
   - Now, the Style Settings panel speaks Chinese
