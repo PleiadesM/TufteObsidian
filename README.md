@@ -90,6 +90,12 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 
 ## Changelog
 
+- **1.20.0** (2026-09-17)
+  - Code blocks take css4.pub's beige ground on light paper
+  - Syntax colors in Gruvbox, light and dark
+  - Code in the platform's monospace, at css4.pub's spacing
+  - Editor gutter numerals in the code face
+  - No spell-check underlines inside code
 - **1.19.0** (2026-08-29)
   - Now, the Style Settings panel speaks 23 languages
   - Pair with Tufte Suite 1.3.0

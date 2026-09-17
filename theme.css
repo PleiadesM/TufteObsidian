@@ -404,6 +404,28 @@ body {
   --tufte-bg:           #fffff8;
   --tufte-bg-alt:       #f7f7ef;
   --tufte-ink:          #111111;
+  --tufte-code-bg:      #f5f5dc;   /* css4.pub's beige — "Printing Tufte with CSS" gives
+                                      its <pre> this ground (CSS `beige`, rgb 245,245,220),
+                                      and it is the ONE thing the block takes from that
+                                      page's chrome; the inks below are Gruvbox's */
+  /* Gruvbox (morhetz), the faded set light mode is written for, read
+     on the beige above. Contrast computed, not guessed (WCAG 2.x
+     relative luminance on #f5f5dc): fg1 10.48:1, fg3 5.89:1, red
+     7.79:1, purple 6.09:1, blue 5.97:1, orange 5.53:1, aqua 4.51:1,
+     green 4.40:1 — and yellow 3.41:1, Gruvbox light's known weak
+     value. It stays as published: a hand-lifted yellow would no
+     longer be the palette anyone recognizes. fg4 (#7c6f64) was the
+     obvious muted ink and lands at 4.40:1, so the quieter role took
+     fg3 instead. */
+  --tufte-code-fg:      #3c3836;   /* fg1 — plain code */
+  --tufte-code-muted:   #665c54;   /* fg3 — comments, punctuation, operators */
+  --tufte-code-red:     #9d0006;   /* keywords */
+  --tufte-code-green:   #79740e;   /* strings */
+  --tufte-code-yellow:  #b57614;   /* functions, types, tags */
+  --tufte-code-blue:    #076678;   /* parameters, variables */
+  --tufte-code-purple:  #8f3f71;   /* numbers, booleans */
+  --tufte-code-aqua:    #427b58;   /* properties, keys, member access */
+  --tufte-code-orange:  #af3a03;   /* reserved — declared, no token wears it yet */
   --tufte-muted:        #555555;
   --tufte-muted-rgb:    85, 85, 85;     /* --tufte-muted as an R,G,B triplet, for
                                            Obsidian tokens that want components */
@@ -429,7 +451,6 @@ body {
                                       cream, 3.7:1 on --tufte-bg-alt, both a shade
                                       under AA — watch-items), plainly not the accent,
                                       so a missing note never shouts */
-  --tufte-code-bg:      #f0f0e8;   /* reserved — currently unused (code went transparent) */
   --tufte-mark:         rgba(213, 106, 118, 0.20);   /* the Playfair tint — the rose wash of
                                       the Denmark & Norway plate, at 20% (was 40% for a
                                       day) so it stays a whisper of ground under
@@ -457,6 +478,23 @@ body {
   --tufte-bg:           #151515;
   --tufte-bg-alt:       #1c1c1c;
   --tufte-ink:          #e8e6d9;
+  --tufte-code-bg:      transparent;   /* no ground on dark paper: css4.pub is a
+                                          light-only print model, so the tufte paper
+                                          shows through here as it did before */
+  /* Gruvbox's bright set, read on --tufte-bg (#151515): fg1 13.31:1,
+     yellow 10.77:1, green 8.85:1, aqua 8.68:1, orange 7.23:1, blue
+     6.78:1, purple 6.66:1, muted 6.57:1, red 5.31:1. The muted ink is
+     fg4, not Gruvbox's gray #928374, which is 4.97:1 here and falls
+     under AA on any paper a shade lighter than this one. */
+  --tufte-code-fg:      #ebdbb2;
+  --tufte-code-muted:   #a89984;
+  --tufte-code-red:     #fb4934;
+  --tufte-code-green:   #b8bb26;
+  --tufte-code-yellow:  #fabd2f;
+  --tufte-code-blue:    #83a598;
+  --tufte-code-purple:  #d3869b;
+  --tufte-code-aqua:    #8ec07c;
+  --tufte-code-orange:  #fe8019;   /* reserved, as in light mode */
   --tufte-muted:        #a59f8c;
   --tufte-muted-rgb:    165, 159, 140;
   --tufte-muted-warm:   var(--tufte-muted);   /* Dark's muted is ALREADY this warm grey
@@ -471,7 +509,6 @@ body {
   --tufte-link:         #e8e6d9;
   --tufte-unresolved:   #877F6C;   /* the same stone reads on both papers (4.6:1 on
                                       #151515) — one value, one meaning */
-  --tufte-code-bg:      #232320;
   --tufte-mark:         rgba(213, 106, 118, 0.15);   /* Playfair tint, thinned a step below
                                       the light paper's 20% so the wash stays a ground
                                       on dark paper */
@@ -564,7 +601,7 @@ body.theme-dark {
   --font-text-theme:       var(--tufte-serif-latin), var(--font-cjk-serif);
   --font-interface-theme:  var(--font-gill-sans);
   --font-italic-theme:     var(--tufte-serif-latin), var(--font-cjk-kaiti);
-  --font-monospace-theme:  "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+  --font-monospace-theme:  monospace;   /* the platform's own fixed face — see the code note below */
   --font-gill-sans:        var(--tufte-sans-latin), var(--font-cjk-sans);
   --font-weight:           var(--tufte-serif-weight);
   /* The interface itself — this body element — sits in the sans
@@ -659,10 +696,18 @@ body.theme-dark {
   --link-unresolved-opacity:      1;
   --link-unresolved-decoration-style: solid;
 
-  /* code — Tufte CSS uses no background and the body ink color. The
-     monospace stack matches GitHub's, "shifts gracefully along the
-     monospace spectrum from the elegant but rare Consolas all the
-     way to good old reliable Courier." */
+  /* code — these body-level values now reach INLINE code only (Tufte
+     CSS: no background, the body ink, untouched by the round-5 code
+     block); a fenced block re-pins the whole --code-* set onto the
+     Gruvbox inks — see the Code section.
+     The monospace face is the generic `monospace` — the
+     platform's own fixed face, exactly as css4.pub's Tufte model sets
+     its code (Menlo on macOS, Consolas on Windows, DejaVu / Liberation
+     on Linux); it replaced GitHub's Consolas → Liberation Mono → Menlo
+     → Courier stack on 2026-09-16, by request. Obsidian's Chromium does
+     not apply the old generic-monospace size quirk to em sizes
+     (verified live: a 1em child of a serif parent stays 1em), so the
+     `monospace, monospace` idiom is not needed. */
   --code-background:      transparent;
   --code-normal:          var(--tufte-ink);
   --code-size:            1rem;
@@ -1377,246 +1422,455 @@ body.theme-dark {
 }
 
 /* ------------------------------------------------------------------
-   Code — Tufte-adjacent treatment with our overrides:
-     - Font stack matches Tufte CSS: Consolas → Liberation Mono → Menlo
-       → Courier → monospace (GitHub's selection, "shifts gracefully
-       along the monospace spectrum from the elegant but rare Consolas
-       all the way to good old reliable Courier").
-     - Size at 0.65em of the body — noticeably smaller than the 21px
-       prose, in the user-specified "≈0.6×" zone.
-     - Indented from the left like a Tufte blockquote.
-     - No background, no padding ribbon, no border-radius, no syntax
-       highlighting — the code reads as plain monospace text in the
-       body ink color.
-     - Language fence label floats in the upper-right corner of the
-       block, set in red italic et-book.
+   Code — css4.pub's ground, Gruvbox's inks (2026-09-17). Two sources,
+   each asked for by name:
+     - the GROUND is css4.pub's, "Printing Tufte with CSS"
+       (css4.pub/2023/tufte), whose <pre> sits on plain CSS `beige`,
+       #f5f5dc. That page has no dark model at all — no
+       prefers-color-scheme rule, no color-scheme meta — so the beige
+       is a LIGHT-mode fact here: on dark paper the block keeps no
+       ground of its own and the tufte paper shows through, as in the
+       round before this one. Gruvbox's own bg0 #282828 is the obvious
+       one-token alternative and is deliberately not taken;
+     - the INKS are Gruvbox's (morhetz), faded set on the light beige,
+       bright set on the dark paper — the palette and its contrast
+       figures live in the two palette blocks above. Both surfaces read
+       them through Obsidian's own --code-* tokens, so no rule in this
+       section writes a color literal; that is what lets the print
+       block collapse the whole scheme to one ink by re-declaring ten
+       names (see the print section, §1 and §3).
+   The mapping below is the PrismJS gruvbox theme's (Azat S.; the light
+   variant by M. Schnerring) with three departures kept from the rounds
+   of 2026-09-16: properties, JSON keys and member access take AQUA,
+   parameters and plain variables take BLUE, and comments/punctuation
+   are set in fg3 (light) / fg4 (dark) rather than Gruvbox's gray, which
+   is too faint to read as text at this size. Color is the whole of it:
+   bold, italic and the entity underline stay stripped in both views, as
+   they have been since the one-ink round.
+   Everything else is unchanged and stays from that round:
+     - the platform's monospace — the generic `monospace`, exactly as
+       css4.pub sets its code (Menlo on macOS, Consolas on Windows; the
+       token and its note live in the fonts block);
+     - 0.65em of the body — kept smaller than the page's body-size
+       code, by request — at css4.pub's 1.5 line-height, no border, no
+       corners, and the block wraps (css4.pub's pre-wrap);
+     - this theme's shared 2.5rem set-off edge (quotes, code, callouts,
+       math) in Reading view; flush left in the editor, where the
+       cursor expects it;
+     - the language label — Tufte red italic et-book in the upper-right
+       — with Obsidian's copy button appearing on hover to its left
+       (stock behaviour, quiet dress); in Live Preview the flair,
+       Obsidian's own label that copies on a click, is dressed the same.
+   What the ground changes is the padding. css4.pub gives its <pre> 1em
+   of air on every side, so the block now carries a real inset rather
+   than vertical-only air; the top band is 2.2em, because the label and
+   Obsidian's copy button sit in it (the stock button box runs ≈6–34px
+   from the top at this size). The editor reaches the same band by
+   adding 0.7em above the begin line's 1.5em line box, and keeps
+   app.css's own 16px start padding — ≈1.3em at 12.35px, near enough to
+   css4.pub's 1em, and touching it would break a list-nested fence's
+   indent.
+   Two by-products of the retired Gruvbox PANEL (2026-09-15/16, three
+   rounds — Handoff Log) stay, independent of any panel: the editor
+   gutter's numerals in the code face, and no spell-check squiggles
+   inside code.
+   The token re-pins live on `.markdown-rendered pre` (every rendered
+   container: Reading view, popovers, embeds, callouts in either view —
+   an editor callout's pre sits under `.markdown-rendered`, verified
+   live) and on the editor's `.cm-line.HyperMD-codeblock`, whose
+   `HyperMD-codeblock-bg` layer is the line itself.
    ------------------------------------------------------------------ */
-.markdown-preview-view code,
-.markdown-preview-view pre,
-.markdown-preview-view pre > code,
-.markdown-preview-view :not(pre) > code {
-  /* No !important needed: the competitor is `.markdown-rendered code`
-     (0,1,1), same specificity as ours and NOT important — and a theme
-     sheet loads after app.css, so ours wins on order alone. */
+.markdown-rendered pre,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  --code-background:   var(--tufte-code-bg);
+  --code-border-width: 0px;
+  --code-radius:       0;
+  --code-normal:       var(--tufte-code-fg);
+  --code-comment:      var(--tufte-code-muted);
+  --code-punctuation:  var(--tufte-code-muted);
+  --code-operator:     var(--tufte-code-muted);
+  --code-keyword:      var(--tufte-code-red);
+  --code-important:    var(--tufte-code-green);   /* app.css groups regex with important;
+                                                     regex is green, and `important` itself
+                                                     is re-pinned red below */
+  --code-string:       var(--tufte-code-green);
+  --code-function:     var(--tufte-code-yellow);
+  --code-tag:          var(--tufte-code-yellow);
+  --code-value:        var(--tufte-code-purple);
+  --code-property:     var(--tufte-code-aqua);
+}
+
+/* Reading view. Competitor: app.css's own `.markdown-rendered pre`
+   (0,1,1) — the same specificity, and a theme sheet loads later, so
+   order decides; the font-size flag is kept for the Backlinks
+   insulation rule, which was written to outrank it. */
+.markdown-rendered pre {
+  position: relative;
+  margin: 1.4rem 0 1.4rem 2.5rem;         /* the shared set-off edge */
+  padding: 2.2em 1em 1em;                 /* css4.pub's 1em of air on every side, now that
+                                             there is a ground to inset from; the top band
+                                             is 2.2em — the room the label and the copy
+                                             button share */
   font-family: var(--font-monospace-theme);
-  background: transparent;
-  background-color: transparent;
-  color: var(--tufte-ink);
+  font-size: 0.65em !important;           /* Tufte's code register */
+  line-height: 1.5;                       /* css4.pub's */
+  tab-size: 4;
+  color: var(--tufte-code-fg);
+  background: var(--tufte-code-bg);       /* also set on --code-background above, which
+                                             app.css's own `.markdown-rendered pre` (0,1,1)
+                                             reads; both resolve to the same token, and this
+                                             shorthand — same specificity, later sheet — is
+                                             the one that lands */
   border: none;
   border-radius: 0;
-  line-height: 1.42;
+  white-space: pre-wrap;                  /* css4.pub's word-wrap; the editor wraps too */
+  overflow-wrap: anywhere;
+  overflow: visible;
   -webkit-text-size-adjust: 100%;
 }
-.markdown-preview-view code,
-.markdown-preview-view :not(pre) > code {
-  /* Same cascade note as the block above — order beats app.css's
-     `.markdown-rendered code` without !important. */
-  font-size: 0.65em;
+.markdown-rendered pre > code {
+  /* (0,1,2): over app.css's `code[class*="language-"]` (0,1,1), which
+     would otherwise re-impose the prose line-height. */
+  font-family: inherit;
+  font-size: 1em;                         /* inherit from <pre>, don't double-shrink */
+  line-height: inherit;
+  color: inherit;
   padding: 0;
-}
-.markdown-preview-view pre {
-  /* Kept: this padding is what the language-label overlay further down is
-     positioned against — the two are read together, and unpicking them is
-     not worth a count. */
-  font-size: 0.65em !important;
-  margin: 1.4rem 0 1.4rem 2.5rem;
-  padding: 1.6em 0 0 0 !important;     /* top room for the language label */
-  position: relative;
-  overflow-x: auto;
-}
-.markdown-preview-view pre > code {
-  font-size: 1em;            /* inherit from <pre>, don't double-shrink */
-  padding: 0;
-}
-/* Code inside headings: 0.8em of the heading (Tufte's rule). */
-.markdown-preview-view h1 code,
-.markdown-preview-view h2 code,
-.markdown-preview-view h3 code,
-.markdown-preview-view h4 code,
-.markdown-preview-view h5 code,
-.markdown-preview-view h6 code {
-  /* Competitor is `.markdown-rendered code` (0,1,1); ours is (0,1,2)
-     and later — no !important required. */
-  font-size: 0.8em;
-}
-
-/* Disable Obsidian's Prism-style syntax highlighting — every token
-   renders in the body ink color, matching Tufte CSS's plain-monospace
-   approach. */
-.markdown-preview-view.markdown-preview-view pre [class*="token"],
-.markdown-preview-view.markdown-preview-view code [class*="token"],
-.markdown-preview-view.markdown-preview-view pre [class*="hljs-"],
-.markdown-preview-view.markdown-preview-view code [class*="hljs-"] {
-  /* No !important, by specificity instead. Most Prism rules are
-     `.token.comment` and friends (0,2,0), but the language-scoped forms
-     `.language-css .token.string` and `.style .token.string` reach
-     (0,3,0) — the highest any token rule in app.css reaches — and would
-     win a css-fenced block. The doubled lead class puts this at (0,3,1),
-     which clears them all; the match set is unchanged (same class,
-     tested twice). */
-  color: var(--tufte-ink);
   background: transparent;
-  font-style: normal;
-  font-weight: normal;
+  border: none;
+  border-radius: 0;
+  white-space: inherit;
+  overflow-wrap: inherit;
+}
+/* Weight, slant and the entity underline are still inherited away —
+   app.css hardcodes those three, and Gruvbox is a color scheme, not a
+   set of faces. */
+.markdown-rendered pre .token.important,
+.markdown-rendered pre .token.bold {
+  font-weight: inherit;
+}
+.markdown-rendered pre .token.italic {
+  font-style: inherit;
+}
+.markdown-rendered pre .token.url {
+  text-decoration: none;
+}
+/* The re-pins. app.css groups Prism's classes under Obsidian's eleven
+   --code-* tokens, a coarser sort than Gruvbox's: these rules (0,3,1,
+   over app.css's own `.token.x` pairs at 0,2,0) put back the distinctions
+   the grouping loses. Read them against the mapping in the section
+   header; every one goes through a --tufte-code-* token, so print can
+   still flatten the lot to one ink. app.css's `.token.namespace
+   { opacity: .7 }` is left alone — a dimming, not a color. */
+.markdown-rendered pre .token.boolean,
+.markdown-rendered pre .token.selector,
+.markdown-rendered pre .token.atrule,
+.markdown-rendered pre .token.important,
+.markdown-rendered pre .token.constant,
+.markdown-rendered pre .token.deleted,
+.markdown-rendered pre .token.delimiter {
+  color: var(--tufte-code-red);
+}
+.markdown-rendered pre .token.char,
+.markdown-rendered pre .token.inserted,
+.markdown-rendered pre .token.url,
+.markdown-rendered pre .token.regex,
+.markdown-rendered pre .token.attr-value {
+  color: var(--tufte-code-green);
+}
+/* CSS and <style> strings: app.css paints these with --code-property
+   (aqua here) through language-scoped rules of its own at (0,3,0), so
+   they need one class more (0,4,1) to read as the strings they are. */
+.markdown-rendered pre .language-css .token.string,
+.markdown-rendered pre .style .token.string {
+  color: var(--tufte-code-green);
+}
+.markdown-rendered pre .token.doctype {
+  /* tag, builtin, function and class-name arrive yellow already,
+     through --code-tag and --code-function */
+  color: var(--tufte-code-yellow);
+}
+.markdown-rendered pre .token.symbol,
+.markdown-rendered pre .token.entity {
+  color: var(--tufte-code-purple);
+}
+.markdown-rendered pre .token.property-access,
+.markdown-rendered pre .token.attr-name {
+  color: var(--tufte-code-aqua);
+}
+.markdown-rendered pre .token.parameter,
+.markdown-rendered pre .token.variable {
+  color: var(--tufte-code-blue);
 }
 
-/* Hide Obsidian's default "Copy" button so it doesn't collide with
-   the language label in the upper-right. */
-.markdown-preview-view pre > button.copy-code-button {
-  display: none !important;
-}
-
-/* Language fence label — Tufte red italic, upper-right of the block.
-   Pure CSS: each common language class sets `--tufte-lang`, and a single
-   ::before rule reads it. Unknown languages render no label.
-
-   Both the variable and the ::before sit on the CODE element, because
-   that is the only node Obsidian classes. Both construction paths agree
-   (verified in the 1.13.4 bundle): the reading-view hast builder sets
-   `className: ["language-" + lang]` on the code node and creates the
-   pre with no class at all, and the Live Preview widget does the same —
-   `createEl("pre")`, then `createEl("code", "language-" + lang)`. So
-   this needs neither `:has()` nor a class the pre never gets. The pre
-   stays `position: relative` and the code is never positioned, so the
-   ::before's containing block is still the pre — same corner, same
-   coordinates as before. */
-.markdown-preview-view pre > code[class*="language-"]::before {
+/* Language label — Tufte red italic, upper-right, as it has always
+   been. Both the variable and the ::before sit on the CODE element,
+   the node Obsidian always classes (the pre carries the class too since
+   1.13.x, the code in every build); the pre, `position: relative`, is
+   the containing block. Its em is 1.4× the code's: the 2.6em from the
+   right leaves the hover copy button its corner (stock: 6px in, ~32px
+   wide), and the 2.2em top band above is its room. The 0.35em top is
+   measured in that same 1.4em em — ≈6px, level with the copy button's
+   own 6px margin. */
+.markdown-rendered pre > code[class*="language-"]::before {
   content: var(--tufte-lang, "");
   position: absolute;
-  top: 0.1em;
-  right: 0.4em;
+  top: 0.35em;
+  right: 2.6em;
   color: var(--tufte-accent);
   font-family: var(--font-text-theme);
   font-style: italic;
   font-weight: 400;
-  font-size: 1.4em;                     /* relative to pre's 0.65em → ~body size */
+  font-size: 1.4em;                       /* relative to the pre's 0.65em → ≈ body size */
   letter-spacing: 0.01em;
   line-height: 1.2;
   pointer-events: none;
 }
-.markdown-preview-view pre > code.language-css { --tufte-lang: "css"; }
-.markdown-preview-view pre > code.language-html { --tufte-lang: "html"; }
-.markdown-preview-view pre > code.language-js,
-.markdown-preview-view pre > code.language-javascript { --tufte-lang: "javascript"; }
-.markdown-preview-view pre > code.language-ts,
-.markdown-preview-view pre > code.language-typescript { --tufte-lang: "typescript"; }
-.markdown-preview-view pre > code.language-jsx { --tufte-lang: "jsx"; }
-.markdown-preview-view pre > code.language-tsx { --tufte-lang: "tsx"; }
-.markdown-preview-view pre > code.language-md,
-.markdown-preview-view pre > code.language-markdown { --tufte-lang: "markdown"; }
-.markdown-preview-view pre > code.language-py,
-.markdown-preview-view pre > code.language-python { --tufte-lang: "python"; }
-.markdown-preview-view pre > code.language-r { --tufte-lang: "r"; }
-.markdown-preview-view pre > code.language-sh,
-.markdown-preview-view pre > code.language-bash,
-.markdown-preview-view pre > code.language-shell,
-.markdown-preview-view pre > code.language-zsh { --tufte-lang: "bash"; }
-.markdown-preview-view pre > code.language-json { --tufte-lang: "json"; }
-.markdown-preview-view pre > code.language-yaml,
-.markdown-preview-view pre > code.language-yml { --tufte-lang: "yaml"; }
-.markdown-preview-view pre > code.language-toml { --tufte-lang: "toml"; }
-.markdown-preview-view pre > code.language-rust,
-.markdown-preview-view pre > code.language-rs { --tufte-lang: "rust"; }
-.markdown-preview-view pre > code.language-go { --tufte-lang: "go"; }
-.markdown-preview-view pre > code.language-c { --tufte-lang: "c"; }
-.markdown-preview-view pre > code.language-cpp { --tufte-lang: "c++"; }
-.markdown-preview-view pre > code.language-java { --tufte-lang: "java"; }
-.markdown-preview-view pre > code.language-sql { --tufte-lang: "sql"; }
-.markdown-preview-view pre > code.language-ruby,
-.markdown-preview-view pre > code.language-rb { --tufte-lang: "ruby"; }
-.markdown-preview-view pre > code.language-php { --tufte-lang: "php"; }
-.markdown-preview-view pre > code.language-swift { --tufte-lang: "swift"; }
-.markdown-preview-view pre > code.language-kotlin { --tufte-lang: "kotlin"; }
-.markdown-preview-view pre > code.language-scss { --tufte-lang: "scss"; }
-.markdown-preview-view pre > code.language-xml { --tufte-lang: "xml"; }
-.markdown-preview-view pre > code.language-dataview { --tufte-lang: "dataview"; }
+/* Obsidian's copy button — stock behaviour (shown while the block is
+   hovered, top-right) in quiet dress: no ground, the muted ink, the
+   ink on hover. (0,2,2) over app.css's `.markdown-rendered
+   button.copy-code-button` (0,2,1). */
+.markdown-rendered pre > button.copy-code-button {
+  color: var(--tufte-muted);
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.markdown-rendered pre > button.copy-code-button:hover,
+.markdown-rendered pre > button.copy-code-button:focus-visible {
+  color: var(--tufte-ink);
+  background-color: transparent;
+  box-shadow: none;
+}
 
-/* Editing view: smaller monospace, ink color, no ribbon. The source
-   block stays flush-left (no margin indent) so the cursor sits where
-   the user expects it. */
+/* Language names, as Obsidian's Live Preview flair spells them, so both
+   views read the same word. Each class sets --tufte-lang; the one
+   ::before rule above reads it; an unlisted language shows no label. */
+.markdown-rendered pre > code.language-css { --tufte-lang: "CSS"; }
+.markdown-rendered pre > code.language-scss { --tufte-lang: "SCSS"; }
+.markdown-rendered pre > code.language-html { --tufte-lang: "HTML"; }
+.markdown-rendered pre > code.language-xml { --tufte-lang: "XML"; }
+.markdown-rendered pre > code.language-js,
+.markdown-rendered pre > code.language-javascript { --tufte-lang: "JavaScript"; }
+.markdown-rendered pre > code.language-ts,
+.markdown-rendered pre > code.language-typescript { --tufte-lang: "TypeScript"; }
+.markdown-rendered pre > code.language-jsx { --tufte-lang: "JSX"; }
+.markdown-rendered pre > code.language-tsx { --tufte-lang: "TSX"; }
+.markdown-rendered pre > code.language-json { --tufte-lang: "JSON"; }
+.markdown-rendered pre > code.language-yaml,
+.markdown-rendered pre > code.language-yml { --tufte-lang: "YAML"; }
+.markdown-rendered pre > code.language-toml { --tufte-lang: "TOML"; }
+.markdown-rendered pre > code.language-ini { --tufte-lang: "INI"; }
+.markdown-rendered pre > code.language-md,
+.markdown-rendered pre > code.language-markdown { --tufte-lang: "Markdown"; }
+.markdown-rendered pre > code.language-tex,
+.markdown-rendered pre > code.language-latex { --tufte-lang: "LaTeX"; }
+.markdown-rendered pre > code.language-py,
+.markdown-rendered pre > code.language-python { --tufte-lang: "Python"; }
+.markdown-rendered pre > code.language-r { --tufte-lang: "R"; }
+.markdown-rendered pre > code.language-julia { --tufte-lang: "Julia"; }
+.markdown-rendered pre > code.language-matlab { --tufte-lang: "MATLAB"; }
+.markdown-rendered pre > code.language-sh,
+.markdown-rendered pre > code.language-bash,
+.markdown-rendered pre > code.language-shell,
+.markdown-rendered pre > code.language-zsh { --tufte-lang: "Bash"; }
+.markdown-rendered pre > code.language-powershell,
+.markdown-rendered pre > code.language-ps1 { --tufte-lang: "PowerShell"; }
+.markdown-rendered pre > code.language-dockerfile,
+.markdown-rendered pre > code.language-docker { --tufte-lang: "Dockerfile"; }
+.markdown-rendered pre > code.language-diff { --tufte-lang: "Diff"; }
+.markdown-rendered pre > code.language-rust,
+.markdown-rendered pre > code.language-rs { --tufte-lang: "Rust"; }
+.markdown-rendered pre > code.language-go { --tufte-lang: "Go"; }
+.markdown-rendered pre > code.language-c { --tufte-lang: "C"; }
+.markdown-rendered pre > code.language-cpp { --tufte-lang: "C++"; }
+.markdown-rendered pre > code.language-cs,
+.markdown-rendered pre > code.language-csharp { --tufte-lang: "C#"; }
+.markdown-rendered pre > code.language-java { --tufte-lang: "Java"; }
+.markdown-rendered pre > code.language-kotlin { --tufte-lang: "Kotlin"; }
+.markdown-rendered pre > code.language-swift { --tufte-lang: "Swift"; }
+.markdown-rendered pre > code.language-sql { --tufte-lang: "SQL"; }
+.markdown-rendered pre > code.language-ruby,
+.markdown-rendered pre > code.language-rb { --tufte-lang: "Ruby"; }
+.markdown-rendered pre > code.language-php { --tufte-lang: "PHP"; }
+.markdown-rendered pre > code.language-perl { --tufte-lang: "Perl"; }
+.markdown-rendered pre > code.language-lua { --tufte-lang: "Lua"; }
+.markdown-rendered pre > code.language-graphql { --tufte-lang: "GraphQL"; }
+.markdown-rendered pre > code.language-dataview { --tufte-lang: "Dataview"; }
+.markdown-rendered pre > code.language-dataviewjs { --tufte-lang: "DataviewJS"; }
+
+/* Inline code — Tufte's plain monospace ink: no ground, no corners, no
+   color, 0.65em of the prose. Scoped to app.css's own `.markdown-rendered`
+   so a callout rendered inside the editor gets the same treatment without
+   a rule of its own; (0,1,2) outranks `.markdown-rendered code` (0,1,1). */
+.markdown-rendered :not(pre) > code {
+  font-family: var(--font-monospace-theme);
+  font-size: 0.65em;
+  line-height: 1.42;
+  padding: 0;
+  color: var(--tufte-ink);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  -webkit-text-size-adjust: 100%;
+}
+/* Code inside headings: 0.8em of the heading (Tufte's rule). */
+.markdown-rendered h1 code,
+.markdown-rendered h2 code,
+.markdown-rendered h3 code,
+.markdown-rendered h4 code,
+.markdown-rendered h5 code,
+.markdown-rendered h6 code {
+  font-size: 0.8em;
+}
+
+/* Editor — the same block: monospace, 0.65em, the Gruvbox inks, and the
+   ground painted by Obsidian itself, which draws the line's own
+   `HyperMD-codeblock-bg` layer from --code-background (the beige on
+   light paper, transparent on dark; the fence lines carry
+   `-begin-bg` / `-end-bg` and read the same token). Flush left with
+   app.css's own 16px start padding — ≈1.3em at 12.35px, close enough to
+   css4.pub's 1em, and left alone so a list-nested fence keeps its list
+   indent. Face and size stay important as before: a CodeMirror surface
+   the static harness cannot prove. */
 .markdown-source-view.mod-cm6 .cm-inline-code,
 .markdown-source-view.mod-cm6 .HyperMD-codeblock,
-.markdown-source-view.mod-cm6 .HyperMD-codeblock-bg,
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
   font-family: var(--font-monospace-theme) !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--tufte-ink) !important;
-  border-radius: 0 !important;
 }
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
+  font-size: 0.65em !important;
+  line-height: 1.5;
+  color: var(--tufte-code-fg);
+}
+/* The top band, matching Reading view's: the begin line's own 1.5em
+   line box plus 0.7em makes 2.2em. The end line needs nothing — its
+   empty line box IS the bottom air. */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin {
+  padding-top: 0.7em;
+}
+/* Every token class inside a fence, at (0,5,0) — over app.css's bare
+   classes (0,1,0), its `.cm-s-obsidian span.cm-link` (0,2,1) and the
+   rest. Weight, slant, underline and any per-token ground are stripped
+   from the syntax classes; COLOR is deliberately not, so app.css's own
+   class rules resolve through the --code-* tokens above. Prose
+   formatting outside fences is not matched. Inside a markdown-flavoured
+   fence CodeMirror also emits prose classes (cm-header-N, cm-highlight),
+   and the theme's own heading and highlight rules declare those same
+   properties !important: nothing but another !important would strip
+   them, so a `# heading` line inside a markdown fence keeps its sans
+   weight and a ==mark== its wash. Left as is — the block still reads as
+   code by face, size and ink. */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock [class*="cm-"] {
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: none;
+  background-color: transparent;
+}
+/* The editor re-pins, the counterpart to Reading view's. CodeMirror's
+   legacy modes name things app.css never lists (cm-atom, cm-qualifier,
+   cm-def) or sorts under a token that means something else here, so
+   these rules (0,5,0) set them by hand. Arriving correct without a rule
+   and left alone: cm-keyword red, cm-string / cm-string-2 green,
+   cm-comment muted, cm-number purple, cm-punctuation / -bracket / -hr
+   and cm-operator muted, cm-builtin / -type / -tag yellow. */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-atom,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-qualifier {
+  /* booleans and null in the legacy modes — unlisted in app.css, so
+     they would otherwise sit at the plain code ink */
+  color: var(--tufte-code-red);
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-def,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-variable-3 {
+  color: var(--tufte-code-yellow);
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-variable,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-variable-2 {
+  /* plain identifiers; app.css files them under --code-property, which
+     is the aqua of real properties */
+  color: var(--tufte-code-fg);
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-meta,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-property,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-attribute {
+  color: var(--tufte-code-aqua);
+}
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-link,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock .cm-url {
+  color: var(--tufte-code-green);
+}
+/* The flair — Obsidian's language label in the fence line, which copies
+   the block on a click (app.js raises a Notice; no icon swap) — dressed
+   as the Reading-view label: Tufte red italic et-book, upper-right,
+   1.4× the code's em. A language-less fence shows Obsidian's own copy
+   icon here, in the same red. (0,3,0) ties app.css's own flair rule and
+   its hover rule; later source wins both. Top and right are its own
+   1.4em em — ≈6px each, the Reading-view label's corner. */
+.markdown-source-view.mod-cm6 .code-block-flair {
+  top: 0.35em;
+  right: 0.35em;
+  padding: 0 0.25em;
+  border-radius: 0;
+  font-family: var(--font-text-theme);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.4em;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  color: var(--tufte-accent);
+  background-color: transparent;
+}
+@media (hover: hover) {
+  .markdown-source-view.mod-cm6 .code-block-flair:hover {
+    color: var(--tufte-ink);
+    background-color: transparent;
+  }
+}
+
+/* Inline code in the editor — plain, as in Reading view. */
 .markdown-source-view.mod-cm6 .cm-inline-code {
-  /* Live Preview surface: CodeMirror decorates these spans, so the result
-     is not reproducible in a static harness — the audit's conservative
-     default applies and the declaration stays important. */
   font-size: 0.65em !important;
-}
-.markdown-source-view.mod-cm6 .HyperMD-codeblock,
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock {
-  /* Live Preview surface — see the .cm-inline-code note above. */
-  font-size: 0.65em !important;
-}
-
-/* Editor syntax tokens inside fenced code: render every token in the
-   body ink color, no italics, no bold, no background — same restraint
-   as Reading view. Targets the CodeMirror token classes (`cm-keyword`,
-   `cm-string`, etc.) only when they appear inside a fenced code block
-   line, so prose markdown formatting tokens aren't affected. */
-.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock [class*="cm-"],
-.markdown-source-view.mod-cm6 .HyperMD-codeblock [class*="cm-"] {
   color: var(--tufte-ink) !important;
-  background: transparent !important;
   background-color: transparent !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-  text-decoration: none !important;
-}
-
-/* Code rendered inside an editor callout (sidenote, marginnote, note,
-   etc.) goes through the markdown renderer and emits plain <code> /
-   <pre> — not CodeMirror spans. Without these rules it falls back to
-   Obsidian's default chrome (background, color, large size), which the
-   user noticed inside sidenote callouts. Mirror the Reading-view
-   treatment: small, plain, no background, no syntax color. */
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code,
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre,
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > code,
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout :not(pre) > code {
-  /* Live Preview callout surface — see the cluster note above. */
-  font-family: var(--font-monospace-theme) !important;
-  background: transparent !important;
-  background-color: transparent !important;
-  color: var(--tufte-ink) !important;
-  border: none !important;
   border-radius: 0 !important;
-  padding: 0 !important;
 }
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code,
+
+/* Code rendered inside an editor callout (sidenote, marginnote, note…)
+   goes through the markdown renderer — `.markdown-rendered`, so the
+   rules above already apply. What stays special is the size: callout
+   text is set smaller, and 0.65em of it was too small to read, so code
+   there keeps its 0.85em step, as before. */
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout :not(pre) > code {
-  /* Live Preview callout surface — see the cluster note above. */
   font-size: 0.85em !important;
 }
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre {
-  /* Live Preview callout surface — see the cluster note above. */
   font-size: 0.85em !important;
   margin: 0.6em 0 !important;
 }
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > code {
-  /* Live Preview callout surface — see the cluster note above. */
-  font-size: 1em !important;
+
+/* Spell-check inside code. The editor's spell-checker underlines what
+   it can reach in a fence (the tokenizer opts most tokens out, not
+   all); a wavy red line under an identifier is noise. Chromium's
+   highlight pseudo-elements (::spelling-error since 121; Obsidian
+   1.13 ships 142) take a text-decoration of their own — none. */
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock::spelling-error,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock ::spelling-error,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock::grammar-error,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock ::grammar-error,
+.markdown-source-view.mod-cm6 .cm-inline-code::spelling-error,
+.markdown-source-view.mod-cm6 .cm-inline-code::grammar-error {
+  text-decoration: none;
 }
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre [class*="token"],
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code [class*="token"],
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre [class*="hljs-"],
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout code [class*="hljs-"] {
-  /* Live Preview callout surface — see the cluster note above. */
-  color: var(--tufte-ink) !important;
-  background: transparent !important;
-  font-style: normal !important;
-  font-weight: normal !important;
-}
-.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout pre > button.copy-code-button {
-  /* Live Preview callout surface — see the cluster note above. */
-  display: none !important;
+
+/* Editor › Show line numbers — the gutter, set in the code face. app.css
+   hands `.cm-gutters` the body font, so the numbers came out in et-book
+   at 13px in --text-faint: a serif numeral column beside code, and
+   small enough for two-digit numbers to blur (the 2026-09-15 report).
+   Mono, lining, tabular: the code's own figures. */
+.markdown-source-view.mod-cm6 .cm-gutters {
+  font-family: var(--font-monospace-theme);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 /* ------------------------------------------------------------------
@@ -2338,16 +2592,24 @@ body {
 }
 
 /* Insulation for the Tufte Backlinks plugin's rendered snippets: this theme's
-   own `.markdown-preview-view pre { font-size: 0.65em !important }` (kept for
-   the language-label geometry, see the code section) would shrink a code
+   own `.markdown-rendered pre { font-size: 0.65em !important }` (the code
+   register, see the Code section) would shrink a code
    block inside an in-document mention to ~8px of the snippet base. Among
    important declarations specificity decides, so this (0,2,1) beats that
    (0,1,1) and re-anchors the block to the snippet's own size. The flag lives
    HERE and not in the plugin because the community directory discourages
    !important in plugin stylesheets — and only this theme needs the fight at
-   all; the plugin's normal 0.9em rule handles every other theme. */
+   all; the plugin's normal 0.9em rule handles every other theme.
+   The padding goes back to a plain 1em on every side, and the language
+   label is dropped: a snippet is a quotation of another note, and at
+   this size the label and the band it needs are noise. Obsidian's copy
+   button stays stock. */
 .markdown-preview-view .tufte-backlinks-rendered pre {
   font-size: 0.9em !important;
+  padding: 1em;
+}
+.markdown-preview-view .tufte-backlinks-rendered pre > code[class*="language-"]::before {
+  content: none;
 }
 
 /* The whole panel set in Gill Sans, like the to-do lists — at the
@@ -3422,6 +3684,22 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
     --tufte-bg:           #ffffff;
     --tufte-bg-alt:       #ffffff;
     --tufte-ink:          #111111;
+    /* Code on paper keeps the round-4 model — one ink, no ground, no
+       colors — and gets it for free: every rule in the Code section
+       reads a --tufte-code-* name and never a literal, so re-declaring
+       the ten names here collapses the whole Gruvbox scheme to the
+       print ink. The screen's beige is dropped with it: a tinted panel
+       is a screen affordance, and on paper it would only cost toner. */
+    --tufte-code-bg:      transparent;
+    --tufte-code-fg:      #111111;
+    --tufte-code-muted:   #111111;
+    --tufte-code-red:     #111111;
+    --tufte-code-green:   #111111;
+    --tufte-code-yellow:  #111111;
+    --tufte-code-blue:    #111111;
+    --tufte-code-purple:  #111111;
+    --tufte-code-aqua:    #111111;
+    --tufte-code-orange:  #111111;
     --tufte-muted:        #555555;
     --tufte-muted-rgb:    85, 85, 85;
     --tufte-muted-warm:   #6d6755;
@@ -3531,10 +3809,16 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
     break-inside: avoid;
   }
 
-  /* 3 · Small print — code and tables in real points. */
+  /* 3 · Small print — code and tables in real points. Code prints as it
+     read on screen BEFORE the beige: one ink on the paper, no ground,
+     no frame (the §1 palette does that work); the label keeps its
+     corner. With no ground there is nothing to inset from, so the
+     screen's 1em side padding goes as well — the block returns to the
+     10mm left margin below and nothing else. */
   .print .markdown-preview-view pre {
     font-size: 8.5pt !important;      /* 0.65em of 11pt would be 7.15pt */
     margin: 5mm 0 5mm 10mm;
+    padding-inline: 0;
   }
   .print .markdown-preview-view code,
   .print .markdown-preview-view :not(pre) > code {

@@ -80,6 +80,17 @@
   --tufte-tag-plum:    #5b3a6b;
   --tufte-tag-teal:    #1f5f5b;
   --tufte-tag-rust:    #784a30;
+  /* code — css4.pub's beige ground, Gruvbox faded inks */
+  --tufte-code-bg:     #f5f5dc;
+  --tufte-code-fg:     #3c3836;
+  --tufte-code-muted:  #665c54;
+  --tufte-code-red:    #9d0006;
+  --tufte-code-green:  #79740e;
+  --tufte-code-yellow: #b57614;
+  --tufte-code-blue:   #076678;
+  --tufte-code-purple: #8f3f71;
+  --tufte-code-aqua:   #427b58;
+  --tufte-code-orange: #af3a03;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -100,6 +111,17 @@
     --tufte-tag-plum:    #b299c4;
     --tufte-tag-teal:    #7fc2bc;
     --tufte-tag-rust:    #c99b7d;
+    /* code — no ground on the dark paper, Gruvbox bright inks */
+    --tufte-code-bg:     transparent;
+    --tufte-code-fg:     #ebdbb2;
+    --tufte-code-muted:  #a89984;
+    --tufte-code-red:    #fb4934;
+    --tufte-code-green:  #b8bb26;
+    --tufte-code-yellow: #fabd2f;
+    --tufte-code-blue:   #83a598;
+    --tufte-code-purple: #d3869b;
+    --tufte-code-aqua:   #8ec07c;
+    --tufte-code-orange: #fe8019;
     color-scheme: dark;
   }
 }
@@ -120,6 +142,17 @@
   --tufte-tag-plum:    #b299c4;
   --tufte-tag-teal:    #7fc2bc;
   --tufte-tag-rust:    #c99b7d;
+  /* code — no ground on the dark paper, Gruvbox bright inks */
+  --tufte-code-bg:     transparent;
+  --tufte-code-fg:     #ebdbb2;
+  --tufte-code-muted:  #a89984;
+  --tufte-code-red:    #fb4934;
+  --tufte-code-green:  #b8bb26;
+  --tufte-code-yellow: #fabd2f;
+  --tufte-code-blue:   #83a598;
+  --tufte-code-purple: #d3869b;
+  --tufte-code-aqua:   #8ec07c;
+  --tufte-code-orange: #fe8019;
   color-scheme: dark;
 }
 
@@ -135,7 +168,7 @@
   --font-text:         var(--tufte-serif-latin), var(--tufte-cjk-serif);
   --font-italic:       var(--tufte-serif-latin), var(--tufte-cjk-kaiti);
   --font-sans:         var(--tufte-sans-latin), var(--tufte-cjk-sans);
-  --font-mono:         "Consolas", "Liberation Mono", Menlo, Courier, monospace;
+  --font-mono:         monospace;            /* the generic, as css4.pub sets it */
 
   --font-text-size:    21px;                 /* Tufte CSS body: 1.4rem at a 15px root */
   --line-height:       1.55;
@@ -464,31 +497,39 @@ th { font-weight: var(--bold-weight); font-style: normal; color: var(--tufte-ink
 th[align="right"], td[align="right"] { text-align: right; }
 th[align="center"], td[align="center"] { text-align: center; }
 
-/* ---- code — plain monospace ink ----------------------------------------- */
+/* ---- code — beige ground, Gruvbox ink ----------------------------------- */
 code, pre {
   font-family: var(--font-mono);
   background: transparent;
   color: var(--tufte-ink);
   border: none;
   border-radius: 0;
-  line-height: 1.42;
+  line-height: 1.5;
   -webkit-text-size-adjust: 100%;
 }
-:not(pre) > code { font-size: 0.65em; padding: 0; }
+:not(pre) > code { font-size: 0.65em; padding: 0; }   /* inline code: body ink, no ground */
 pre {
   font-size: 0.65em;
+  background: var(--tufte-code-bg);                  /* beige on light paper, bare paper on dark */
+  color: var(--tufte-code-fg);
   margin: 1.4rem 0 1.4rem 2.5rem;
-  padding: 1.6em 0 0 0;                              /* top room for the language label */
+  padding: 2.2em 1em 1em;                            /* top room for the language label */
   position: relative;
-  overflow-x: auto;
-  white-space: pre;
+  white-space: pre-wrap;                             /* wrap instead of scrolling sideways */
+  overflow-wrap: anywhere;
 }
-pre > code { font-size: 1em; padding: 0; white-space: pre; }
+pre > code {
+  font-size: 1em;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  white-space: inherit;
+}
 pre > code[class*="language-"]::before {
   content: var(--tufte-lang, "");
   position: absolute;
-  top: 0.1em;
-  right: 0.4em;
+  top: 0.35em;
+  right: 2.6em;                                      /* in the label's own em */
   color: var(--tufte-accent);
   font-family: var(--font-text);
   font-style: italic;
@@ -502,6 +543,47 @@ pre > code.language-css      { --tufte-lang: "css"; }
 pre > code.language-markdown { --tufte-lang: "markdown"; }
 pre > code.language-html     { --tufte-lang: "html"; }
 pre > code.language-js       { --tufte-lang: "javascript"; }
+
+/* Prism tokens — Gruvbox: the faded set on beige, the bright set on dark paper. */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata,
+.token.punctuation,
+.token.operator { color: var(--tufte-code-muted); }
+.token.keyword,
+.token.boolean,
+.token.selector,
+.token.atrule,
+.token.important,
+.token.constant,
+.token.deleted,
+.token.delimiter { color: var(--tufte-code-red); }
+.token.string,
+.token.char,
+.token.inserted,
+.token.url,
+.token.regex,
+.token.attr-value,
+.language-css .token.string { color: var(--tufte-code-green); }
+.token.function,
+.token.builtin,
+.token.class-name,
+.token.tag,
+.token.doctype { color: var(--tufte-code-yellow); }
+.token.number,
+.token.symbol,
+.token.entity { color: var(--tufte-code-purple); }
+.token.property,
+.token.property-access,
+.token.attr-name { color: var(--tufte-code-aqua); }
+.token.parameter,
+.token.variable { color: var(--tufte-code-blue); }
+/* Emphasis belongs to the prose, not to the highlighter. */
+pre .token.important,
+pre .token.bold { font-weight: inherit; }
+pre .token.italic { font-style: inherit; }
+pre .token.url { text-decoration: none; }
 
 /* ---- mathematics -------------------------------------------------------- */
 .math-inline { font-size: 0.95em; vertical-align: -0.1em; color: var(--tufte-ink); }
@@ -1137,7 +1219,7 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <pre><code class="language-markdown">^^A new thought^^ opens a section the way Tufte's books do…
 
-&amp;&amp;Usage.&amp;&amp; Select a phrase and press `⌥N`…
+&amp;&amp;Usage.&amp;&amp; Select a phrase and press <span class="token code keyword"><span class="token punctuation">`</span><span class="token code-snippet">⌥N</span><span class="token punctuation">`</span></span>…
 </code></pre>
 
 <p lang="en">The delimiters never leave your Markdown: Live Preview conceals them and shows the styled text, strict Source mode shows them raw, and code or math spans are left alone. A third pair serves Chinese: Han glyphs have no case to small-cap, so <code>@@这@@</code> — wrapping a section's <em>first character alone</em>, by hand or with <code>⌥D</code> — drops it as an enlarged initial spanning two lines (首字下沉). The raw HTML forms work too: <code>&lt;span class="newthought"&gt;…&lt;/span&gt;</code> and <code>&lt;span class="dropcap-cjk"&gt;…&lt;/span&gt;</code> are identical to the shorthands.</p>
@@ -1162,8 +1244,8 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <pre><code class="language-markdown">…the same gesture for a marginnote[^2].
 
-&gt; [!sidenote] 2
-&gt; Sidenotes are labelled notes in the right margin…
+<span class="token blockquote punctuation">&gt;</span> [!sidenote] 2
+<span class="token blockquote punctuation">&gt;</span> Sidenotes are labelled notes in the right margin…
 </code></pre>
 
 <p lang="en">The label lives in the callout title — the same place Obsidian's standard callout syntax puts a heading. That means the margin number is rendered by Obsidian itself the instant the callout mounts, so it never flickers and never disagrees with the inline <code>[^N]</code> you wrote. (Notes from older vaults still work too: a <code>[!sidenote]</code> callout whose body is <code>&gt; [^N]: text</code> is hydrated by the companion plugin into the same shape.)</p>
@@ -1225,8 +1307,8 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <p lang="en">The Markdown source:</p>
 <p lang="zh-Hans">Markdown 源文：</p>
 
-<pre><code class="language-markdown">##### Estimates of relative survival rates, by cancer site
-*% survival rates and their standard errors*
+<pre><code class="language-markdown"><span class="token title important"><span class="token punctuation">#####</span> Estimates of relative survival rates, by cancer site</span>
+<span class="token italic"><span class="token punctuation">*</span>% survival rates and their standard errors<span class="token punctuation">*</span></span>
 
 | Cancer   | 5 year   | 10 year  | 15 year  | 20 year  |
 | -------- | -------- | -------- | -------- | -------- |
@@ -1274,9 +1356,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <p lang="en">Source:</p>
 <p lang="zh-Hans">源文：</p>
 
-<pre><code class="language-markdown">&gt; [!figure] Fig. 1.
-&gt; ![[exports-imports.png|Exports and Imports to and from Denmark &amp; Norway from 1700 to 1780]]
-&gt; From Edward Tufte, *The Visual Display…* page 92.
+<pre><code class="language-markdown"><span class="token blockquote punctuation">&gt;</span> [!figure] Fig. 1.
+<span class="token blockquote punctuation">&gt;</span> ![[exports-imports.png|Exports and Imports to and from Denmark &amp; Norway from 1700 to 1780]]
+<span class="token blockquote punctuation">&gt;</span> From Edward Tufte, <span class="token italic"><span class="token punctuation">*</span>The Visual Display…<span class="token punctuation">*</span></span> page 92.
 
 ^fig-1
 </code></pre>
@@ -1290,9 +1372,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <p lang="en">Source:</p>
 <p lang="zh-Hans">源文：</p>
 
-<pre><code class="language-markdown">&gt; [!figure-full] Fig. 2.
-&gt; ![[napoleons-march.png|…]]
-&gt; Charles Joseph Minard's *Carte figurative*…
+<pre><code class="language-markdown"><span class="token blockquote punctuation">&gt;</span> [!figure-full] Fig. 2.
+<span class="token blockquote punctuation">&gt;</span> ![[napoleons-march.png|…]]
+<span class="token blockquote punctuation">&gt;</span> Charles Joseph Minard's <span class="token italic"><span class="token punctuation">*</span>Carte figurative<span class="token punctuation">*</span></span>…
 
 ^fig-2
 </code></pre>
@@ -1306,9 +1388,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <p lang="en">Source:</p>
 <p lang="zh-Hans">源文：</p>
 
-<pre><code class="language-markdown">&gt; [!figure-margin] Fig. 3.
-&gt; ![[rhino.png|Dürer's rhinoceros, 1515]]
-&gt; F.J. Cole, "The History of Albrecht Dürer's Rhinoceros…"
+<pre><code class="language-markdown"><span class="token blockquote punctuation">&gt;</span> [!figure-margin] Fig. 3.
+<span class="token blockquote punctuation">&gt;</span> ![[rhino.png|Dürer's rhinoceros, 1515]]
+<span class="token blockquote punctuation">&gt;</span> F.J. Cole, "The History of Albrecht Dürer's Rhinoceros…"
 
 ^fig-3
 </code></pre>
@@ -1330,11 +1412,11 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <p lang="en">Source:</p>
 <p lang="zh-Hans">源文：</p>
 
-<pre><code class="language-markdown">&gt; [!figure-full] Fig. 4.
-&gt; ![[herbal-deer.webp|266]] (a) Deer.
-&gt; ![[herbal-peony.webp|278]] (b) Peony.
-&gt; ![[herbal-beaver.webp|267]] (c) Beaver.
-&gt; Three woodcuts from *Gart der Gesundheit*…
+<pre><code class="language-markdown"><span class="token blockquote punctuation">&gt;</span> [!figure-full] Fig. 4.
+<span class="token blockquote punctuation">&gt;</span> ![[herbal-deer.webp|266]] (a) Deer.
+<span class="token blockquote punctuation">&gt;</span> ![[herbal-peony.webp|278]] (b) Peony.
+<span class="token blockquote punctuation">&gt;</span> ![[herbal-beaver.webp|267]] (c) Beaver.
+<span class="token blockquote punctuation">&gt;</span> Three woodcuts from <span class="token italic"><span class="token punctuation">*</span>Gart der Gesundheit<span class="token punctuation">*</span></span>…
 
 ^fig-4
 </code></pre>
@@ -1357,9 +1439,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <p lang="zh-Hans"><strong><code>[!banner]</code></strong> 标注块是 Tufte 书中的章首整幅图版，移植到笔记里：一幅横贯整个窗格——正文栏<em>与</em>右侧边注栏——的图片，裁切为一条安静的横带，标注块的外壳全部隐去。无需插件；它用的正是 <code>[!figure-full]</code> 的同一套全宽手法。本页末尾的整幅图版即是一例。</p>
 
-<pre><code class="language-markdown">&gt; [!banner]
-&gt; ![[chapter-plate.png]]
-&gt; <span lang="en">A quiet caption line, set below the image.</span><span lang="zh-Hans">章首题图下的一行安静图注。</span>
+<pre><code class="language-markdown"><span class="token blockquote punctuation">&gt;</span> [!banner]
+<span class="token blockquote punctuation">&gt;</span> ![[chapter-plate.png]]
+<span class="token blockquote punctuation">&gt;</span> <span lang="en">A quiet caption line, set below the image.</span><span lang="zh-Hans">章首题图下的一行安静图注。</span>
 </code></pre>
 
 <p lang="en">Leave the title blank (<code>[!banner]</code>, not <code>[!banner] Something</code>) — the title is always hidden in Reading view, since there is no postprocessor here to fold it into a label. The trailing text line becomes the caption automatically; skip it and the plate spans on its own. In the editor, <code>[!banner]</code> stays an ordinary single-column callout.</p>
@@ -1372,14 +1454,14 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <h3 id="code"><span lang="en">Code, restrained</span><span lang="zh-Hans">克制的代码</span></h3>
 
-<p lang="en">Code renders as plain monospace ink — no background ribbon, no rounded corners, no syntax colors — noticeably smaller than the prose, and indented from the left like a quotation. A fenced block's language floats in the upper-right corner as a red italic label:</p>
+<p lang="en">Code sits on css4.pub's beige on light paper, and on the bare paper in dark mode — no border, no rounded corners — in the platform's own monospace, noticeably smaller than the prose and indented from the left like a quotation. Syntax takes Gruvbox's colors: the faded set on the beige, the bright set on the dark paper. A fenced block's language floats in the upper-right corner as a red italic label:</p>
 
-<p lang="zh-Hans">代码以纯粹的等宽墨色呈现——没有底色色带、没有圆角、没有语法高亮——明显小于正文，并像引文一样自左侧缩进；围栏代码块的语言名以红色斜体浮于右上角：</p>
+<p lang="zh-Hans">代码在浅色纸面上置于 css4.pub 的米色底色之上，深色模式下则直接落在纸面——没有边框、没有圆角——采用系统自带的等宽字体，明显小于正文，并像引文一样自左侧缩进。语法配色取自 Gruvbox：米色底上用其淡色一组，深色纸上用其亮色一组。围栏代码块的语言名以红色斜体浮于右上角：</p>
 
-<pre><code class="language-css">.newthought {
-  font-variant: small-caps;
-  font-size: 1.2em;
-}
+<pre><code class="language-css"><span class="token selector">.newthought</span> <span class="token punctuation">{</span>
+  <span class="token property">font-variant</span><span class="token punctuation">:</span> small-caps<span class="token punctuation">;</span>
+  <span class="token property">font-size</span><span class="token punctuation">:</span> <span class="token number">1.2</span><span class="token unit">em</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
 
 <h3 id="mathematics"><span lang="en">Mathematics</span><span lang="zh-Hans">数学</span></h3>
@@ -1426,7 +1508,7 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <p lang="zh-Hans">标签处处渲染为纯粹的红色文字——没有胶囊底色、没有边框、没有填充。新添的是一套为单个标签精选的六种克制的印刷色：<code>--tufte-tag-slate</code>（青灰蓝）、<code>-moss</code>（苔绿）、<code>-ochre</code>（赭黄）、<code>-plum</code>（绛紫）、<code>-teal</code>（黛青）与 <code>-rust</code>（棕褐），在两种纸色上全部满足 WCAG AA。未指定的标签保持 Tufte 红；要给 <code>#work</code> 一个自己的色相，在 <code>theme.css</code> 中加一行即可（现成示例已注释在「Tag system」一节）。中文标签回落到黑体：<a class="tag" data-tag="研究">#研究</a> <a class="tag" data-tag="修辞学">#修辞学</a> <a class="tag" data-tag="写作">#写作</a>。</p>
 
-<pre><code class="language-css">a.tag[href="#work" i] { --tag-color: var(--tufte-tag-slate); }
+<pre><code class="language-css"><span class="token selector">a.tag[href="#work" i]</span> <span class="token punctuation">{</span> <span class="token property">--tag-color</span><span class="token punctuation">:</span> <span class="token function">var</span><span class="token punctuation">(</span>--tufte-tag-slate<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
 </code></pre>
 
 <p lang="en">Hovering a tag keeps its hue and underlines it instead of flipping red. The tag pane and frontmatter pills pick up the same treatment automatically.</p>
@@ -1521,6 +1603,12 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <h4><span lang="en">Tufte (theme)</span><span lang="zh-Hans">Tufte（主题）</span></h4>
 
 <ul class="tufte-changelog-list" lang="en">
+<li><strong>1.20.0</strong> (2026-09-17)<ul>
+<li>Code blocks take css4.pub's beige ground on light paper</li>
+<li>Syntax colors in Gruvbox, light and dark</li>
+<li>Code in the platform's monospace, at css4.pub's spacing</li>
+<li>Editor gutter numerals in the code face</li>
+<li>No spell-check underlines inside code</li></ul></li>
 <li><strong>1.19.0</strong> (2026-08-29)<ul>
 <li>Now, the Style Settings panel speaks 23 languages</li>
 <li>Pair with Tufte Suite 1.3.0</li></ul></li>
@@ -1550,6 +1638,12 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 </ul>
 
 <ul class="tufte-changelog-list" lang="zh-Hans">
+<li><strong>1.20.0</strong>（2026-09-17）<ul>
+<li>代码块在浅色纸面上取 css4.pub 的米色底色</li>
+<li>语法配色采用 Gruvbox，浅色与深色皆备</li>
+<li>代码改用系统等宽字体，取 css4.pub 的间距</li>
+<li>编辑器行号栏改用代码字体</li>
+<li>代码内不再有拼写检查下划线</li></ul></li>
 <li><strong>1.19.0</strong>（2026-08-29）<ul>
 <li>Style Settings 面板现已支持 23 种语言</li>
 <li>请与 Tufte Suite 1.3.0 搭配</li></ul></li>
