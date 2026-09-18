@@ -175,7 +175,7 @@
   --line-height-tight: 1.35;
   --tufte-line:        calc(var(--font-text-size) * var(--line-height));   /* one body line */
   --font-ui-medium:    16px;
-  --bold-weight:       600;
+  --bold-weight:       700;                  /* the theme's derived bold: body 400 + 300 — table headers, the H5 device */
 }
 
 /* ---- page --------------------------------------------------------------- */
@@ -387,7 +387,12 @@ h1 code, h2 code, h3 code, h4 code, h5 code, h6 code { font-size: 0.8em; }
 
 /* ---- body copy ---------------------------------------------------------- */
 p { margin: var(--tufte-line) 0; line-height: var(--line-height); }
-strong { font-weight: var(--bold-weight); font-synthesis-weight: none; }
+/* Bold in the reading register, as in the theme (1.21.0): the body's own face one cut
+   past Bold — Songti's Black for Chinese, et-book's one Bold for Latin — plus a hairline
+   text-stroke for the Latin's "slightly heavier"; superscripts and code spans go unstroked. */
+strong { font-weight: 800; -webkit-text-stroke: 0.015em currentColor; font-synthesis-weight: none; }
+strong a { font-weight: inherit; }
+strong sup, strong code { -webkit-text-stroke-width: 0; }
 em, figcaption { font-family: var(--font-italic); font-style: italic; }
 mark {
   background: var(--tufte-mark);
@@ -477,7 +482,7 @@ table {
   font-variant-numeric: lining-nums tabular-nums;
   font-size: 0.84em;
   line-height: 1.45;
-  margin: 1.6rem 0;
+  margin: 1.6rem auto;                              /* centered in the column (1.21.0) */
   border: none;
   border-top: 0.08em solid var(--tufte-ink);        /* \toprule */
   border-bottom: 0.08em solid var(--tufte-ink);     /* \bottomrule */
@@ -1282,9 +1287,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <h3 id="tables"><span lang="en">Tables, the Tufte way</span><span lang="zh-Hans">Tufte 式表格</span></h3>
 
-<p lang="en">A Tufte table is modelled on the cancer-survival specimen from <em>Beautiful Evidence</em> (p. 174): no outer borders, only a single hairline beneath the header row, and generous gaps between columns — set in the serif, in the manner of Tufte-LaTeX's booktabs tables, with a heavier rule above and below the whole.</p>
+<p lang="en">A Tufte table is modelled on the cancer-survival specimen from <em>Beautiful Evidence</em> (p. 174): no outer borders, only a single hairline beneath the header row, and generous gaps between columns — set in the serif, in the manner of Tufte-LaTeX's booktabs tables, with a heavier rule above and below the whole, and centered in the text column.</p>
 
-<p lang="zh-Hans">Tufte 式表格以《Beautiful Evidence》第 174 页的生存率样张为范本：无外框线、表头之下仅一条细线、栏间留足空隙——以衬线体排出，取法 Tufte-LaTeX 的 booktabs 表格，整表上下各一条略粗的线。</p>
+<p lang="zh-Hans">Tufte 式表格以《Beautiful Evidence》第 174 页的生存率样张为范本：无外框线、表头之下仅一条细线、栏间留足空隙——以衬线体排出，取法 Tufte-LaTeX 的 booktabs 表格，整表上下各一条略粗的线，并在正文栏内居中。</p>
 
 <p lang="en">To give a table a caption, put an <strong>H5 heading</strong> (<code>#####</code>) on the line immediately above it — the hotkey table in <em>How to set up</em> is captioned this way. The theme styles every H5 as a Gill Sans bold table title that sits flush against the table that follows. For a subtitle, add a single italic line just below.</p>
 
@@ -1472,21 +1477,21 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <div class="math-block"><svg style="vertical-align: -2.063ex;" xmlns="http://www.w3.org/2000/svg" width="18.638ex" height="5.502ex" role="img" focusable="false" viewBox="0 -1520 8238 2431.9"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="msubsup"><g data-mml-node="mo" transform="translate(0 1)"><path data-c="222B" d="M114 -798Q132 -824 165 -824H167Q195 -824 223 -764T275 -600T320 -391T362 -164Q365 -143 367 -133Q439 292 523 655T645 1127Q651 1145 655 1157T672 1201T699 1257T733 1306T777 1346T828 1360Q884 1360 912 1325T944 1245Q944 1220 932 1205T909 1186T887 1183Q866 1183 849 1198T832 1239Q832 1287 885 1296L882 1300Q879 1303 874 1307T866 1313Q851 1323 833 1323Q819 1323 807 1311T775 1255T736 1139T689 936T633 628Q574 293 510 -5T410 -437T355 -629Q278 -862 165 -862Q125 -862 92 -831T55 -746Q55 -711 74 -698T112 -685Q133 -685 150 -700T167 -741Q167 -789 114 -798Z"></path></g><g data-mml-node="mi" transform="translate(1046.4,1088.1) scale(0.707)"><path data-c="221E" d="M55 217Q55 305 111 373T254 442Q342 442 419 381Q457 350 493 303L507 284L514 294Q618 442 747 442Q833 442 888 374T944 214Q944 128 889 59T743 -11Q657 -11 580 50Q542 81 506 128L492 147L485 137Q381 -11 252 -11Q166 -11 111 57T55 217ZM907 217Q907 285 869 341T761 397Q740 397 720 392T682 378T648 359T619 335T594 310T574 285T559 263T548 246L543 238L574 198Q605 158 622 138T664 94T714 61T765 51Q827 51 867 100T907 217ZM92 214Q92 145 131 89T239 33Q357 33 456 193L425 233Q364 312 334 337Q285 380 233 380Q171 380 132 331T92 214Z"></path></g><g data-mml-node="mn" transform="translate(589,-896.4) scale(0.707)"><path data-c="30" d="M96 585Q152 666 249 666Q297 666 345 640T423 548Q460 465 460 320Q460 165 417 83Q397 41 362 16T301 -15T250 -22Q224 -22 198 -16T137 16T82 83Q39 165 39 320Q39 494 96 585ZM321 597Q291 629 250 629Q208 629 178 597Q153 571 145 525T137 333Q137 175 145 125T181 46Q209 16 250 16Q290 16 318 46Q347 76 354 130T362 333Q362 478 354 524T321 597Z"></path></g></g><g data-mml-node="msup" transform="translate(1970.2,0)"><g data-mml-node="mi"><path data-c="1D452" d="M39 168Q39 225 58 272T107 350T174 402T244 433T307 442H310Q355 442 388 420T421 355Q421 265 310 237Q261 224 176 223Q139 223 138 221Q138 219 132 186T125 128Q125 81 146 54T209 26T302 45T394 111Q403 121 406 121Q410 121 419 112T429 98T420 82T390 55T344 24T281 -1T205 -11Q126 -11 83 42T39 168ZM373 353Q367 405 305 405Q272 405 244 391T199 357T170 316T154 280T149 261Q149 260 169 260Q282 260 327 284T373 353Z"></path></g><g data-mml-node="TeXAtom" transform="translate(499,413) scale(0.707)" data-mjx-texclass="ORD"><g data-mml-node="mo"><path data-c="2212" d="M84 237T84 250T98 270H679Q694 262 694 250T679 230H98Q84 237 84 250Z"></path></g><g data-mml-node="msup" transform="translate(778,0)"><g data-mml-node="mi"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mn" transform="translate(605,363) scale(0.707)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g></g></g></g><g data-mml-node="mstyle" transform="translate(3782.5,0)"><g data-mml-node="mspace"></g></g><g data-mml-node="mi" transform="translate(3949.5,0)"><path data-c="1D451" d="M366 683Q367 683 438 688T511 694Q523 694 523 686Q523 679 450 384T375 83T374 68Q374 26 402 26Q411 27 422 35Q443 55 463 131Q469 151 473 152Q475 153 483 153H487H491Q506 153 506 145Q506 140 503 129Q490 79 473 48T445 8T417 -8Q409 -10 393 -10Q359 -10 336 5T306 36L300 51Q299 52 296 50Q294 48 292 46Q233 -10 172 -10Q117 -10 75 30T33 157Q33 205 53 255T101 341Q148 398 195 420T280 442Q336 442 364 400Q369 394 369 396Q370 400 396 505T424 616Q424 629 417 632T378 637H357Q351 643 351 645T353 664Q358 683 366 683ZM352 326Q329 405 277 405Q242 405 210 374T160 293Q131 214 119 129Q119 126 119 118T118 106Q118 61 136 44T179 26Q233 26 290 98L298 109L352 326Z"></path></g><g data-mml-node="mi" transform="translate(4469.5,0)"><path data-c="1D465" d="M52 289Q59 331 106 386T222 442Q257 442 286 424T329 379Q371 442 430 442Q467 442 494 420T522 361Q522 332 508 314T481 292T458 288Q439 288 427 299T415 328Q415 374 465 391Q454 404 425 404Q412 404 406 402Q368 386 350 336Q290 115 290 78Q290 50 306 38T341 26Q378 26 414 59T463 140Q466 150 469 151T485 153H489Q504 153 504 145Q504 144 502 134Q486 77 440 33T333 -11Q263 -11 227 52Q186 -10 133 -10H127Q78 -10 57 16T35 71Q35 103 54 123T99 143Q142 143 142 101Q142 81 130 66T107 46T94 41L91 40Q91 39 97 36T113 29T132 26Q168 26 194 71Q203 87 217 139T245 247T261 313Q266 340 266 352Q266 380 251 392T217 404Q177 404 142 372T93 290Q91 281 88 280T72 278H58Q52 284 52 289Z"></path></g><g data-mml-node="mo" transform="translate(5319.2,0)"><path data-c="3D" d="M56 347Q56 360 70 367H707Q722 359 722 347Q722 336 708 328L390 327H72Q56 332 56 347ZM56 153Q56 168 72 173H708Q722 163 722 153Q722 140 707 133H70Q56 140 56 153Z"></path></g><g data-mml-node="mfrac" transform="translate(6375,0)"><g data-mml-node="msqrt" transform="translate(220,682.5)"><g transform="translate(853,0)"><g data-mml-node="mi"><path data-c="1D70B" d="M132 -11Q98 -11 98 22V33L111 61Q186 219 220 334L228 358H196Q158 358 142 355T103 336Q92 329 81 318T62 297T53 285Q51 284 38 284Q19 284 19 294Q19 300 38 329T93 391T164 429Q171 431 389 431Q549 431 553 430Q573 423 573 402Q573 371 541 360Q535 358 472 358H408L405 341Q393 269 393 222Q393 170 402 129T421 65T431 37Q431 20 417 5T381 -10Q370 -10 363 -7T347 17T331 77Q330 86 330 121Q330 170 339 226T357 318T367 358H269L268 354Q268 351 249 275T206 114T175 17Q164 -11 132 -11Z"></path></g></g><g data-mml-node="mo" transform="translate(0,-22.5)"><path data-c="221A" d="M95 178Q89 178 81 186T72 200T103 230T169 280T207 309Q209 311 212 311H213Q219 311 227 294T281 177Q300 134 312 108L397 -77Q398 -77 501 136T707 565T814 786Q820 800 834 800Q841 800 846 794T853 782V776L620 293L385 -193Q381 -200 366 -200Q357 -200 354 -197Q352 -195 256 15L160 225L144 214Q129 202 113 190T95 178Z"></path></g><rect width="570" height="60" x="853" y="717.5"></rect></g><g data-mml-node="mn" transform="translate(681.5,-686)"><path data-c="32" d="M109 429Q82 429 66 447T50 491Q50 562 103 614T235 666Q326 666 387 610T449 465Q449 422 429 383T381 315T301 241Q265 210 201 149L142 93L218 92Q375 92 385 97Q392 99 409 186V189H449V186Q448 183 436 95T421 3V0H50V19V31Q50 38 56 46T86 81Q115 113 136 137Q145 147 170 174T204 211T233 244T261 278T284 308T305 340T320 369T333 401T340 431T343 464Q343 527 309 573T212 619Q179 619 154 602T119 569T109 550Q109 549 114 549Q132 549 151 535T170 489Q170 464 154 447T109 429Z"></path></g><rect width="1623" height="60" x="120" y="220"></rect></g></g></g></svg></div>
 
-<p lang="en">— are set flush left with the same indent as a blockquote or a code block, not centered: Tufte never floats an element to the page's optical center, and an equation is set off from the prose here the way a quotation is — on the same shared edge as quotes, code, and callouts. An equation too wide for the column scrolls sideways inside its own quiet box. MathJax's Computer Modern face is kept because it cannot be safely restyled from CSS and it's what readers of scientific typesetting expect (Tufte's own books set expressions in Bembo, the book face — not an option a stylesheet can reach). In the editor, raw <code>$…$</code> source renders small and muted until it compiles.</p>
+<p lang="en">— are set flush left with the same indent as a blockquote or a code block, not centered: an equation is set off from the prose here the way a quotation is — on the same shared edge as quotes, code, and callouts. An equation too wide for the column scrolls sideways inside its own quiet box. MathJax's Computer Modern face is kept because it cannot be safely restyled from CSS and it's what readers of scientific typesetting expect (Tufte's own books set expressions in Bembo, the book face — not an option a stylesheet can reach). In the editor, raw <code>$…$</code> source renders small and muted until it compiles.</p>
 
-<p lang="zh-Hans">——与引文、代码块共享同一条缩进边线，左对齐排布而非居中：Tufte 从不把元素浮到页面的视觉中心，公式在这里与正文的分离方式同引文一样——落在与引文、代码、标注块共同的边线上。过宽的公式在自身的框内静静横向滚动。MathJax 的 Computer Modern 字体被保留，因为 CSS 无法安全替换它，而它正是科技排版读者所习惯的面貌（Tufte 自己的书用 Bembo——正文字体——排公式，这不是样式表够得着的选项）。编辑器中，未编译的 <code>$…$</code> 源码以小号灰色呈现。</p>
+<p lang="zh-Hans">——与引文、代码块共享同一条缩进边线，左对齐排布而非居中：公式在这里与正文的分离方式同引文一样——落在与引文、代码、标注块共同的边线上。过宽的公式在自身的框内静静横向滚动。MathJax 的 Computer Modern 字体被保留，因为 CSS 无法安全替换它，而它正是科技排版读者所习惯的面貌（Tufte 自己的书用 Bembo——正文字体——排公式，这不是样式表够得着的选项）。编辑器中，未编译的 <code>$…$</code> 源码以小号灰色呈现。</p>
 
 <h3 id="inline-ornaments"><span lang="en">Inline ornaments</span><span lang="zh-Hans">行内装饰</span></h3>
 
 <ul lang="en">
 <li><code>==Highlighted text==</code> (<code>⌘H</code>) renders as <mark>Tufte-red ink</mark> rather than a highlighter-pen ground.</li>
-<li><strong>Bold</strong> and <em>italic</em> are restrained; bold is 600-weight rather than 700, and Chinese bold is only ever a real bold cut, never faked strokes.</li>
+<li><strong>Bold</strong> and <em>italic</em> are restrained in kind, not in weight: bold is the body's own face one cut heavier — Songti's Black cut for Chinese, et-book Bold with a hairline stroke for English — and Chinese bold is only ever a real cut, never faked strokes.</li>
 <li>A horizontal rule, like the one before <em>Try it</em> below, is a single hairline.</li>
 </ul>
 
 <ul lang="zh-Hans">
 <li><code>==高亮文本==</code>（<code>⌘H</code>）呈现为 Tufte 红墨色，而非荧光笔底色：<mark>高亮文本</mark>。</li>
-<li><strong>加粗</strong>与<em>斜体</em>都很克制；加粗为 600 字重而非 700，中文<strong>加粗</strong>只在装有真实粗体字重时加粗，绝不伪造粗笔画；中文<em>斜体</em>一律以楷体呈现，永不剪切变形。</li>
+<li><strong>加粗</strong>与<em>斜体</em>克制在"类"而非"量"：加粗仍是正文自身的字体、再重一档——中文取宋体的 Black 字重，英文为 et-book Bold 再加一道极细描边——中文<strong>加粗</strong>只在装有真实字重时加粗，绝不伪造粗笔画；中文<em>斜体</em>一律以楷体呈现，永不剪切变形。</li>
 <li>分隔线——如下文「试一试」之前那一条——是一条极细线。</li>
 </ul>
 
@@ -1603,6 +1608,11 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <h4><span lang="en">Tufte (theme)</span><span lang="zh-Hans">Tufte（主题）</span></h4>
 
 <ul class="tufte-changelog-list" lang="en">
+<li><strong>1.21.0</strong> (2026-09-18)<ul>
+<li>Bold Chinese takes Songti's Black cut</li>
+<li>Bold English a hairline heavier</li>
+<li>Cream labels on the red buttons in dark mode</li>
+<li>Tables centered in the text column</li></ul></li>
 <li><strong>1.20.0</strong> (2026-09-17)<ul>
 <li>Code blocks take css4.pub's beige ground on light paper</li>
 <li>Syntax colors in Gruvbox, light and dark</li>
@@ -1638,6 +1648,11 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 </ul>
 
 <ul class="tufte-changelog-list" lang="zh-Hans">
+<li><strong>1.21.0</strong>（2026-09-18）<ul>
+<li>中文粗体改用宋体的 Black 字重</li>
+<li>英文粗体略微加重</li>
+<li>深色模式下红色按钮改用纸色文字</li>
+<li>表格在正文栏内居中</li></ul></li>
 <li><strong>1.20.0</strong>（2026-09-17）<ul>
 <li>代码块在浅色纸面上取 css4.pub 的米色底色</li>
 <li>语法配色采用 Gruvbox，浅色与深色皆备</li>

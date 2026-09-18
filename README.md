@@ -90,6 +90,11 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 
 ## Changelog
 
+- **1.21.0** (2026-09-18)
+  - Bold Chinese takes Songti's Black cut
+  - Bold English a hairline heavier
+  - Cream labels on the red buttons in dark mode
+  - Tables centered in the text column
 - **1.20.0** (2026-09-17)
   - Code blocks take css4.pub's beige ground on light paper
   - Syntax colors in Gruvbox, light and dark

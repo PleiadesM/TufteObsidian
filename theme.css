@@ -456,6 +456,10 @@ body {
                                       day) so it stays a whisper of ground under
                                       full-strength ink (==highlights==) */
   --tufte-paper:        var(--tufte-bg);  /* read by the Tufte Figures lightbox */
+  --tufte-on-accent:    #fffff8;   /* the ink on an accent FILL (the red buttons,
+                                      active chips, flairs, error messages): the
+                                      light paper's cream, on both papers — the
+                                      dark palette's note has the contrast figures */
   /* The one shared "this is selected" wash — selected Bases/table cells,
      keyboard-selected property rows, multi-selected nav rows. One value
      so the idea reads identically everywhere. */
@@ -513,6 +517,20 @@ body {
                                       the light paper's 20% so the wash stays a ground
                                       on dark paper */
   --tufte-paper:        var(--tufte-bg);
+  --tufte-on-accent:    #fffff8;   /* NOT the dark paper: through 1.20.0 the ink on
+                                      accent fills was --tufte-bg, which here gave the
+                                      red buttons (mod-cta, mod-warning) near-black
+                                      labels. Requested 2026-09-17: the light paper's
+                                      cream on every red fill, in both modes.
+                                      Contrast, computed (WCAG 2.x): on the light
+                                      accent #a00000 8.38:1; on this lifted accent
+                                      #d97474 3.12:1 (the dark ink read 5.83:1 — the
+                                      lift exists for red-as-INK on dark paper; a
+                                      filled button could take a deeper red at one
+                                      token if the label wants more); on the stock
+                                      error reds, #e93147 4.19:1 light and #fb464c
+                                      3.44:1 dark (stock Obsidian ships white on
+                                      both). */
   --tufte-wash-select:  color-mix(in srgb, var(--tufte-accent) 12%, transparent);
   /* Tag palette, lifted for the dark paper — hues held from light mode,
      chroma capped BELOW the dark accent's (C* 43) so no accessory color
@@ -548,7 +566,8 @@ body.theme-dark {
   --text-accent:        var(--tufte-accent);
   --text-accent-hover:  var(--tufte-accent);
   --text-selection:     color-mix(in srgb, var(--tufte-accent) 25%, transparent);
-  --text-on-accent:     var(--tufte-bg);
+  --text-on-accent:     var(--tufte-on-accent);   /* the light paper's cream on every
+                                                     accent fill, both modes — palette note */
 
   /* interactive */
   --interactive-accent:        var(--tufte-accent);
@@ -566,11 +585,15 @@ body.theme-dark {
                          set-apart text; a slanted Song glyph reads as
                          broken, not emphasized);
        --font-cjk-sans   Hei/Gothic, companion to Gill Sans in UI/data
-                         contexts (tags, tables, nav, tabs).
+                         contexts (tags, nav, tabs, task lists, Bases).
      --font-italic-theme is the one shared stack for every italic
      context in the theme (headings h1–h4/h6, em, blockquotes, callout
      titles, captions, citation-style file titles) so the Kaiti pairing
      is declared once, not per rule.
+     Bold has no stack of its own: it is the body's face a step
+     heavier — Song stays Song — see --tufte-bold-weight below. (A Hei
+     companion for bold, the 黑体-for-emphasis book convention, was
+     tried on 2026-09-17 and judged too sharp the same day.)
      There is no widely-shipped open Kaiti; past the named Kaiti faces
      the stack degrades to upright Song — plain but correct.
 
@@ -739,13 +762,48 @@ body.theme-dark {
 
   /* misc */
   --bold-color:           var(--tufte-ink);
-  /* (No --bold-weight pin: app.css derives it — and strong/.cm-strong
-     directly — as calc(var(--font-weight) + var(--bold-modifier)),
-     +200 stock. That lands on the same restrained 600 the old pin
-     hardcoded at the 400 default, and now tracks the serif weight
-     knob: bold stays one clear step above the body, never a shout,
-     at every body weight. Same derivation serves the serif table
-     headers below.) */
+  /* Bold weight, two tiers (2026-09-17, "sharper contrast between bold
+     and regular, especially in Chinese"; round 2 the same day: "for
+     Chinese a larger weight of the same Song font is enough; for
+     English slightly heavier").
+     · app.css derives --bold-weight — bold in chrome, in the sans
+       register and in table headers — as calc(var(--font-weight) +
+       var(--bold-modifier)); the modifier is +300 here (stock +200):
+       700 at the 400 body, the full Bold cut rather than a SemiBold
+       wherever a face carries both (Gill Sans; Noto Serif CJK / Source
+       Han Serif), no change where one cut answers both requests
+       (et-book, Palatino, Songti SC, Source Han Sans / Noto Sans CJK —
+       no 600 cut — and PingFang SC, which tops out at Semibold 600).
+     · The READING register's bold — strong/b/.cm-strong in the note —
+       asks for --tufte-bold-weight instead, one step past Bold: a
+       face's ExtraBold where it has one, else its heaviest. Songti SC
+       and Kaiti SC → Black, Noto Serif CJK / Source Han Serif → Heavy
+       (their 900); Songti TC, Hiragino Mincho, et-book, Palatino,
+       Georgia → the one bold cut they have, unchanged. Ink on canvas
+       (Songti SC, 加粗的中文段落 at 21px; a verifier's run at another
+       size read a few points lower — the shape holds): Bold ≈ +18%
+       over Regular, Black ≈ +40%.
+       ⚠ Songti SC Black covers 7,103 of the 20,992 URO ideographs
+       (Regular and Bold 20,902; Kaiti SC Black all of them) — GB 2312
+       and a little more, so daily simplified text is whole, but a rarer
+       or traditional-form character inside a bold run falls to the next
+       family (STSong, Regular only) and reads light. One token back to
+       700 if that ever shows.
+     · --tufte-bold-stroke is the "slightly heavier English": et-book has
+       one Bold cut and nothing above it, so the reading register's bold
+       also takes a hairline -webkit-text-stroke in the text color —
+       0.015em ≈ 0.3px at 21px, about +6% ink on et-book Bold (canvas,
+       "Bold English text" at 21px: +4–4.5% at 0.01em, +6–6.5% at
+       0.015em, +8–8.5% at 0.02em across two runs). It rides every run
+       of the element, so a CJK Black run gains the same ~6%, and it is
+       INHERITED: the rules after the bold rule take it off superscript
+       references, code spans and bolded tags. It prints (≈0.17pt at the
+       11pt print body). 0 turns it off. The sans contexts and Bases
+       zero both tokens in their own rules — Gill Sans keeps its plain
+       Bold there. */
+  --bold-modifier:        300;
+  --tufte-bold-weight:    800;
+  --tufte-bold-stroke:    0.015em;
   --italic-color:         var(--tufte-ink);
   --hr-color:             var(--tufte-rule);
   --hr-thickness:         1px;
@@ -1197,13 +1255,15 @@ body.theme-dark {
   font-weight: var(--font-weight);
 }
 
-/* Inline bold/italic kept restrained. Bold no longer needs a rule of
-   its own: app.css's `strong`/`.cm-strong` compute
-   calc(var(--font-weight) + var(--bold-modifier)) — 600 at the 400
-   default, byte-identical to the pin that used to sit here, and it
-   now scales with the serif weight knob (et-book's only bold cut is
-   700, so past a 500 body the two meet at the cap — a limit of the
-   face, not the wiring). */
+/* Inline bold/italic. Bold's rule lives in the Chinese typography
+   section, where the CJK cuts are reasoned about: the reading
+   register's strong/b/.cm-strong ask for --tufte-bold-weight — one step
+   past Bold, Songti SC's Black — and wear the hairline
+   --tufte-bold-stroke; the tokens, their measurements and the coverage
+   caveat are in the wiring block above. Everything else bold (chrome,
+   the sans register, table headers) keeps app.css's derivation,
+   calc(var(--font-weight) + var(--bold-modifier)) — 700 at the 400 body
+   with the theme's +300, scaling with the serif weight knob. */
 .markdown-preview-view em     { font-style: italic; }
 
 /* ------------------------------------------------------------------
@@ -1243,7 +1303,15 @@ body.theme-dark {
    table's size on screen and in print alike. (Through 1.15.9 this
    register was the Beautiful-Evidence Gill Sans specimen; the sans
    voice now lives on only in Bases and the H5 table-title device —
-   both deliberate.) Selectors target Reading view and Live Preview.
+   both deliberate.) Since 2026-09-17, by request, the table sits
+   CENTERED in the text column (through 1.20.0 it stood flush left, as
+   in the books): auto side margins on the shrink-to-fit table in
+   Reading view, on the fit-content wrapper in Live Preview, and in
+   print. A table wider than the column loses nothing — auto margins
+   resolve to zero and the .el-table wrapper scrolls it as before. The
+   H5 title stack stays flush left (Chicago's convention for table
+   titles; centering it too is a one-rule change if wanted). Selectors
+   target Reading view and Live Preview.
    ------------------------------------------------------------------ */
 .markdown-preview-view table,
 .markdown-source-view.mod-cm6 .cm-content table,
@@ -1260,7 +1328,7 @@ body.theme-dark {
      0.84em ≈ 16px at a 19px body, the user's calibration. */
   font-size: 0.84em !important;
   line-height: 1.45;
-  margin: 1.6rem 0 !important;
+  margin: 1.6rem auto !important;   /* auto: centered in the column (intro above) */
   border: none !important;
   border-top: 0.08em solid var(--tufte-ink) !important;      /* \toprule  — booktabs heavy */
   border-bottom: 0.08em solid var(--tufte-ink) !important;   /* \bottomrule */
@@ -1309,9 +1377,13 @@ body.theme-dark {
 .markdown-preview-view th,
 .markdown-source-view.mod-cm6 .cm-content th,
 .markdown-rendered th {
-  /* Bold serif headers, as in the books' front-matter tables —
-     via app.css's derived bold (body knob + 200): 600 at the 400
-     default, one step above the body at every reading weight. */
+  /* Bold serif headers, as in the books' front-matter tables — via
+     app.css's derived bold (body knob + the theme's 300): 700 at the
+     400 default, one clear step above the body at every reading
+     weight. Deliberately NOT the reading register's heavier
+     --tufte-bold-weight: a header row is structure, not emphasis, and
+     at the table's 0.84em Songti Black would shout. The face is the
+     cells' own text stack (the rule above). */
   font-weight: var(--bold-weight);
   font-style: normal;
   color: var(--tufte-ink);
@@ -1339,7 +1411,7 @@ body.theme-dark {
 
 /* Live Preview table-editing widget. Most of its chrome is already
    quiet through tokens this theme sets (--table-add-button-border-color
-   → --tufte-rule, drag-handle colors → --tufte-faint/-accent). Two
+   → --tufte-rule, drag-handle colors → --tufte-faint/-accent). Three
    things aren't:
    1. app.css zeroes th/td padding inside the widget so
       .table-cell-wrapper alone carries it — but this theme's own
@@ -1352,6 +1424,16 @@ body.theme-dark {
       square the corners, scoped to the widget only. */
 .markdown-source-view.mod-cm6 .cm-table-widget .table-cell-wrapper {
   padding: 0;
+}
+/* 3. Centering (2026-09-17): the widget's `.table-wrapper` is
+   `width: fit-content` and `position: relative`, and the row/column
+   drag handles and add-buttons are positioned against IT — so the
+   wrapper, not the table, takes the auto margins and the handles
+   travel with it. Ties app.css (0,3,0) and wins on order. A table
+   wider than the editor column resolves the margins to zero and the
+   widget's own overflow-x scrolls it, as before. */
+.markdown-source-view.mod-cm6 .cm-table-widget .table-wrapper {
+  margin-inline: auto;
 }
 .markdown-source-view.mod-cm6 .cm-table-widget {
   --table-selection: var(--tufte-wash-select);
@@ -1377,6 +1459,8 @@ body.theme-dark {
      (0,1,1) is not important and loses to this rule on order. The two
      MARGINS below are a different fight — see their comment. */
   font-family: var(--font-gill-sans);
+  --tufte-bold-weight: var(--bold-weight);   /* bold inside the title: plain Gill Sans Bold */
+  --tufte-bold-stroke: 0;
   /* One clear step above the sans series base — 600 at the 400
      default, the Beautiful-Evidence semibold; min() caps the top of
      the scale. (Requests between macOS Gill Sans cuts snap to the
@@ -1396,6 +1480,8 @@ body.theme-dark {
      sets font-size to inherit, itself !important — and no specificity beats an
      important declaration. */
   font-family: var(--font-gill-sans) !important;
+  --tufte-bold-weight: var(--bold-weight);   /* as in Reading view */
+  --tufte-bold-stroke: 0;
   font-weight: min(900, calc(var(--tufte-sans-weight) + 200)) !important;   /* same derived step as Reading view */
   font-style: normal !important;
   font-size: 1.1em !important;
@@ -2422,9 +2508,11 @@ body.theme-dark {
    through to a Hei/Gothic companion for UI/data text. The rules here
    apply the italic stack to every italic context that doesn't already
    carry it via a token (--hN-font and .callout-title are handled
-   above), snap the two upright attribution lines back to Song, stop
-   the browser from faking obliques/bolds on CJK faces that have none,
-   and add the CJK line-breaking / punctuation refinements.
+   above), snap the two upright attribution lines back to Song, set
+   bold runs a step past the Bold cut (Songti SC's Black — a heavier
+   Song, not a different face) with a hairline stroke for the Latin,
+   stop the browser from faking obliques/bolds on CJK faces that have
+   none, and add the CJK line-breaking / punctuation refinements.
 
    This section deliberately sits AFTER every rule it overlays —
    several of its selectors tie existing rules on specificity and win
@@ -2463,14 +2551,80 @@ body {
   font-synthesis-style: none;
 }
 
-/* Same idea for bold: Latin bold uses et-book's real bold face, and
-   CJK runs landing on Songti/Noto/Source Han bold through real
-   weights — only a run that falls all the way to STSong/SimSun (no
-   bold cut) stops faking a thickened stroke, which on CJK visibly
-   collides strokes rather than just looking heavy. */
+/* Bold in the reading register (2026-09-17, by request — "sharper
+   contrast between bold and regular, especially in Chinese"; round 2
+   the same day: "for Chinese a larger weight of the same Song font is
+   enough; for English slightly heavier"). Bold keeps the body's face
+   and asks for --tufte-bold-weight, one step past Bold: Songti SC (and
+   Kaiti SC, for bold inside a heading or another italic context)
+   answer with their Black cut, Noto Serif CJK / Source Han Serif with
+   their Heavy; et-book has one Bold and stays on it, so the Latin gets its
+   "slightly" from --tufte-bold-stroke, a hairline text-stroke in the
+   text color that rides every run of the element (tokens, ink figures
+   and the Songti Black coverage caveat: the wiring block). Sans
+   contexts re-point both tokens in their own rules — task lists, the
+   H5 table title, Bases (rendered cells in the sans register) — so bold
+   there stays Gill Sans Bold, unstroked. `b` is listed because app.css
+   styles `b, strong` alike; Markdown itself never emits it. The two
+   `.cm-content` arms are for Live Preview's REAL-HTML islands — the
+   table widget's cells, callouts, HTML embeds — which render `<strong>`
+   elements, not `.cm-strong` spans; a cell being edited nests a
+   CodeMirror editor whose spans the `.cm-strong` arm covers. A link
+   inside bold would otherwise take app.css's own `strong a` weight
+   (--link-weight + the modifier = 700, Songti Bold beside Black), so it
+   inherits. `.markdown-rendered` surfaces outside the preview (backlink
+   mentions, property renderers) keep app.css's 700, as the italic rule
+   above leaves them their own stack. (A Hei companion for CJK bold —
+   the 黑体-for-emphasis book convention — was the first answer and was
+   judged too sharp the same day.)
+   font-synthesis-weight stays: only a run that falls all the way to a
+   face with no bold cut (STSong, SimSun) stops faking a thickened
+   stroke, which on CJK visibly collides strokes rather than just
+   looking heavy — so a character outside Songti Black's coverage reads
+   in STSong at Regular weight inside a bold run, light rather than
+   faux-bold. */
 .markdown-preview-view strong,
-.markdown-source-view.mod-cm6 .cm-strong {
+.markdown-preview-view b,
+.markdown-source-view.mod-cm6 .cm-strong,
+.markdown-source-view.mod-cm6 .cm-content strong,
+.markdown-source-view.mod-cm6 .cm-content b {
+  font-weight: var(--tufte-bold-weight);
+  -webkit-text-stroke: var(--tufte-bold-stroke) currentColor;
   font-synthesis-weight: none;
+}
+.markdown-preview-view strong a,
+.markdown-preview-view b a,
+.markdown-source-view.mod-cm6 .cm-content strong a,
+.markdown-source-view.mod-cm6 .cm-content b a {
+  font-weight: inherit;
+}
+/* Two things the bold rule must not reach (a verifier's catch). (1) A
+   bolded tag — the one sans element that lives INSIDE the reading
+   register: the tag rule gives it Gill Sans, and the weight and stroke
+   would come down from the strong, where Gill Sans answers an 800 with
+   its UltraBold (+52% ink over Bold). Pin it to the sans tier,
+   unstroked; in Live Preview the merged .cm-strong.cm-hashtag span
+   out-specifies the bold rule ((0,4,0) over (0,3,0)). (2) The stroke is
+   an inherited property, so it would ride descendants that stand
+   outside the bold voice: superscript references, which the sidenote
+   rules reset to body weight, and code spans, whose monospace has a
+   bold of its own. */
+.markdown-preview-view strong a.tag,
+.markdown-preview-view b a.tag,
+.markdown-source-view.mod-cm6 .cm-strong.cm-hashtag {
+  font-weight: var(--bold-weight);
+  -webkit-text-stroke-width: 0;
+}
+.markdown-preview-view strong sup,
+.markdown-preview-view strong .footnote-ref,
+.markdown-preview-view strong .tufte-sidenote-ref,
+.markdown-preview-view strong code,
+.markdown-preview-view b sup,
+.markdown-preview-view b code,
+.markdown-source-view.mod-cm6 .cm-content strong sup,
+.markdown-source-view.mod-cm6 .cm-content strong code,
+.markdown-source-view.mod-cm6 .cm-strong.cm-inline-code {
+  -webkit-text-stroke-width: 0;
 }
 
 /* CJK line-breaking prohibitions (禁则/kinsoku) — closing punctuation
@@ -2531,6 +2685,10 @@ body {
 .markdown-preview-view li.task-list-item,
 .markdown-source-view.mod-cm6 .cm-line.HyperMD-task-line {
   font-family: var(--font-gill-sans);
+  --tufte-bold-weight: var(--bold-weight);   /* **bold** inside a task: Gill Sans Bold,
+                                                unstroked — the reading register's
+                                                heavier tier is for running text */
+  --tufte-bold-stroke: 0;
   font-weight: var(--tufte-sans-weight);   /* the series' own knob, not the serif's */
   font-variant-numeric: lining-nums tabular-nums;   /* dates/counts align */
 }
@@ -3032,6 +3190,9 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
 .bases-view,
 .bases-toolbar-menu {
   font-family: var(--font-gill-sans);
+  --tufte-bold-weight: var(--bold-weight);   /* **bold** in a rendered cell: Gill Sans Bold,
+                                                unstroked (see the Chinese typography section) */
+  --tufte-bold-stroke: 0;
   font-weight: var(--tufte-sans-weight);   /* the specimen follows its series */
   font-variant-numeric: lining-nums tabular-nums;   /* columns of digits must stack */
 }
@@ -3844,7 +4005,7 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
   .print .markdown-preview-view table {
     font-size: 9.5pt !important;
     line-height: 4mm;
-    margin: 5mm 0 !important;
+    margin: 5mm auto !important;     /* centered, as on screen */
   }
   .print .markdown-preview-view th,
   .print .markdown-preview-view td {
