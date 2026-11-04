@@ -90,6 +90,12 @@ Optional: install the community **Style Settings** plugin to get sliders for the
 
 ## Changelog
 
+- **1.22.0** (2026-11-03)
+  - Callouts take the code block's ground and width
+  - Code blocks and callouts on a dark grey in dark mode
+  - Smaller note names in hover previews
+  - Embedded Bases lists no longer collapse after scrolling
+  - Pair with Tufte Suite 1.3.1
 - **1.21.0** (2026-09-18)
   - Bold Chinese takes Songti's Black cut
   - Bold English a hairline heavier

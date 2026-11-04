@@ -408,6 +408,8 @@ body {
                                       its <pre> this ground (CSS `beige`, rgb 245,245,220),
                                       and it is the ONE thing the block takes from that
                                       page's chrome; the inks below are Gruvbox's */
+  --tufte-callout-bg:   var(--tufte-code-bg);   /* callouts share the code block's
+                                                   ground on light paper */
   /* Gruvbox (morhetz), the faded set light mode is written for, read
      on the beige above. Contrast computed, not guessed (WCAG 2.x
      relative luminance on #f5f5dc): fg1 10.48:1, fg3 5.89:1, red
@@ -482,14 +484,26 @@ body {
   --tufte-bg:           #151515;
   --tufte-bg-alt:       #1c1c1c;
   --tufte-ink:          #e8e6d9;
-  --tufte-code-bg:      transparent;   /* no ground on dark paper: css4.pub is a
-                                          light-only print model, so the tufte paper
-                                          shows through here as it did before */
-  /* Gruvbox's bright set, read on --tufte-bg (#151515): fg1 13.31:1,
-     yellow 10.77:1, green 8.85:1, aqua 8.68:1, orange 7.23:1, blue
-     6.78:1, purple 6.66:1, muted 6.57:1, red 5.31:1. The muted ink is
-     fg4, not Gruvbox's gray #928374, which is 4.97:1 here and falls
-     under AA on any paper a shade lighter than this one. */
+  --tufte-code-bg:      #282828;       /* Gruvbox's bg0 (2026-11-03). Until then code
+                                          had no ground on dark paper (css4.pub is a
+                                          light-only print model). Callouts took this
+                                          grey first ("light gray"), and code followed
+                                          ("make the code block the same as well"). It
+                                          is lifted 1.24:1 off #151515, and it is the
+                                          lightest grey that keeps the red callout
+                                          title and code label (#d97474) at AA: 4.70:1
+                                          here, against 4.33:1 on #2e2e2e and 4.03:1 on
+                                          #333333. Body ink on it is 11.76:1. */
+  --tufte-callout-bg:   var(--tufte-code-bg);   /* one ground for both boxes, as on
+                                                   light paper */
+  /* Gruvbox's bright set, read on the #282828 ground above (the paper
+     it was designed for): fg1 10.75:1, yellow 8.69:1, green 7.14:1,
+     aqua 7.01:1, orange 5.84:1, blue 5.48:1, purple 5.37:1, muted
+     5.30:1, and red 4.29:1. The red is Gruvbox's own keyword-on-bg0
+     pairing and stays as published, like light mode's yellow. (On the
+     bare #151515 paper the same inks measured 13.31 to 5.31:1.) The
+     muted ink is fg4, not Gruvbox's gray #928374, which is 4.97:1 on
+     #151515 and only about 4:1 on this ground. */
   --tufte-code-fg:      #ebdbb2;
   --tufte-code-muted:   #a89984;
   --tufte-code-red:     #fb4934;
@@ -1165,6 +1179,53 @@ body.theme-dark {
   margin-right: -30cqi;
 }
 
+/* Heading titles. A preview of a heading link ([[Note#Heading]]) shows
+   the heading itself as the title: Obsidian writes
+   <div class="inline-title" data-level="1"><h1>…</h1></div>. app.css
+   sizes only `.inline-title:not([data-level])` and leaves this wrapper
+   at 1em, so the nested heading carries its own size. The 2.6em title
+   above ignored that distinction: it multiplied with the h1's 2.29em
+   (113px in a 19px preview) and the h1's 3-line !important top margin
+   (88px). The result was a heading that filled the hover window. Here
+   the wrapper is back at 1em, and the nested heading gets back the
+   zero margins app.css gives it (`.inline-title h1 { margin-block: 0 }`).
+   That has to be !important because of the heading margins above. */
+.markdown-preview-view .inline-title[data-level],
+.markdown-source-view .inline-title[data-level] {
+  font-size: 1em;
+  line-height: inherit;
+}
+.markdown-preview-view .inline-title[data-level] > :is(h1, h2, h3, h4, h5, h6),
+.markdown-source-view .inline-title[data-level] > :is(h1, h2, h3, h4, h5, h6) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Linked (hover) previews: the note's name is a label for a small
+   window, not a page title. One size for every form it takes: the
+   heading of a [[Note#Heading]] preview (whatever its level) and the
+   inline title the new-item popover of Bases shows. That size is
+   1.57em, the H2 step: about 30px at a 19px body, against 2.29em (43px)
+   for an H1 and 2.6em (49px) for the page title. One knob,
+   --tufte-preview-title-size. (Ordinary previews: app.css hides the
+   inline title, so a note's name shows only if the note opens with its
+   own # H1, which keeps the H1 size.) The size sits on the wrapper and
+   the nested heading takes 1em of it: when a heading line does not
+   parse to a heading, app.js writes it into the data-level wrapper as
+   plain text, and that form must not drop to body size. */
+.popover.hover-popover {
+  --tufte-preview-title-size: var(--h2-size);
+}
+.popover.hover-popover .inline-title,
+.popover.hover-popover .inline-title[data-level] {   /* (0,4,0) over the 1em reset above */
+  font-size: var(--tufte-preview-title-size);
+  line-height: 1.1;
+}
+.popover.hover-popover .inline-title[data-level] > :is(h1, h2, h3, h4, h5, h6) {
+  font-size: 1em;
+  line-height: inherit;
+}
+
 /* The .newthought class — small-caps opening to a section.
    Use the `^^text^^` shorthand (rendered by the Tufte Inline plugin in
    Reading view), or the raw <span class="newthought">text</span>. */
@@ -1514,10 +1575,10 @@ body.theme-dark {
        (css4.pub/2023/tufte), whose <pre> sits on plain CSS `beige`,
        #f5f5dc. That page has no dark model at all — no
        prefers-color-scheme rule, no color-scheme meta — so the beige
-       is a LIGHT-mode fact here: on dark paper the block keeps no
-       ground of its own and the tufte paper shows through, as in the
-       round before this one. Gruvbox's own bg0 #282828 is the obvious
-       one-token alternative and is deliberately not taken;
+       is a LIGHT-mode fact here. On dark paper the block sat on the
+       bare paper until 2026-11-03. It now takes Gruvbox's own bg0,
+       #282828, the one-token alternative this note had left open,
+       shared with the callouts (see the dark palette);
      - the INKS are Gruvbox's (morhetz), faded set on the light beige,
        bright set on the dark paper — the palette and its contrast
        figures live in the two palette blocks above. Both surfaces read
@@ -2300,6 +2361,42 @@ body.theme-dark {
 .markdown-source-view.mod-cm6 .cm-embed-block.cm-callout .callout-title-inner {
   color: var(--tufte-accent);
   font-style: italic;
+}
+
+/* The callout ground (2026-11-03). Every ordinary callout sits on
+   --tufte-callout-bg, which points at the code block's ground
+   (--tufte-code-bg) on both papers, so the two read as one kind of
+   object: css4.pub's beige on light paper, Gruvbox's bg0 #282828 on
+   dark (see the dark palette). It is a token of its own so the two can
+   part if wanted. None in print: the print palette clears both. The
+   air is the code block's too:
+   0.65 × the body size (12.35px at 19px) on every side, the 1em of the
+   block's 0.65em code type. The shared 2.5rem set-off edge places the
+   ground's left edge where the code block's starts. --font-text-size,
+   not em, because the editor sets callouts at 0.88em and the air must
+   not shrink with them.
+   The devices stay unboxed, since they are typography and not panels:
+   epigraph (a bare quotation), banner (a picture), the figure family
+   and the marginalia (sidenote, marginnote), which leave the column in
+   Reading view. */
+.callout:not([data-callout="epigraph"]):not([data-callout="banner"]):not([data-callout^="figure"]):not([data-callout="sidenote"]):not([data-callout="marginnote"]) {
+  background-color: var(--tufte-callout-bg);
+  padding: calc(var(--font-text-size) * 0.65);
+}
+
+/* One width for both boxes (2026-11-03, "the width of the callouts and
+   the code block should be the same"). In Reading view they already
+   match: both sit on the 2.5rem set-off and run to the column's right
+   edge (490px at a 19px body). In the editor the code block runs the
+   full text column with no set-off (708px), while the callout widget
+   carries the 2.5rem left padding of the .cm-callout rule above
+   (660px). A grounded callout pulls back over that padding, so the two
+   boxes share both edges there too. Only the top-level callout moves:
+   nested ones are not children of the widget's .markdown-rendered.
+   The devices keep the indent. !important to outrank the widget's
+   `margin: 0.8rem 0 !important`. */
+.markdown-source-view.mod-cm6 .cm-embed-block.cm-callout > .markdown-rendered > .callout:not([data-callout="epigraph"]):not([data-callout="banner"]):not([data-callout^="figure"]):not([data-callout="sidenote"]):not([data-callout="marginnote"]) {
+  margin-left: -2.5rem !important;
 }
 
 /* epigraph: indented block, italic, with author attribution muted */
@@ -3396,6 +3493,65 @@ body:not(.is-phone) .workspace-leaf.mod-active .tree-item-self.has-focus:focus-w
 }
 
 /* ------------------------------------------------------------------
+   List view — the collapse guard. Works around an Obsidian race (seen
+   in 1.12.4 and 1.15.0, with or without this theme); there is no
+   layout bug in the theme itself. The list view is JS-virtualized:
+   every row is position:absolute at a measured `top`. When an embedded
+   base scrolls out of view, the editor detaches it; Obsidian's
+   ResizeObserver then re-measures the list while it is off the page,
+   so every row measures 0 tall and gets `top: 0px`. Normally that
+   observer re-measures again on the way back in, but the window
+   scroll listener sometimes runs first and records the restored
+   width, so the observer sees "no change". Every row stays at top 0,
+   and the numbers and titles print on top of each other.
+   That state leaves a mark CSS can see: a group list whose inline
+   height is "0px" while its rows are still attached. (A folded group
+   detaches its rows, and empty rows are never attached, so neither
+   matches.) Within it:
+   · the rows are put back in normal flow: still in order, one per
+     line, so the list reads correctly at once;
+   · a short pulse train steps the container 1px narrower (its
+     margin-inline-end) and its .bases-view parent 1px taller (its
+     margin-bottom), then back. That changes the size of the
+     .bases-view Obsidian observes. Its ResizeObserver then sees a
+     width it has not recorded and re-measures properly. The mark
+     disappears and the virtualized layout resumes. A pulse lands only
+     in a frame with no scroll event, so a train of them heals once
+     scrolling pauses.
+   Two details came from a verifier pass. The height step is a margin
+   and min-height is lifted, because app.css gives the container
+   min-height:100px under border-box, which swallowed a 1px padding on
+   a short list, so .bases-view never changed size. And groups and rows
+   get `top: auto` as well as position:relative, because a relative box
+   is offset by its inline top: once Obsidian re-measures the group
+   headings, the groups' tops become running sums. !important is
+   unavoidable throughout: the heights and tops are inline styles.
+   Measured live on Obsidian 1.15.0: real wheel scrolling collapsed
+   this specimen on 2 of 3 passes with the theme off. */
+.bases-list-container:has(> .bases-list-group > .bases-list-group-list[style*="height: 0px"] > .bases-list-item) {
+  height: auto !important;
+  min-height: 0;
+  animation: tufte-bases-list-remeasure 0.5s step-end 8 both;
+}
+.bases-list-container:has(> .bases-list-group > .bases-list-group-list[style*="height: 0px"] > .bases-list-item) > .bases-list-group {
+  position: relative;
+  top: auto !important;
+  height: auto !important;
+}
+.bases-list-container:has(> .bases-list-group > .bases-list-group-list[style*="height: 0px"] > .bases-list-item) .bases-list-group-list {
+  height: auto !important;
+}
+.bases-list-container:has(> .bases-list-group > .bases-list-group-list[style*="height: 0px"] > .bases-list-item) .bases-list-item {
+  position: relative;
+  top: auto !important;
+}
+@keyframes tufte-bases-list-remeasure {
+  0%   { margin-inline-end: 1px; margin-bottom: 1px; }
+  50%  { margin-inline-end: 0;   margin-bottom: 0; }
+  100% { margin-inline-end: 0;   margin-bottom: 0; }
+}
+
+/* ------------------------------------------------------------------
    Cards as a bookshelf gallery. The card is not a panel — it is a
    cover standing on the paper with a small title page set beneath it.
    ------------------------------------------------------------------ */
@@ -3852,6 +4008,9 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
        print ink. The screen's beige is dropped with it: a tinted panel
        is a screen affordance, and on paper it would only cost toner. */
     --tufte-code-bg:      transparent;
+    --tufte-callout-bg:   transparent;   /* declared here, not inherited: the body's
+                                            value was resolved against the SCREEN
+                                            palette (beige, or the dark grey) */
     --tufte-code-fg:      #111111;
     --tufte-code-muted:   #111111;
     --tufte-code-red:     #111111;
@@ -3987,6 +4146,12 @@ body.is-translucent:not(.is-fullscreen) .workspace-tabs .workspace-tab-header.is
   }
   .print .markdown-preview-view pre > code {
     font-size: 1em;                   /* keep the no-double-shrink contract */
+  }
+  /* Callouts follow the code block onto paper: the §1 palette clears
+     both grounds (--tufte-code-bg, --tufte-callout-bg), and with nothing
+     left to inset from, the screen's air goes too. */
+  .print .markdown-preview-view .callout:not([data-callout="epigraph"]):not([data-callout="banner"]):not([data-callout^="figure"]):not([data-callout="sidenote"]):not([data-callout="marginnote"]) {
+    padding: 0;
   }
   .print .markdown-preview-view pre,
   .print .markdown-preview-view pre code {

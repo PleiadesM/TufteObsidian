@@ -82,6 +82,7 @@
   --tufte-tag-rust:    #784a30;
   /* code — css4.pub's beige ground, Gruvbox faded inks */
   --tufte-code-bg:     #f5f5dc;
+  --tufte-callout-bg:  var(--tufte-code-bg);   /* callouts share the code block's ground */
   --tufte-code-fg:     #3c3836;
   --tufte-code-muted:  #665c54;
   --tufte-code-red:    #9d0006;
@@ -112,7 +113,7 @@
     --tufte-tag-teal:    #7fc2bc;
     --tufte-tag-rust:    #c99b7d;
     /* code — no ground on the dark paper, Gruvbox bright inks */
-    --tufte-code-bg:     transparent;
+    --tufte-code-bg:     #282828;   /* Gruvbox bg0, shared with callouts */
     --tufte-code-fg:     #ebdbb2;
     --tufte-code-muted:  #a89984;
     --tufte-code-red:    #fb4934;
@@ -143,7 +144,7 @@
   --tufte-tag-teal:    #7fc2bc;
   --tufte-tag-rust:    #c99b7d;
   /* code — no ground on the dark paper, Gruvbox bright inks */
-  --tufte-code-bg:     transparent;
+  --tufte-code-bg:     #282828;   /* Gruvbox bg0, shared with callouts */
   --tufte-code-fg:     #ebdbb2;
   --tufte-code-muted:  #a89984;
   --tufte-code-red:    #fb4934;
@@ -515,7 +516,7 @@ code, pre {
 :not(pre) > code { font-size: 0.65em; padding: 0; }   /* inline code: body ink, no ground */
 pre {
   font-size: 0.65em;
-  background: var(--tufte-code-bg);                  /* beige on light paper, bare paper on dark */
+  background: var(--tufte-code-bg);                  /* beige on light paper, #282828 on dark */
   color: var(--tufte-code-fg);
   margin: 1.4rem 0 1.4rem 2.5rem;
   padding: 2.2em 1em 1em;                            /* top room for the language label */
@@ -605,7 +606,7 @@ pre .token.url { text-decoration: none; }
 .math-block::-webkit-scrollbar { display: none; }
 .math-block svg { display: block; }
 
-/* ---- callouts — indented paragraphs, italic red title, no box ------------ */
+/* ---- callouts — the code block's ground and width, italic red title -------- */
 .callout {
   background: transparent;
   border: none;
@@ -629,6 +630,12 @@ pre .token.url { text-decoration: none; }
 .callout-content { padding: 0; }
 .callout-content > :first-child { margin-top: 0; }
 .callout-content > :last-child  { margin-bottom: 0; }
+/* every ordinary callout on the code block's ground, with its air (0.65em =
+   the 1em of the block's 0.65em code type); the devices stay unboxed */
+.callout:not([data-callout="epigraph"]):not([data-callout="banner"]):not([data-callout^="figure"]):not([data-callout="sidenote"]):not([data-callout="marginnote"]) {
+  background-color: var(--tufte-callout-bg);
+  padding: 0.65em;
+}
 
 /* [!epigraph] — the quote IS the callout */
 .callout[data-callout="epigraph"] {
@@ -1279,9 +1286,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <div class="callout" data-callout="epigraph" lang="zh-Hans"><div class="callout-content"><p>不闻不若闻之，闻之不若见之。</p><p><em>——《荀子·儒效》</em></p></div></div>
 
-<p lang="en">Every other callout is quiet too: an indented paragraph with the callout title set in italic rather than a boxed card.</p>
+<p lang="en">Every other callout shares the code block's ground: css4.pub's beige on light paper, Gruvbox's dark grey (#282828) in dark mode. It also takes the code block's width and air, and its title is set in red italic. It is a quiet panel, with no border and no rounded corners.</p>
 
-<p lang="zh-Hans">其他一切标注块同样安静：一段缩进的文字，标题以斜体（中文即楷体）呈现，而不是一张带框的卡片。</p>
+<p lang="zh-Hans">其他一切标注块都与代码块共用底色：浅色纸面上为 css4.pub 的米色，深色模式下为 Gruvbox 的深灰（#282828）。宽度与留白也与代码块相同，标题以红色斜体（中文即楷体）呈现。这是一块安静的底色，没有边框，也没有圆角。</p>
 
 <div class="callout" data-callout="note"><div class="callout-title"><div class="callout-title-inner"><span lang="en">A modest callout</span><span lang="zh-Hans">一个克制的标注</span></div></div><div class="callout-content"><p><span lang="en">This keeps annotations in the flow of the prose without adding Obsidian's usual visual weight.</span><span lang="zh-Hans">让批注留在行文之中，而不添加 Obsidian 惯常的视觉重量。</span></p></div></div>
 
@@ -1459,9 +1466,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 
 <h3 id="code"><span lang="en">Code, restrained</span><span lang="zh-Hans">克制的代码</span></h3>
 
-<p lang="en">Code sits on css4.pub's beige on light paper, and on the bare paper in dark mode — no border, no rounded corners — in the platform's own monospace, noticeably smaller than the prose and indented from the left like a quotation. Syntax takes Gruvbox's colors: the faded set on the beige, the bright set on the dark paper. A fenced block's language floats in the upper-right corner as a red italic label:</p>
+<p lang="en">Code sits on css4.pub's beige on light paper, and on Gruvbox's dark grey (#282828) in dark mode — no border, no rounded corners — in the platform's own monospace, noticeably smaller than the prose and indented from the left like a quotation. Syntax takes Gruvbox's colors: the faded set on the beige, the bright set on the dark grey. A fenced block's language floats in the upper-right corner as a red italic label:</p>
 
-<p lang="zh-Hans">代码在浅色纸面上置于 css4.pub 的米色底色之上，深色模式下则直接落在纸面——没有边框、没有圆角——采用系统自带的等宽字体，明显小于正文，并像引文一样自左侧缩进。语法配色取自 Gruvbox：米色底上用其淡色一组，深色纸上用其亮色一组。围栏代码块的语言名以红色斜体浮于右上角：</p>
+<p lang="zh-Hans">代码在浅色纸面上置于 css4.pub 的米色底色之上，深色模式下则置于 Gruvbox 的深灰底色（#282828）之上——没有边框、没有圆角——采用系统自带的等宽字体，明显小于正文，并像引文一样自左侧缩进。语法配色取自 Gruvbox：米色底上用其淡色一组，深灰底上用其亮色一组。围栏代码块的语言名以红色斜体浮于右上角：</p>
 
 <pre><code class="language-css"><span class="token selector">.newthought</span> <span class="token punctuation">{</span>
   <span class="token property">font-variant</span><span class="token punctuation">:</span> small-caps<span class="token punctuation">;</span>
@@ -1608,6 +1615,12 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <h4><span lang="en">Tufte (theme)</span><span lang="zh-Hans">Tufte（主题）</span></h4>
 
 <ul class="tufte-changelog-list" lang="en">
+<li><strong>1.22.0</strong> (2026-11-03)<ul>
+<li>Callouts take the code block's ground and width</li>
+<li>Code blocks and callouts on a dark grey in dark mode</li>
+<li>Smaller note names in hover previews</li>
+<li>Embedded Bases lists no longer collapse after scrolling</li>
+<li>Pair with Tufte Suite 1.3.1</li></ul></li>
 <li><strong>1.21.0</strong> (2026-09-18)<ul>
 <li>Bold Chinese takes Songti's Black cut</li>
 <li>Bold English a hairline heavier</li>
@@ -1648,6 +1661,12 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 </ul>
 
 <ul class="tufte-changelog-list" lang="zh-Hans">
+<li><strong>1.22.0</strong>（2026-11-03）<ul>
+<li>标注块取代码块的底色与宽度</li>
+<li>深色模式下代码块与标注块改用深灰底色</li>
+<li>悬停预览中的笔记名称缩小</li>
+<li>内嵌的 Bases 列表滚动后不再叠成一行</li>
+<li>请与 Tufte Suite 1.3.1 搭配</li></ul></li>
 <li><strong>1.21.0</strong>（2026-09-18）<ul>
 <li>中文粗体改用宋体的 Black 字重</li>
 <li>英文粗体略微加重</li>
@@ -1690,6 +1709,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 <h4>Tufte Suite</h4>
 
 <ul class="tufte-changelog-list" lang="en">
+<li><strong>1.3.1</strong> (2026-11-03)<ul>
+<li>Sidenote numbers print raised in PDF exports</li>
+<li>Pair with theme Tufte 1.22.0</li></ul></li>
 <li><strong>1.3.0</strong> (2026-08-29)<ul>
 <li>Now, the Suite speaks 44 languages</li>
 <li>Add companion typefaces for 19 scripts, Japanese included</li>
@@ -1714,6 +1736,9 @@ a.internal-link, a.external-link, a.tag, sup.tufte-sidenote-ref, .tufte-changelo
 </ul>
 
 <ul class="tufte-changelog-list" lang="zh-Hans">
+<li><strong>1.3.1</strong>（2026-11-03）<ul>
+<li>导出 PDF 时旁注编号以上标印出</li>
+<li>请与主题 Tufte 1.22.0 搭配</li></ul></li>
 <li><strong>1.3.0</strong>（2026-08-29）<ul>
 <li>Suite 现已支持 44 种语言</li>
 <li>新增 19 种文字的伴随字体，包含日文</li>
